@@ -20,6 +20,9 @@
     <van-nav-bar :title="this.$t('app.hello')" @click-left="show=true">
       <van-icon name="search" slot="left" />
     </van-nav-bar>
+    <div class="aa">
+      <div class="aa1">A</div><div class="aa2">A</div>
+    </div>
   </div>
 </template>
 
@@ -47,7 +50,15 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang='scss' scoped>
+  .aa{
+    .aa1{
+      font-size: 1.2rem;
+    }
+    .aa2{
+      font-size: 1.5rem;
+    }
+  }
   .test{
     width:20rem;
     height:10rem;
