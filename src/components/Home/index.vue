@@ -16,7 +16,11 @@
       <div class="sponsor">Version 1.1</div>
     </div>
     <div class="login-input">
-
+      <div class="title">请登录</div>
+      <div class="username"><input class="username-input" type="text" placeholder="用户名"></div>
+      <div class="password"><input class="password-input" type="password" placeholder="密码"></div>
+      <div class="forget-pwd">忘记密码</div>
+      <div class="login-btn" @click="loginSystem">登录</div>
     </div>
     <div class="end">
       <span class="item">隐私政策</span>
@@ -39,7 +43,7 @@
       },
       methods:{
         loginSystem(){
-          this.$router.push("/helloworld");
+          this.$router.push("/dimensions");
         }
 
       }
@@ -51,13 +55,13 @@
     margin: 0;
     padding: 0;
   }
-  html,body{height: 100%}
 .page-sign-in{
   position:absolute;
   top:0;
   bottom:0;
   left:0;
   right: 0;
+  min-height: 36rem;
   background-color:#fabe00;
   .top{
     position:absolute;
@@ -116,6 +120,51 @@
     top: 11.5rem;
     z-index: 2;
     border-radius: 5px;
+    .title{
+      border-left: 2px solid #000;
+      font-weight: bold;
+      width: 90%;
+      margin: auto;
+      margin-top: 1rem;
+      padding-left: 0.3rem;
+      line-height: 1.5rem;
+    }
+    .username,.password{
+      height: 2.8rem;
+      width: 90%;
+      margin: auto;
+      margin-top: 1rem;
+      border-bottom: 1px solid #989898;
+      .username-input,.password-input{
+         height: 2.8rem;
+        color: #919191;
+         width: 100%;
+          border: 0;  // 去除未选中状态边框
+          outline: none; // 去除选中状态边框
+          background-color: rgba(0, 0, 0, 0);// 透明背景
+
+      }
+    }
+    .forget-pwd{
+      width: 90%;
+      margin: auto;
+      text-align: right;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #919191;
+    }
+    .login-btn{
+      height: 3rem;
+      width: 90%;
+      margin: auto;
+      background-color: #fabe00;
+      color: #000;
+      font-weight: bold;
+      text-align: center;
+      line-height: 3rem;
+      margin-top: 2rem;
+
+    }
   }
   .end{
     position: absolute;
