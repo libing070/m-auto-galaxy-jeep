@@ -68,13 +68,10 @@
 
 <script>
   import TopBar from "../common/TopBar";
-  import BgLayout from "../common/BgLayout";
-
   export default {
         name: "index",
        components: {
          TopBar,
-         BgLayout
 
   }
     }
