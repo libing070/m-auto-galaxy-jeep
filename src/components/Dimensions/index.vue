@@ -4,62 +4,62 @@
     <div class="dimension-item first">
       <div class="title">
         <span class="line"></span>
-        <div class="desc">产品竞争力舆情洞察</div>
+        <div class="desc">{{this.$t('dimension.depart1')}}</div>
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">交叉购买考虑</span>
+        <span class="desc">{{this.$t('dimension.list112')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">产品垂媒声量</span>
+        <span class="desc">{{this.$t('dimension.list27')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">产品口碑</span>
+        <span class="desc">{{this.$t('dimension.list15')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">产品满意&不满意因子</span>
+        <span class="desc">{{this.$t('dimension.list14')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">产品购买&拒绝原因</span>
+        <span class="desc">{{this.$t('dimension.list12')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">高频疑问</span>
+        <span class="desc">{{this.$t('dimension.list28')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
     </div>
     <div class="dimension-item">
       <div class="title">
         <span class="line"></span>
-        <div class="desc">消费者画像 & 需求洞察</div>
+        <div class="desc">{{this.$t('dimension.depart2')}}</div>
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">人口统计</span>
+        <span class="desc">{{this.$t('dimension.list21')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">触媒习惯</span>
+        <span class="desc">{{this.$t('dimension.list22')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">兴趣爱好</span>
+        <span class="desc">{{this.$t('dimension.list23')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
         <img class="icon" :src="require('../../assets/img/line.png')">
-        <span class="desc">内容偏好</span>
+        <span class="desc">{{this.$t('dimension.list24')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
     </div>
@@ -92,6 +92,7 @@
         height: 2.5rem;
         position: relative;
         top: 1rem;
+        font-size: 0.9rem;
         .line{
           position: absolute;
           background: #fabe00;

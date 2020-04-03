@@ -7,8 +7,8 @@
     >
     </div>
     <div class="lang-box">
-      <span class="item">EN</span>
-      <span class="item">中文</span>
+      <span :class="['item',{lang:true, active:curLang === 'en'}]" data-type="en" @click="toggleLang">EN</span>
+      <span :class="['item',{lang:true, active:curLang === 'zh'}]" data-type="zh" @click="toggleLang">中文</span>
     </div>
     <div class="back-btn">
       <img :src="require('../../assets/img/back.png')">
@@ -20,7 +20,18 @@
 
 <script>
     export default {
-        name: "top-bar"
+        name: "top-bar",
+      computed: {
+        curLang() {
+          return this.$i18n.locale;
+        }
+      },
+      methods:{
+        toggleLang(e) {
+          this.$i18n.locale = e.target.dataset.type;
+          localStorage.lang = e.target.dataset.type;
+        },
+      }
     }
 </script>
 
@@ -51,7 +62,7 @@
         bottom: 0;
         margin: auto;
         width: 4rem;
-        color: #fabe00;
+        color: #fff;
         height: 1rem;
         font-size: 0.7rem;
         .item{
@@ -61,6 +72,9 @@
         .item:nth-child(1){
           border-right:1px solid  #fabe00;
           padding-right: 0.3rem;
+        }
+        .item.active{
+           color: #fabe00;
         }
       }
       .back-btn{

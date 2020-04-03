@@ -2,8 +2,8 @@
   <div class="page-sign-in">
     <div class="top">
       <div class="lang-box">
-        <span class="item">EN</span>
-        <span class="item">中文</span>
+        <span :class="['item',{lang:true, active:curLang === 'en'}]" data-type="en" @click="toggleLang">EN</span>
+        <span :class="['item',{lang:true, active:curLang === 'zh'}]" data-type="zh" @click="toggleLang">中文</span>
       </div>
       <div class="logo-img">
         <img
@@ -12,15 +12,15 @@
           class="logo"
         >
       </div>
-      <div class="desc">业务洞察工具</div>
+      <div class="desc">{{this.$t('login.introduction')}}</div>
       <div class="sponsor">Version 1.1</div>
     </div>
     <div class="login-input">
-      <div class="title">请登录</div>
-      <div class="username"><input class="username-input" type="text" placeholder="用户名"></div>
-      <div class="password"><input class="password-input" type="password" placeholder="密码"></div>
-      <div class="forget-pwd">忘记密码</div>
-      <div class="login-btn" @click="loginSystem">登录</div>
+      <div class="title">{{this.$t('login.info')}}</div>
+      <div class="username"><input class="username-input" type="text" :placeholder="this.$t('login.name_label')"></div>
+      <div class="password"><input class="password-input" type="password" :placeholder="this.$t('login.password_label')"></div>
+      <div class="forget-pwd">{{this.$t('login.forget_password')}}</div>
+      <div class="login-btn" @click="loginSystem">{{this.$t('login.button')}}</div>
     </div>
     <div class="end">
       <span class="item">隐私政策</span>
@@ -39,12 +39,22 @@
           msg: ''
         }
       },
+      computed: {
+        curLang() {
+          return this.$i18n.locale;
+        }
+      },
       created () {
+          console.log("login"+this.$i18n.locale);
       },
       methods:{
         loginSystem(){
           this.$router.push("/dimensions");
-        }
+        },
+        toggleLang(e) {
+          this.$i18n.locale = e.target.dataset.type;
+          localStorage.lang = e.target.dataset.type;
+        },
 
       }
     }
@@ -75,7 +85,7 @@
       right: 4rem;
       top: 1rem;
        width: 4rem;
-      color: #fabe00;
+      color: #fff;
       font-size: 0.8rem;
       .item{
         display:inline-block;
@@ -83,6 +93,9 @@
       .item:nth-child(1){
         border-right:1px solid  #fabe00;
         padding-right: 0.3rem;
+      }
+      .item.active{
+        color: #fabe00;
       }
     }
     .logo-img{
