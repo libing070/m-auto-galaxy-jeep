@@ -11,7 +11,7 @@
       <span :class="['item',{lang:true, active:curLang === 'zh'}]" data-type="zh" @click="toggleLang">中文</span>
     </div>
     <div class="back-btn">
-      <img :src="require('../../assets/img/back.png')">
+      <img :src="require('../../assets/img/back.png')" @click.prevent="logout">
     </div>
   </div>
    <div class="block-bg"></div>
@@ -31,6 +31,11 @@
           this.$i18n.locale = e.target.dataset.type;
           localStorage.lang = e.target.dataset.type;
         },
+        logout() {
+          localStorage.setItem("hasLogin", false);
+          //this.$store.commit(types.CHANGE_GLOBAL_STATE, false);
+          this.$router.push("/sign-in");
+        }
       }
     }
 </script>

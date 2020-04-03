@@ -3,14 +3,22 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+const HOST_PRODUCTION = "http://jeep.bitsmart.com.cn/";
+const HOST_DEV = "http://172.20.207.44:8080";
+// let host = HOST_DEV;
+let host = HOST_PRODUCTION;
 module.exports = {
   dev: {
 
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      "**/login": {
+        target: host,
+        changeOrigin: true
+      },
+    },
 
     // Various Dev Server settings
     host:'192.168.10.5',

@@ -16,7 +16,10 @@ export default {
     forget_password:'Forget password',
     name_tip: ['Please enter the username', 'Please enter the correct username'],
     password_tip: 'Please enter the password',
-    button: 'Log In'
+    button: 'Log In',
+    bottom1:'Privacy Policy',
+    bottom2:'Help & Explain',
+    bottom3:'Suggestions & Suggestions'
   },
   topbar: {
     menu1: 'Insight Dimension',

@@ -16,7 +16,11 @@ export default {
     forget_password:'忘记密码',
     name_tip: ['请输入用户名', '请输入正确的手机号'],
     password_tip: '请输入密码',
-    button: '登 录'
+    button: '登 录',
+    bottom1:'隐私政策',
+    bottom2:'帮助与说明',
+    bottom3:'意见与建议'
+
   },
   topbar: {
     menu1: '洞察维度',

@@ -17,15 +17,15 @@
     </div>
     <div class="login-input">
       <div class="title">{{this.$t('login.info')}}</div>
-      <div class="username"><input class="username-input" type="text" :placeholder="this.$t('login.name_label')"></div>
-      <div class="password"><input class="password-input" type="password" :placeholder="this.$t('login.password_label')"></div>
-      <div class="forget-pwd">{{this.$t('login.forget_password')}}</div>
+      <div class="username"><input v-model="username" class="username-input" type="text" :placeholder="this.$t('login.name_label')"></div>
+      <div class="password"><input v-model="password" class="password-input" type="password" :placeholder="this.$t('login.password_label')"></div>
+      <div class="forget-pwd" @click="forgetPwd">{{this.$t('login.forget_password')}}</div>
       <div class="login-btn" @click="loginSystem">{{this.$t('login.button')}}</div>
     </div>
     <div class="end">
-      <span class="item">隐私政策</span>
-      <span class="item">帮助与说明</span>
-      <span class="item">意见与建议</span>
+      <span class="item">{{this.$t('login.bottom1')}}</span>
+      <span class="item">{{this.$t('login.bottom2')}}</span>
+      <span class="item">{{this.$t('login.bottom3')}}</span>
 
     </div>
   </div>
@@ -36,7 +36,9 @@
         name: "SignIn",//登录页面
       data () {
         return {
-          msg: ''
+          msg: '',
+          username: "",
+          password: ""
         }
       },
       computed: {
@@ -49,13 +51,43 @@
       },
       methods:{
         loginSystem(){
-          this.$router.push("/dimensions");
+          var that=this;
+          if(this.username===""){
+            this.$toast(that.$t("login.name_tip[0]"));
+          }else if(this.password===""){
+            this.$toast(that.$t("login.password_tip"));
+          }else{
+            this.$axios
+              .post("v2/login", {
+                username: this.username,
+                password: this.password
+              })
+              .then(res => {
+                if (res.data.status === 1) {
+                  localStorage.hasLogin = true;
+                  localStorage.isSuperAdmin = res.data.data.isAdmin;
+                  localStorage.name = res.data.data.username;
+                  localStorage.UserPhone = res.data.data.username;
+                  this.$router.push("/dimensions");
+                } else {
+                  this.$toast(res.data.msg);
+                }
+              });
+
+          }
         },
         toggleLang(e) {
           this.$i18n.locale = e.target.dataset.type;
           localStorage.lang = e.target.dataset.type;
         },
-
+        forgetPwd(){
+          this.$dialog.alert({
+            title: '提示',
+            message: '请联系市场部数字智能营销团队孙玮颢'
+          }).then(() => {
+            // on close
+          });
+        }
       }
     }
 </script>
@@ -203,4 +235,9 @@
   }
 
 }
+</style>
+<style>
+  .van-dialog{
+    width: 18rem !important;
+  }
 </style>
