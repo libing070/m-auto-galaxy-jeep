@@ -8,6 +8,9 @@ export default {
     message2:'发送成功',
     message3:'发送失败',
     new_demand:'新需求',
+    btn1:'取消',
+    btn2:'发送',
+    placeholder1:'需求说明',
     tips: ['您没有访问权限', '用户名只能包含英文字母和数字', '用户名超出20个字符', '用户名区分大小写，不超过20个字符，只限英文字母和数字'],
   },
   login: {

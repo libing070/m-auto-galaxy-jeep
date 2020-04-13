@@ -26,11 +26,11 @@
           <div class="title">
             {{this.$t('global.new_demand')}}
           </div>
-          <textarea placeholder="需求说明" v-model="textareaContent"></textarea>
+          <textarea :placeholder="this.$t('global.placeholder1')" v-model="textareaContent"></textarea>
         </div>
         <div class="popup-wrap-btn">
-          <div @click="hidePopup" class="btn cancel-btn">取消</div>
-          <div @click="sendBtnClick" class="btn send-btn">发送</div>
+          <div @click="hidePopup" class="btn cancel-btn">  {{this.$t('global.btn1')}}</div>
+          <div @click="sendBtnClick" class="btn send-btn">  {{this.$t('global.btn2')}}</div>
         </div>
     </div>
 
@@ -59,6 +59,7 @@
         },
         hidePopup(){
           this.newdemandShow = false;
+          this.textareaContent="";
         },
         sendBtnClick(){
           var that=this;
@@ -66,7 +67,7 @@
             this.$toast(that.$t("global.message1"));
           }else{
             this.$axios
-              .post("v2/mail", {
+              .post("/mail", {
                 type: '新需求',
                 text:that.textareaContent
               })

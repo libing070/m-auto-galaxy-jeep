@@ -18,7 +18,7 @@ module.exports = {
         target: host,
         changeOrigin: true
       },
-      "**/mail": {
+      "/mail": {
         target: host,
         changeOrigin: true
       }
