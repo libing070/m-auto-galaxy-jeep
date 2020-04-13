@@ -4,10 +4,15 @@ export default {
     hello: 'Hello，World!'
   },
   global: {
+    new_demand:'New Demand',
+    message1:'Content cannot be empty',
+    message2:'Send successfully',
+    message3:'fail in send',
     tips: ['You have no right to access to this page!', 'Should only include English Letters and Numbers', 'The username is more than 20 characters', 'The username is case-sensitive,and the length should not more than 20 characters.']
   },
   login: {
     introduction: 'Business Insights Tool',
+    welcome:'Welcome',
     info: 'Please Log In',
     name_label: 'Username',
     password_label: 'Password',

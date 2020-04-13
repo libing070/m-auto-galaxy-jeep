@@ -16,7 +16,7 @@
       <div class="sponsor">Version 1.1</div>
     </div>
     <div class="login-input">
-      <div class="title">{{this.$t('login.info')}}</div>
+      <div class="title">{{this.$t('login.welcome')}}</div>
       <div class="username"><input v-model="username" class="username-input" type="text" :placeholder="this.$t('login.name_label')"></div>
       <div class="password"><input v-model="password" class="password-input" type="password" :placeholder="this.$t('login.password_label')"></div>
       <div class="forget-pwd" @click="forgetPwd">{{this.$t('login.forget_password')}}</div>
@@ -111,7 +111,7 @@
     left:0;
     right: 0;
     background-color:#000;
-    height: 13rem;
+    height: 480px;
     .lang-box{
       position:absolute;
       right: 4rem;
@@ -144,44 +144,46 @@
       top: 6.5rem;
       left: 3rem;
       color: #fff;
-      font-size: 2rem;
+      font-size: 75px;
     }
     .sponsor{
       position:absolute;
       right: 1rem;
-      bottom: 2rem;
+      bottom: 3rem;
       color: #fff;
-      font-size: 0.7rem;
+      font-size: 24px;
     }
   }
   .login-input{
     background-color: #fff;
-    width: 90%;
-    height: 20rem;
+    width: 710px;
+    height: 780px;
     margin: auto;
     position: absolute;
     left: 0;
     right: 0;
-    top: 11.5rem;
+    top: 12.5rem;
     z-index: 2;
     border-radius: 5px;
     .title{
-      border-left: 2px solid #000;
+      border-left: 5px solid #000;
       font-weight: bold;
       width: 90%;
       margin: auto;
       margin-top: 1rem;
       padding-left: 0.3rem;
       line-height: 1.5rem;
+      font-size: 36px;
     }
     .username,.password{
-      height: 2.8rem;
+      font-size: 36px;
+      height: 3.8rem;
       width: 90%;
       margin: auto;
       margin-top: 1rem;
       border-bottom: 1px solid #989898;
       .username-input,.password-input{
-         height: 2.8rem;
+         height: 3.8rem;
         color: #919191;
          width: 100%;
           border: 0;  // 去除未选中状态边框
@@ -195,32 +197,33 @@
       margin: auto;
       text-align: right;
       margin-top: 0.5rem;
-      font-size: 0.8rem;
+      font-size:28px;
       color: #919191;
     }
     .login-btn{
-      height: 3rem;
-      width: 90%;
+      height: 103px;
+      width: 552px;
       margin: auto;
       background-color: #fabe00;
       color: #000;
       font-weight: bold;
       text-align: center;
-      line-height: 3rem;
-      margin-top: 2rem;
+      font-size:36px;
+      line-height: 103px;
+      margin-top: 3.5rem;
 
     }
   }
   .end{
     position: absolute;
     z-index: 3;
-    top: 32.5rem;
+    bottom: 60px;
     width: 15rem;
     left:0;
     right:0;
     margin: auto;
     color: #000;
-    font-size: 0.8rem;
+    font-size: 24px;
     text-align: center;
     .item{
       display:inline-block;

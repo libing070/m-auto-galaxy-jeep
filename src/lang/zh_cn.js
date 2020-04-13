@@ -4,10 +4,15 @@ export default {
     hello: '你好，世界！'
   },
   global: {
+    message1:'内容不能位空',
+    message2:'发送成功',
+    message3:'发送失败',
+    new_demand:'新需求',
     tips: ['您没有访问权限', '用户名只能包含英文字母和数字', '用户名超出20个字符', '用户名区分大小写，不超过20个字符，只限英文字母和数字'],
   },
   login: {
     introduction: '业务洞察工具',
+    welcome:'欢迎',
     info: '请登录',
     name_label: '用户名',
     password_label: '密 码',
@@ -32,14 +37,14 @@ export default {
     btn: '洞察案例',
     note: '皮卡市场研究',
     depart: '市场部 & 产品规划部',
-    depart1: '产品竞争力洞察',
+    depart1: '产品竞争力舆情洞察',
     depart2: '消费者画像 & 需求洞察',
     list11: '竞争格局',
     list112: '交叉购买考虑',
-    list12: '购买 & 拒绝原因',
+    list12: '产品购买&拒绝原因',
     list13: '关键购买考虑因素',
-    list14: '满意 & 不满意因子',
-    list15: '产品使用体验',
+    list14: '产品满意&不满意因子',
+    list15: '产品口碑',
     list16: '配置偏好',
     list17: '产品使用场景',
     list18: '更多洞察维度，正在制作中',
@@ -50,7 +55,7 @@ export default {
     list25: '消费能力',
     list26: '更多洞察维度，正在制作中',
     list27:'产品垂媒声量',
-    list28:'高频疑问'
+    list28:'用户高频疑问'
   },
   case: {
     back: '返回',

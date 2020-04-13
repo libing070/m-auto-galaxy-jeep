@@ -7,60 +7,68 @@
         <div class="desc">{{this.$t('dimension.depart1')}}</div>
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus1-1.png')">
         <span class="desc">{{this.$t('dimension.list112')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus1-2.png')">
         <span class="desc">{{this.$t('dimension.list27')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus1-3.png')">
         <span class="desc">{{this.$t('dimension.list15')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus1-4.png')">
         <span class="desc">{{this.$t('dimension.list14')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus1-5.png')">
         <span class="desc">{{this.$t('dimension.list12')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus1-6.png')">
         <span class="desc">{{this.$t('dimension.list28')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
+      <div class="item" style="border-bottom: none">
+        <img class="icon" style="height: 37%" :src="require('../../assets/img/icon-maintenance.png')">
+        <span class="desc" style="color: #a1a1a1">{{this.$t('dimension.list18')}}</span>
+      </div>
     </div>
-    <div class="dimension-item">
+    <div class="dimension-item" style="color: #a1a1a1">
       <div class="title">
         <span class="line"></span>
         <div class="desc">{{this.$t('dimension.depart2')}}</div>
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus2-1.png')">
         <span class="desc">{{this.$t('dimension.list21')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus2-2.png')">
         <span class="desc">{{this.$t('dimension.list22')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus2-3.png')">
         <span class="desc">{{this.$t('dimension.list23')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
       <div class="item">
-        <img class="icon" :src="require('../../assets/img/line.png')">
+        <img class="icon" :src="require('../../assets/img/icon-menus2-4.png')">
         <span class="desc">{{this.$t('dimension.list24')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
+      </div>
+      <div class="item" style="border-bottom: none">
+        <img class="icon" style="height: 37%" :src="require('../../assets/img/icon-maintenance.png')">
+        <span class="desc">{{this.$t('dimension.list18')}}</span>
       </div>
     </div>
   </div>
@@ -82,42 +90,43 @@
     .dimension-item{
       position: relative;
       margin: auto;
-      width: 90%;
+      width: 95%;
       border-radius: 5px;
       background: white;
       margin-bottom: 1rem;
       padding-bottom: 2rem;
       .title{
         width: 100%;
-        height: 2.5rem;
         position: relative;
         top: 1rem;
-        font-size: 0.9rem;
+        font-size: 36px;
         .line{
           position: absolute;
           background: #fabe00;
           left: 0;
-          width: 2px;
+          width: 5px;
           height: 2rem;
           top: 0;
           bottom: 0;
         }
         .desc{
-          height: 2rem;
+          height: 70px;
           font-weight: bold;
           border-bottom: 0.5px solid #fabe00;
-          line-height: 2rem;
           padding-left: 0.5rem;
           width: 90%;
           margin: auto;
 
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
         }
       }
       .item{
         width: 90%;
         margin: auto;
-        height: 2.6rem;
-        line-height: 2.6rem;
+        height: 100px;
+        line-height: 100px;
         border-bottom: 0.5px solid #d8d8d8;
         position: relative;
         top: 1rem;
@@ -128,13 +137,18 @@
           top: 0;
           bottom: 0;
           margin: auto;
-          height: 70%;
+          height: 45%;
         }
         .desc{
           position: absolute;
-          left: 2rem;
+          left: 2.5rem;
           font-weight: bold;
-          font-size: 0.8rem;
+          font-size: 28px;
+          width: 550px;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+
         }
         .arrow-right{
           display: inline-block;
@@ -148,7 +162,7 @@
       }
     }
     .dimension-item.first{
-      margin-top: -9rem;
+      margin-top: -6rem;
     }
   }
 </style>
