@@ -1,37 +1,37 @@
 <template>
   <div class="dimension-wrap">
-    <top-bar></top-bar>
+    <top-bar :isshowBackbtn="false"></top-bar>
     <div class="dimension-item first">
       <div class="title">
         <span class="line"></span>
         <div class="desc">{{this.$t('dimension.depart1')}}</div>
       </div>
-      <div class="item">
+      <div class="item" @click="toAnalysisPage('buy')">
         <img class="icon" :src="require('../../assets/img/icon-menus1-1.png')">
         <span class="desc">{{this.$t('dimension.list112')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item">
+      <div class="item" @click="toAnalysisPage('sound')">
         <img class="icon" :src="require('../../assets/img/icon-menus1-2.png')">
         <span class="desc">{{this.$t('dimension.list27')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item">
+      <div class="item" @click="toAnalysisPage('koubei')">
         <img class="icon" :src="require('../../assets/img/icon-menus1-3.png')">
         <span class="desc">{{this.$t('dimension.list15')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item">
+      <div class="item" @click="toAnalysisPage('pleased')">
         <img class="icon" :src="require('../../assets/img/icon-menus1-4.png')">
         <span class="desc">{{this.$t('dimension.list14')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item">
+      <div class="item" @click="toAnalysisPage('reason')">
         <img class="icon" :src="require('../../assets/img/icon-menus1-5.png')">
         <span class="desc">{{this.$t('dimension.list12')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item">
+      <div class="item" @click="toAnalysisPage('doubt')">
         <img class="icon" :src="require('../../assets/img/icon-menus1-6.png')">
         <span class="desc">{{this.$t('dimension.list28')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
@@ -80,20 +80,25 @@
         name: "index",
        components: {
          TopBar,
-
-  }
+      },
+    methods:{
+      toAnalysisPage(key){
+        this.$router.push({path: '/galaxy', query: {'target': key}})
+      }
+    }
     }
 </script>
 
 <style lang="scss" scoped>
   .dimension-wrap{
+    background: #fabe00;
+    padding-bottom: 1rem;
     .dimension-item{
       position: relative;
       margin: auto;
       width: 95%;
       border-radius: 5px;
       background: white;
-      margin-bottom: 1rem;
       padding-bottom: 2rem;
       .title{
         width: 100%;
@@ -162,6 +167,7 @@
       }
     }
     .dimension-item.first{
+      margin-bottom: 1rem;
       margin-top: -6rem;
     }
   }

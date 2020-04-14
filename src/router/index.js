@@ -6,6 +6,7 @@ import { Toast } from 'vant';
 const SignIn = resolve => require(['@/components/Home'], resolve)
 import NotFound from '@/components/404/index'
 import Dimensions from '@/components/Dimensions/index'
+import Galaxy from '@/components/Galaxy/index'
 import HelloWorld from '@/components/HelloWorld'
 import {i18n} from "../lang";
 
@@ -40,6 +41,14 @@ const router= new Router({
       path: '/dimensions',
       name: 'Dimensions',
       component: Dimensions,
+      meta: {
+        permission: true
+      },
+    },
+    {
+      path: '/galaxy',
+      name: 'Galaxy',
+      component: Galaxy,
       meta: {
         permission: true
       },
