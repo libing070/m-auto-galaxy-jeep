@@ -7,6 +7,7 @@ const SignIn = resolve => require(['@/components/Home'], resolve)
 import NotFound from '@/components/404/index'
 import Dimensions from '@/components/Dimensions/index'
 import Galaxy from '@/components/Galaxy/index'
+import AnalysisBuy from '@/components/Galaxy/AnalysisBuy'
 import HelloWorld from '@/components/HelloWorld'
 import {i18n} from "../lang";
 
@@ -49,6 +50,14 @@ const router= new Router({
       path: '/galaxy',
       name: 'Galaxy',
       component: Galaxy,
+      meta: {
+        permission: true
+      },
+    },
+    {
+      path: '/analysisBuy',
+      name: 'AnalysisBuy',
+      component: AnalysisBuy,
       meta: {
         permission: true
       },

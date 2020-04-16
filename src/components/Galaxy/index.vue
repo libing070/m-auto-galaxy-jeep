@@ -29,7 +29,7 @@
             </select>
           </div>
         </div>
-        <div class="big-box">
+        <div class="zhedie big-box">
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
             <select>
@@ -42,11 +42,11 @@
           </div>
         </div>
       </div>
-      <div class="item-time">
+      <div class="zhedie item-time">
         <div class="box">
           <span class="radio-name">时间选择：</span>
-          <span class="radio-option"><img :src="require('../../assets/img/radio-checked.png')"><span class="text">自定义</span></span>
-          <span class="radio-option"><img :src="require('../../assets/img/radio-nochecked.png')"><span class="text">上市期</span></span>
+          <span  class="radio-option"><img :src="require('../../assets/img/radio-checked.png')">自定义</span>
+          <span  class="radio-option"><img :src="require('../../assets/img/radio-nochecked.png')">上市期</span>
         </div>
         <div class="box">
           <div class="cc">
@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="item-area">
+      <div class="zhedie item-area">
         <div class="box">
           <span class="area-name">区域选择：</span>
         </div>
@@ -88,7 +88,7 @@
           </span>
         </div>
       </div>
-      <div class="item-user-form">
+      <div class="zhedie item-user-form">
         <div class="box">
           <span class="user-attribute">用户属性：</span>
         </div>
@@ -99,7 +99,7 @@
           <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-nochecked.png')"><span class="text">媒体</span></span>
         </div>
       </div>
-      <div class="item-user-form" style="border: none">
+      <div class="zhedie item-user-form" style="border: none">
         <div class="box">
           <span class="user-attribute">来源媒体：</span>
         </div>
@@ -107,13 +107,15 @@
           <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">汽车之家</span></span>
           <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">易车</span></span>
           <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">爱卡汽车</span></span>
+          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">太平洋汽车</span></span>
+
         </div>
       </div>
-      <div class="start-wrap">
+      <div class="zhedie start-wrap">
         开始分析
       </div>
       <div class="retractable-btn" @click="retractableClick">
-        <img :src="require('../../assets/img/retractable-button.png')">
+        <img :src="retractable_url">
       </div>
     </div>
      <van-datetime-picker
@@ -157,6 +159,9 @@
   import pData from '../../assets/json/province'
   import * as t  from '../../assets/js/common'
   import TopBar from "../common/TopBar";
+  // 下面是导入两张图片的相对地址
+  import retractable_close from '../../assets/img/retractable-button-close.png'
+  import retractable_open from '../../assets/img/retractable-button.png'
   export default {
         name: "index",
     components: {
@@ -199,11 +204,36 @@
           currPList:[],//当前选中的省份
           currCList:[],//当前选中的城市
           resultDataList:[],//最终展示的结果
+
+          retractable_url:retractable_open
         }
       },
       created(){
         var  target=  this.$route.query.target;
         console.log(target);
+        $("body").on("click",'.item-time .radio-option',function () {
+           $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
+          $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
+        });
+
+        var myDate = new Date();
+        var y= myDate.getFullYear();    //获取完整的年份(4位,1970-????)
+        var m= this.p(myDate.getMonth());       //获取当前月份(0-11,0代表1月)
+        var d=myDate.getDate();
+        //设置开始时间最小时间
+        this.sminDate=new Date((y-2),0,1);
+       // console.log(this.GetPreMonthDay((y+"-"+m+"-"+d),0));
+        //设置开始时间默认选中日期
+        var currentStartDatechecked =this.GetPreMonthDay((y+"-"+m+"-"+d),6);//前六个月
+        this.currentStartDate=new Date(currentStartDatechecked.split('-')[0],currentStartDatechecked.split('-')[1],currentStartDatechecked.split('-')[2]);
+        //设置结束时间最小时间
+        this.eminDate=new Date((y-2),0,1);
+
+        //设置开始时间，结束时间最大时间（上一个月 当前月-1）
+        var s_e_PreDate =this.GetPreMonthDay((y+"-"+m+"-"+d),1);
+        this.smaxDate=new Date(s_e_PreDate.split('-')[0],s_e_PreDate.split('-')[1],s_e_PreDate.split('-')[2]);
+        this.emaxDate=new Date(s_e_PreDate.split('-')[0],s_e_PreDate.split('-')[1],s_e_PreDate.split('-')[2]);
+
       },
       methods:{
         chooseStartTimeClick(){
@@ -331,16 +361,96 @@
         },
         retractableClick(){
           var currClass=document.getElementById("galaxyWarp").className;
+          var zhedie=  document.getElementsByClassName("zhedie");
           if(currClass.indexOf("close")>-1){
             document.getElementById("galaxyWarp").classList.add("open");
             document.getElementById("galaxyWarp").classList.remove("close");
+            for(var i=0;i<zhedie.length;i++){
+              zhedie[i].classList.remove("hidediv");
+            }
+            document.getElementsByClassName("item-type")[0].style.borderBottom="0.1px solid #d8d8d8";
+            this.retractable_url=retractable_open;
+            for(var i=0;i<zhedie.length;i++){
+              zhedie[i].classList.remove("hidediv");
+              (function(a) {
+                setTimeout(function() {
+                  console.log(a);
+                  zhedie[a].classList.add("showdiv");
+                  zhedie[a].style.display="block";
+                },100*a);
+              })(i);
+
+
+            }
           }else{
             document.getElementById("galaxyWarp").classList.add("close");
             document.getElementById("galaxyWarp").classList.remove("open");
+            document.getElementsByClassName("item-type")[0].style.borderBottom="none";
+            this.retractable_url=retractable_close;
+                for(var i=zhedie.length-1;i>=0;i--){
+                  zhedie[i].classList.remove("showdiv");
+                  (function(a) {
+                    setTimeout(function() {
+                      console.log(a);
+                      zhedie[a].classList.add("hidediv");
+                      zhedie[a].style.display="none";
+                    }, 400/a);
+                  })(i);
 
+                }
           }
-          console.log( document.getElementById("galaxyWarp").className );
-        }
+        },
+        getPreMonth(date){
+          var arr = date.split('-');
+          var year = arr[0]; //获取当前日期的年份
+          var month = arr[1]; //获取当前日期的月份
+          var day = arr[2]; //获取当前日期的日
+          var days = new Date(year, month, 0);
+          days = days.getDate(); //获取当前日期中月的天数
+          var year2 = year;
+          var month2 = parseInt(month) - 1;
+          if (month2 == 0) {
+            year2 = parseInt(year2) - 1;
+            month2 = 12;
+          }
+          var day2 = day;
+          var days2 = new Date(year2, month2, 0);
+          days2 = days2.getDate();
+          if (day2 > days2) {
+            day2 = days2;
+          }
+          if (month2 < 10) {
+            month2 = '0' + month2;
+          }
+          var t2 = year2 + '-' + month2 + '-' + day2;
+          return t2;
+        },
+        GetPreMonthDay: function (date, monthNum) {//monthNum从0开始
+          var dateArr = date.split('-');
+          var year = dateArr[0]; //获取当前日期的年份
+          var month = dateArr[1]; //获取当前日期的月份
+          var day = dateArr[2]; //获取当前日期的日
+          var days = new Date(year, month, 0);
+          days = days.getDate(); //获取当前日期中月的天数
+          var year2 = year;
+          var month2 = parseInt(month) - monthNum;
+          if (month2 <= 0) {
+            year2 =parseInt(year2) -parseInt(month2 / 12 == 0 ? 1 : Math.abs(parseInt(month2 / 12)) + 1)
+            month2 = 12 - (Math.abs(month2) % 12);
+          }
+          var day2 = day;
+          var days2 = new Date(year2, month2, 1);
+          days2 = days2.getDate();
+          if (day2 > days2) {
+            day2 = days2;
+          }
+          if (month2 < 10) {
+            month2 = '0' + month2;
+          }
+          var t2 = year2 + '-' + month2 + '-' + days2;
+          return t2;
+        },
+
       }
     }
 </script>
@@ -378,8 +488,8 @@
         margin-bottom: 1rem;
         padding-bottom: 2rem;
         margin-top: -6rem;
-        height: 85%;
-        transition: all 0.5s ease-out;
+        height:100%;
+        transition: all 0.6s ease-out;
         .title {
           width: 100%;
           position: relative;
@@ -501,14 +611,11 @@
             .radio-option {
               display: inline-block;
               height: 35px;
-              padding-left: 50px;
+              padding:0 50px;
               img {
                 vertical-align: middle;
                 padding-right: 15px;
-                height: 110%;
-              }
-              .text {
-                display: inline-block;
+                height: 100%;
               }
             }
             .cc {
@@ -649,8 +756,7 @@
             .checked-option {
               display: inline-block;
               height: 35px;
-              padding-left: 5px;
-              padding-right: 20px;
+              padding: 8px 20px 8px 5px;
               img {
                 vertical-align: middle;
                 padding-right: 15px;
@@ -673,12 +779,15 @@
           margin-top: 50px;
           font-weight: bold;
           font-size: 40px;
+          margin-bottom: 20px;
         }
         .retractable-btn{
           width: 40px;
           height: 25px;
           margin: auto;
-          margin-top: 30px;
+          margin-bottom: 30px;
+          position: relative;
+          z-index: 0;
           img{
             width: 100%;
           }
@@ -688,7 +797,61 @@
         height: 200px;
       }
       .galaxy-warp.open{
-        height: 85%;
+        height: 100%;
+      }
+      .hidediv{
+        animation-name:fadeoutnum;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count:1;
+        animation-fill-mode:forwards;
+        -webkit-animation-name: fadeoutnum;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-duration: 0.01s;
+        -webkit-animation-direction: alternate;
+      }
+      @-webkit-keyframes fadeoutnum{ /*设置内容由显示变为隐藏*/
+        0% {opacity:1}
+        100% { opacity:0;}
+      }
+      @-moz-keyframes fadeoutnum{ /*设置内容由显示变为隐藏*/
+        0% {opacity:1}
+        100% { opacity:0;}
+      }
+      @-o-keyframes fadeoutnum{ /*设置内容由显示变为隐藏*/
+        0% {opacity:1}
+        100% { opacity:0;}
+      }
+      @keyframes fadeoutnum{
+        0% {opacity:1}
+        100% { opacity:0;}
+      }
+      .showdiv{
+        animation-name:fadeinnum;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count:1;
+        animation-fill-mode:forwards;
+        -webkit-animation-name: fadeinnum;
+        -webkit-animation-timing-function: ease-in-out;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-duration: 0.01s;
+        -webkit-animation-direction: alternate;
+      }
+      @-webkit-keyframes fadeinnum{ /*设置内容由显示变为隐藏*/
+        0% {opacity:0}
+        100% { opacity:1;}
+      }
+      @-moz-keyframes fadeinnum{ /*设置内容由显示变为隐藏*/
+        0% {opacity:0}
+        100% { opacity:1;}
+      }
+      @-o-keyframes fadeinnum{ /*设置内容由显示变为隐藏*/
+        0% {opacity:0}
+        100% { opacity:1;}
+      }
+      @keyframes fadeinnum{
+        0% {opacity:0}
+        100% { opacity:1;}
       }
   }
 
@@ -696,7 +859,7 @@
 <style>
   .van-picker{
     bottom: 0;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
   }

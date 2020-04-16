@@ -5,6 +5,8 @@ import App from './App'
 import './libs/rem.js';
 import router from './router'
 import axios from 'axios'
+// 引入vuex-store
+import store from './store/index';
 
 import Vant from 'vant';
 import 'vant/lib/index.css';
@@ -27,6 +29,7 @@ new Vue({
   el: '#app',
   i18n,
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
