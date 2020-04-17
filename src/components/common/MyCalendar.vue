@@ -43,7 +43,8 @@
             {"id":"09","cnName":'九月',"enName":"Sep",'class':''},
             {"id":"10","cnName":'十月',"enName":"Oct",'class':''},
             {"id":"11","cnName":'十一月',"enName":"Nov",'class':''},
-            {"id":"12","cnName":'十二月',"enName":"Dec",'class':''}]
+            {"id":"12","cnName":'十二月',"enName":"Dec",'class':''}],
+          dateInterval:[]
         }
       },
       props:{
@@ -65,14 +66,90 @@
         },
       },
       created(){
+          var that=this;
           this.appendMonthHtml();
         $("body").on("click",'.month-list .list:not(".disabled")',function () {
-          
+          var hasEndDate=false;
+          $("body").find(".month-list .list:not('.disabled')").each(function () {//是否有结束日期
+            if($(this).hasClass("end-date")){
+              hasEndDate=true;
+            }
+          });
+          if(hasEndDate){
+            $(this).parent().parent().parent().siblings().find(".box .month-list .list").removeClass("start-date");//删除其他年的开始月份
+            $(this).parent().siblings().find(".list").removeClass("start-date");//同一年份下 兄弟节点month-list下的开始月份删除
 
+            $(this).parent().parent().parent().siblings().find(".box .month-list .list").removeClass("end-date");//删除其他年的结束月份
+            $(this).addClass("end-date").siblings().removeClass("end-date");//同一年份下 同一month-list下的结束月份删除
+            $(this).parent().siblings().find(".list").removeClass("end-date");//同一年份下 兄弟节点month-list下的结束月份删除
+
+            $(this).addClass("start-date").siblings().removeClass("start-date");
+            $(this).removeClass("end-date");//同一年份下 同一month-list下的开始月份删除
+          }else{
+            var startyearmonth=0;
+            var endyearmonth=($(this).attr("yearmonth").split("-")[0]+$(this).attr("yearmonth").split("-")[1]);
+            $("body").find(".month-list .list:not('.disabled')").each(function () {//是否有结束日期
+              if($(this).hasClass("start-date")){
+                startyearmonth=($(this).attr("yearmonth").split("-")[0]+$(this).attr("yearmonth").split("-")[1]);
+              }
+            });
+            if(startyearmonth<endyearmonth){ //可以设置结束月
+              $(this).addClass("end-date");
+            }else{
+              $(this).parent().parent().parent().siblings().find(".box .month-list .list").removeClass("start-date");//删除其他年的开始月份
+              $(this).parent().siblings().find(".list").removeClass("start-date");//同一年份下 兄弟节点month-list下的开始月份删除
+
+              $(this).parent().parent().parent().siblings().find(".box .month-list .list").removeClass("end-date");//删除其他年的结束月份
+              $(this).siblings().removeClass("end-date");//同一年份下 同一month-list下的结束月份删除
+              $(this).parent().siblings().find(".list").removeClass("end-date");//同一年份下 兄弟节点month-list下的结束月份删除
+
+              $(this).addClass("start-date").siblings().removeClass("start-date");
+            }
+          }
+
+          var arr=[],syearmonth=0,eyearmonth=0;
+          $("body").find(".month-list .list:not('.disabled')").each(function () {
+            if($(this).hasClass("start-date")){
+              arr.push($(this).attr("yearmonth"));
+              syearmonth=$(this).attr("yearmonth").split("-")[0]+""+$(this).attr("yearmonth").split("-")[1];
+              console.log(syearmonth);
+            }
+            if($(this).hasClass("end-date")){
+              arr.push($(this).attr("yearmonth"));
+              eyearmonth=$(this).attr("yearmonth").split("-")[0]+""+$(this).attr("yearmonth").split("-")[1];
+              console.log(eyearmonth);
+
+            }
+
+          });
+            $("body").find(".month-list .list:not('.disabled')").each(function () {
+              var curr=$(this).attr("yearmonth").split("-")[0]+""+$(this).attr("yearmonth").split("-")[1];
+              if(Number(curr)>Number(syearmonth)&&Number(curr)<Number(eyearmonth)){
+                $(this).addClass("interval");
+              }else{
+                $(this).removeClass("interval");
+              }
+            })
+          that.dateInterval= arr;
+        })
+
+        $("body").on("click",'#mycalendar .footer-btn:not(".disabled")',function () {
+          alert(that.dateInterval);
         })
       },
       watch:{
+        'dateInterval': {
+          handler(newVal) {
+          console.log(newVal);
+          if(newVal.length!=2){
+            $(".footer-btn").addClass("disabled");
+          }else{
+            $(".footer-btn").removeClass("disabled");
 
+          }
+          },
+          deep: true
+        }
       },
       methods:{
           appendMonthHtml(){
@@ -87,6 +164,8 @@
             //获取结束日期可选择的最大月份
             var maxM= this.p(maxDate.getMonth());
             this.sumY=(maxY-minY+1);
+            this.dateInterval.push(minY+"-"+minM);
+            this.dateInterval.push(maxY+"-"+maxM);
             for(var i=0;i<this.sumY;i++){
               if(i==0){//最小年份中的月份可选择的开始日期不可选择
                 var addAttr=JSON.parse(JSON.stringify(this.monthList));//不改变原数组
@@ -242,6 +321,9 @@
                 content: '结束';
                 font-size: 20px;
               }
+              .list.interval{
+                background-color: rgba(250,190,0,0.1);
+              }
             }
           }
         }
@@ -260,6 +342,9 @@
         width:90%;
          margin: auto;
         text-align: center;
+      }
+      .footer-btn.disabled{
+        opacity: 0.5;
       }
     }
     .calendar.open{

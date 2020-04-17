@@ -33,7 +33,7 @@
           date: '',
           mycalendarshow:false,
           show: false,
-          myminDate: new Date(2015, 7, 1),
+          myminDate: new Date(2018, 7, 1),
           mymaxDate: new Date(2020, 4, 31),
           currentStartDate: new Date(2018, 11, 3),//从月份0开始 表示12月
           currentEndDate: new Date(2020, 1, 3),//从月份0开始
