@@ -16,6 +16,7 @@
                  :max-date="mymaxDate"
                  :current-startdate="currentStartDate"
                  :current-enddate="currentEndDate"
+
     ></my-calendar>
   </div>
 </template>
@@ -30,6 +31,7 @@
         name: "analysis-buy",//交叉购买考虑
       data () {
         return {
+
           date: '',
           mycalendarshow:false,
           show: false,
@@ -52,6 +54,7 @@
       }
     },
       methods:{
+
         openMyCalendar(){
           $("body").find("#mycalendar").addClass("open");
           console.log($("body").find("#mycalendar").attr("class"));

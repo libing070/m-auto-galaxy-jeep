@@ -51,15 +51,15 @@
         <div class="box">
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select>
-              <option>按月</option>
-              <option>按日</option>
+            <select v-model="dateType" @change="changeDateType($event)">
+              <option value="month">按月</option>
+              <option value="day">按日</option>
             </select>
           </div>
           <div class="choose-time">
-            <span class="text start-time-text" @click="chooseStartTimeClick">{{currentStartDateText}}</span>
+            <span class="text start-time-text" @click="chooseCalendarClick">{{currentStartDateText}}</span>
             <span class="time-line"></span>
-            <span class="text end-time-text" @click="chooseEndTimeClick">{{currentEndDateText}}</span>
+            <span class="text end-time-text" @click="chooseCalendarClick">{{currentEndDateText}}</span>
           </div>
         </div>
       </div>
@@ -118,29 +118,26 @@
         <img :src="retractable_url">
       </div>
     </div>
-     <van-datetime-picker
-       v-show="startPicker"
-       v-model="currentStartDate"
-       title="开始日期"
-       @cancel="startCancelClick"
-       @confirm="startConfirmClick"
-       type="year-month"
-       :min-date="sminDate"
-       :max-date="smaxDate"
-       :formatter="formatter"
-     />
+     <span v-if="dateType=='month'">
+       <my-calendar  v-show="mycalendarshow"
+                     :min-date="myminDate"
+                     :max-date="mymaxDate"
+                     :current-startdate="currentStartDate"
+                     :current-enddate="currentEndDate"
+                     v-on:dateInterval="dateInterval"
+                     :key="timer"
+       ></my-calendar>
+     </span>
+     <span v-else>
+       <van-calendar
+         v-model="calendarshow"
+         :min-date="minDate"
+         :max-date="maxDate"
+         type="range"
+         @confirm="onConfirm" />
+     </span>
 
-     <van-datetime-picker
-       v-show="endPicker"
-       v-model="currentEndDate"
-       title="结束日期"
-       @cancel="endCancelClick"
-       @confirm="endConfirmClick"
-       type="year-month"
-       :min-date="eminDate"
-       :max-date="emaxDate"
-       :formatter="formatter"
-     />
+
 
      <van-action-sheet v-model="areaShow" :actions="areaActions" @select="onAreaSelect" />
 
@@ -159,6 +156,8 @@
   import pData from '../../assets/json/province'
   import * as t  from '../../assets/js/common'
   import TopBar from "../common/TopBar";
+  import MyCalendar from "../common/MyCalendar";
+
   // 下面是导入两张图片的相对地址
   import retractable_close from '../../assets/img/retractable-button-close.png'
   import retractable_open from '../../assets/img/retractable-button.png'
@@ -166,20 +165,25 @@
         name: "index",
     components: {
       TopBar,
+      MyCalendar
     },
       data () {
         return {
-          startPicker:false,
-          sminDate: new Date(2020, 0, 1),
-          smaxDate: new Date(2025, 10, 1),
-          currentStartDate: new Date(),
-          currentStartDateText:'开始日期',
-
-          endPicker:false,
-          eminDate: new Date(2020, 0, 1),
-          emaxDate: new Date(2025, 10, 1),
-          currentEndDate: new Date(),
+          timer: '',
+          dateType:'month',//按月，按天
           currentEndDateText:'结束日期',
+          currentStartDateText:'开始日期',
+          mycalendarshow:false,
+          myminDate: new Date(2018, 7, 1),
+          mymaxDate: new Date(2020, 4, 31),
+          currentStartDate: new Date(2018, 11, 3),//从月份0开始 表示12月
+          currentEndDate: new Date(2020, 1, 3),//从月份0开始
+          mydateInterval:[],
+
+          calendarshow: false,
+          minDate: new Date(2018, 0, 1),
+          maxDate: new Date(2020, 0, 31),
+
 
           areaText:'全国',
           provinceText:'',
@@ -216,56 +220,50 @@
           $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
         });
 
-        var myDate = new Date();
-        var y= myDate.getFullYear();    //获取完整的年份(4位,1970-????)
-        var m= this.p(myDate.getMonth());       //获取当前月份(0-11,0代表1月)
-        var d=myDate.getDate();
-        //设置开始时间最小时间
-        this.sminDate=new Date((y-2),0,1);
-       // console.log(this.GetPreMonthDay((y+"-"+m+"-"+d),0));
-        //设置开始时间默认选中日期
-        var currentStartDatechecked =this.GetPreMonthDay((y+"-"+m+"-"+d),6);//前六个月
-        this.currentStartDate=new Date(currentStartDatechecked.split('-')[0],currentStartDatechecked.split('-')[1],currentStartDatechecked.split('-')[2]);
-        //设置结束时间最小时间
-        this.eminDate=new Date((y-2),0,1);
-
-        //设置开始时间，结束时间最大时间（上一个月 当前月-1）
-        var s_e_PreDate =this.GetPreMonthDay((y+"-"+m+"-"+d),1);
-        this.smaxDate=new Date(s_e_PreDate.split('-')[0],s_e_PreDate.split('-')[1],s_e_PreDate.split('-')[2]);
-        this.emaxDate=new Date(s_e_PreDate.split('-')[0],s_e_PreDate.split('-')[1],s_e_PreDate.split('-')[2]);
-
+        this.currentStartDateText=this.currentStartDate.getFullYear()+"/"+(this.p(this.currentStartDate.getMonth()+1));
+        this.currentEndDateText=this.currentEndDate.getFullYear()+"/"+(this.p(this.currentEndDate.getMonth()+1));
       },
+    watch:{
+      '$store.state.mycalendarshow': function () {
+        this.mycalendarshow= this.$store.state.mycalendarshow;
+      },
+    },
       methods:{
-        chooseStartTimeClick(){
-          this.startPicker=true;
+        handleLoad () {
+          this.timer = new Date().getTime()
         },
-        chooseEndTimeClick(){
-          this.endPicker=true;
-        },
-        startCancelClick(){//开始时间 取消事件
-          this.startPicker=false;
-        },
-        startConfirmClick(d){//开始时间 确定事件
-          this.startPicker=false;
-          this.currentStartDateText=d.getFullYear()+"/"+(this.p(d.getMonth()+1));
-        },
-        endCancelClick(){//结束时间 取消事件
-          this.endPicker=false;
-        },
-        endConfirmClick(d){//结束时间 确定事件
-          this.endPicker=false;
-          this.currentEndDateText=d.getFullYear()+"/"+(this.p(d.getMonth()+1));
-        },
-        p(s) {
-          return s < 10 ? '0' + s : s
-        },
-       formatter(type, val) {
-          if (type === 'year') {
-            return `${val}年`;
-          } else if (type === 'month') {
-            return `${val}月`;
+        chooseCalendarClick(){
+          if(this.dateType=='month'){
+            this.calendarshow=false;
+            this.currentStartDate=new Date(this.currentStartDateText.split("/")[0],(Number(this.currentStartDateText.split("/")[1])-1),1);
+            this.currentEndDate=new Date(this.currentEndDateText.split("/")[0],(Number(this.currentEndDateText.split("/")[1])-1),1);
+            $("body").find("#mycalendar").addClass("open");
+            this.$store.commit('changeMyCalendar',true);
+            this.mycalendarshow= this.$store.state.mycalendarshow;
+          }else{
+            this.calendarshow=true;
           }
-          return val;
+
+        },
+        dateInterval: function (childValue) {
+          // childValue就是子组件传过来的值
+          this.mydateInterval = childValue
+          this.currentStartDateText=this.mydateInterval[0];
+          this.currentEndDateText=this.mydateInterval[1];
+        },
+
+        formatDate(date) {
+          return `${date.getFullYear() + 1}/${date.getMonth() + 1}/${date.getDate()}`;
+        },
+        onConfirm(date) {
+          const [start, end] = date;
+          this.calendarshow = false;
+          this.currentStartDateText=`${this.formatDate(start)}`;
+          this.currentEndDateText=`${this.formatDate(end)}`;
+        },
+
+
+        changeDateType(event){
         },
         chooseAreaSheetClick(){
           this.areaShow = true;
@@ -399,6 +397,9 @@
 
                 }
           }
+        },
+        p(s) {
+          return s < 10 ? '0' + s : s
         },
         getPreMonth(date){
           var arr = date.split('-');
@@ -870,6 +871,23 @@
      position: fixed;
      bottom: 0;
     background-color: #fabe00;
+    color: #000;
+  }
+  .van-calendar__day--end, .van-calendar__day--multiple-middle, .van-calendar__day--multiple-selected, .van-calendar__day--start, .van-calendar__day--start-end{
+    background-color: #fabe00;
+    color: #000;
+    font-weight: bold;
+  }
+  .van-calendar__day--middle{
+    color: #000;
+    background-color: rgba(250,190,0,0.1);
+  }
+  .van-calendar__day--middle::after{
+    background-color: rgba(250,190,0,0.1);
+  }
+  .van-button--danger{
+    background-color: #fabe00;
+    border: none;
     color: #000;
   }
 </style>

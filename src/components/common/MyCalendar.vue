@@ -11,7 +11,7 @@
           <div class="title">{{item.year}} 年</div>
           <div class="box">
             <div class="month-list" v-for="j in Math.ceil(item.monthList.length/4)">
-              <div :class="info.class" :yearmonth="item.year+'-'+info.id" class="list" v-for="(info,i) in item.monthList.slice((j-1)*4,j*4)" :key="i">
+              <div :class="info.class" :yearmonth="item.year+'/'+info.id" class="list" v-for="(info,i) in item.monthList.slice((j-1)*4,j*4)" :key="i">
                 {{info.cnName}}
               </div>
             </div>
@@ -68,7 +68,7 @@
       created(){
           var that=this;
           this.appendMonthHtml();
-        $("body").on("click",'.month-list .list:not(".disabled")',function () {
+        $("body").off('click','.month-list .list:not(".disabled")').on("click",'.month-list .list:not(".disabled")',function () {
           var hasEndDate=false;
           $("body").find(".month-list .list:not('.disabled')").each(function () {//是否有结束日期
             if($(this).hasClass("end-date")){
@@ -87,10 +87,10 @@
             $(this).removeClass("end-date");//同一年份下 同一month-list下的开始月份删除
           }else{
             var startyearmonth=0;
-            var endyearmonth=($(this).attr("yearmonth").split("-")[0]+$(this).attr("yearmonth").split("-")[1]);
+            var endyearmonth=($(this).attr("yearmonth").split("/")[0]+$(this).attr("yearmonth").split("/")[1]);
             $("body").find(".month-list .list:not('.disabled')").each(function () {//是否有结束日期
               if($(this).hasClass("start-date")){
-                startyearmonth=($(this).attr("yearmonth").split("-")[0]+$(this).attr("yearmonth").split("-")[1]);
+                startyearmonth=($(this).attr("yearmonth").split("/")[0]+$(this).attr("yearmonth").split("/")[1]);
               }
             });
             if(startyearmonth<endyearmonth){ //可以设置结束月
@@ -111,19 +111,15 @@
           $("body").find(".month-list .list:not('.disabled')").each(function () {
             if($(this).hasClass("start-date")){
               arr.push($(this).attr("yearmonth"));
-              syearmonth=$(this).attr("yearmonth").split("-")[0]+""+$(this).attr("yearmonth").split("-")[1];
-              console.log(syearmonth);
+              syearmonth=$(this).attr("yearmonth").split("/")[0]+""+$(this).attr("yearmonth").split("/")[1];
             }
             if($(this).hasClass("end-date")){
               arr.push($(this).attr("yearmonth"));
-              eyearmonth=$(this).attr("yearmonth").split("-")[0]+""+$(this).attr("yearmonth").split("-")[1];
-              console.log(eyearmonth);
-
+              eyearmonth=$(this).attr("yearmonth").split("/")[0]+""+$(this).attr("yearmonth").split("/")[1];
             }
-
           });
             $("body").find(".month-list .list:not('.disabled')").each(function () {
-              var curr=$(this).attr("yearmonth").split("-")[0]+""+$(this).attr("yearmonth").split("-")[1];
+              var curr=$(this).attr("yearmonth").split("/")[0]+""+$(this).attr("yearmonth").split("/")[1];
               if(Number(curr)>Number(syearmonth)&&Number(curr)<Number(eyearmonth)){
                 $(this).addClass("interval");
               }else{
@@ -134,13 +130,14 @@
         })
 
         $("body").on("click",'#mycalendar .footer-btn:not(".disabled")',function () {
-          alert(that.dateInterval);
+          $("body").find("#mycalendar").removeClass("open");
+          that.$store.commit('changeMyCalendar',false);
+          that.$emit('dateInterval', that.dateInterval)
         })
       },
       watch:{
         'dateInterval': {
           handler(newVal) {
-          console.log(newVal);
           if(newVal.length!=2){
             $(".footer-btn").addClass("disabled");
           }else{
@@ -164,8 +161,8 @@
             //获取结束日期可选择的最大月份
             var maxM= this.p(maxDate.getMonth());
             this.sumY=(maxY-minY+1);
-            this.dateInterval.push(minY+"-"+minM);
-            this.dateInterval.push(maxY+"-"+maxM);
+            this.dateInterval.push(minY+"/"+minM);
+            this.dateInterval.push(maxY+"/"+maxM);
             for(var i=0;i<this.sumY;i++){
               if(i==0){//最小年份中的月份可选择的开始日期不可选择
                 var addAttr=JSON.parse(JSON.stringify(this.monthList));//不改变原数组
@@ -189,9 +186,7 @@
             };
 
             //设置开始日期，结束日期
-            var startD=(this.currentStartdate.getFullYear())+"-"+(this.p(this.currentStartdate.getMonth()+1));
-              console.log(this.currentStartdate.getMonth());
-            console.log(this.list);
+            var startD=(this.currentStartdate.getFullYear())+"/"+(this.p(this.currentStartdate.getMonth()+1));
             var resultarray=JSON.parse(JSON.stringify(this.list));//不改变原数组
              for(var j=0;j<resultarray.length;j++){
                 if(resultarray[j].year==this.currentStartdate.getFullYear()){
