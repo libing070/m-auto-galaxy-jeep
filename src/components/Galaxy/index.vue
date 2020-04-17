@@ -93,10 +93,10 @@
           <span class="user-attribute">用户属性：</span>
         </div>
         <div class="box">
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">车主</span></span>
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">一般用户</span></span>
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">水军</span></span>
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-nochecked.png')"><span class="text">媒体</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">车主</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">一般用户</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">水军</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">媒体</span></span>
         </div>
       </div>
       <div class="zhedie item-user-form" style="border: none">
@@ -104,10 +104,10 @@
           <span class="user-attribute">来源媒体：</span>
         </div>
         <div class="box">
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">汽车之家</span></span>
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">易车</span></span>
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">爱卡汽车</span></span>
-          <span class="checked-option"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">太平洋汽车</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">汽车之家</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">易车</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">爱卡汽车</span></span>
+          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">太平洋汽车</span></span>
 
         </div>
       </div>
@@ -181,9 +181,10 @@
           mydateInterval:[],
 
           calendarshow: false,
-          minDate: new Date(2018, 0, 1),
-          maxDate: new Date(2020, 0, 31),
-
+          minDate: new Date(new Date().getFullYear()-2, 0, 1),
+          maxDate: new Date(),
+          currStartDate: new Date(2020, 0, 3),//从月份0开始 表示1月
+          currEndDate: new Date(2020, 4, 3),//从月份0开始
 
           areaText:'全国',
           provinceText:'',
@@ -220,8 +221,35 @@
           $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
         });
 
+
+
+        var nowdate=new Date();
+        //按月，设置默认起止日期（不包括当前月）
+        var beforeMonth=nowdate.getFullYear()+"/"+(this.p(nowdate.getMonth()));
+        var resbefore6Month=this.GetPreMonthDay(beforeMonth,6);
+        this.currentStartDate=new Date(resbefore6Month.split("/")[0],resbefore6Month.split("/")[1],1);
         this.currentStartDateText=this.currentStartDate.getFullYear()+"/"+(this.p(this.currentStartDate.getMonth()+1));
+        var resbefore1Month=this.GetPreMonthDay(beforeMonth,1);
+        this.currentEndDate=new Date(resbefore1Month.split("/")[0],resbefore1Month.split("/")[1],1);
         this.currentEndDateText=this.currentEndDate.getFullYear()+"/"+(this.p(this.currentEndDate.getMonth()+1));
+        //按月，设置最小日期和最大日期选择范围
+          var mmin=nowdate.getFullYear()-2//两年前
+          this.myminDate=new Date(mmin,1,1);//最小日期为两年之前的1月开始
+          this.mymaxDate=new Date(nowdate.getFullYear(),nowdate.getMonth(),1);//最大值为当前月
+        //按天
+        this.currStartDate=new Date(nowdate - 1000 * 60 * 60 * 24 * 30);//最后一个数字30可改，30天的意思
+        this.currEndDate=new Date(nowdate - 1000 * 60 * 60 * 24 * 1);//获取前一天
+
+
+        $("body").on("click",'.item-user-form .checked-option',function () {
+           if($(this).hasClass("active")){
+             $(this).removeClass("active");
+             $(this).find('img').attr("src",require("../../assets/img/icon-checkbox-nochecked.png"));
+           }else{
+             $(this).addClass("active");
+             $(this).find('img').attr("src",require("../../assets/img/icon-checkbox-checked.png"));
+           }
+        })
       },
     watch:{
       '$store.state.mycalendarshow': function () {
@@ -233,13 +261,17 @@
           this.timer = new Date().getTime()
         },
         chooseCalendarClick(){
+          var that=this;
           if(this.dateType=='month'){
             this.calendarshow=false;
             this.currentStartDate=new Date(this.currentStartDateText.split("/")[0],(Number(this.currentStartDateText.split("/")[1])-1),1);
             this.currentEndDate=new Date(this.currentEndDateText.split("/")[0],(Number(this.currentEndDateText.split("/")[1])-1),1);
-            $("body").find("#mycalendar").addClass("open");
-            this.$store.commit('changeMyCalendar',true);
-            this.mycalendarshow= this.$store.state.mycalendarshow;
+            that.$store.commit('changeMyCalendar',true);
+            that.mycalendarshow= that.$store.state.mycalendarshow;
+            setTimeout(function () {
+              $("body").find("#mycalendar").addClass("open");
+              $("body").find("#mycalendar").find(".footer-btn").css("opacity","1");
+            },100);
           }else{
             this.calendarshow=true;
           }
@@ -264,6 +296,14 @@
 
 
         changeDateType(event){
+          if(this.dateType=='month'){
+            this.currentStartDateText=this.currentStartDate.getFullYear()+"/"+(this.p(this.currentStartDate.getMonth()+1));
+            this.currentEndDateText=this.currentEndDate.getFullYear()+"/"+(this.p(this.currentEndDate.getMonth()+1));
+          }else{
+            this.currentStartDateText=this.currStartDate.getFullYear()+"/"+(this.p(this.currStartDate.getMonth()+1)+"/"+this.currStartDate.getDate());
+            this.currentEndDateText=this.currEndDate.getFullYear()+"/"+(this.p(this.currEndDate.getMonth()+1)+"/"+this.currEndDate.getDate());
+          }
+
         },
         chooseAreaSheetClick(){
           this.areaShow = true;
@@ -427,7 +467,7 @@
           return t2;
         },
         GetPreMonthDay: function (date, monthNum) {//monthNum从0开始
-          var dateArr = date.split('-');
+          var dateArr = date.split('/');
           var year = dateArr[0]; //获取当前日期的年份
           var month = dateArr[1]; //获取当前日期的月份
           var day = dateArr[2]; //获取当前日期的日
@@ -448,7 +488,7 @@
           if (month2 < 10) {
             month2 = '0' + month2;
           }
-          var t2 = year2 + '-' + month2 + '-' + days2;
+          var t2 = year2 + '/' + month2 + '/' + days2;
           return t2;
         },
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="my-overlay">
+  <div class="my-overlay" @click.self="onClosecalendar">
     <div class="calendar" id="mycalendar">
       <div class="header-title">
         <span class="name">日期选择</span>
@@ -131,9 +131,11 @@
 
         $("body").on("click",'#mycalendar .footer-btn:not(".disabled")',function () {
           $("body").find("#mycalendar").removeClass("open");
-          that.$store.commit('changeMyCalendar',false);
-          that.$emit('dateInterval', that.dateInterval)
-        })
+          setTimeout(function () {
+            that.$store.commit('changeMyCalendar',false);
+            that.$emit('dateInterval', that.dateInterval)
+          },300);
+        });
       },
       watch:{
         'dateInterval': {
@@ -186,7 +188,6 @@
             };
 
             //设置开始日期，结束日期
-            var startD=(this.currentStartdate.getFullYear())+"/"+(this.p(this.currentStartdate.getMonth()+1));
             var resultarray=JSON.parse(JSON.stringify(this.list));//不改变原数组
              for(var j=0;j<resultarray.length;j++){
                 if(resultarray[j].year==this.currentStartdate.getFullYear()){
@@ -207,13 +208,31 @@
                }
             }
             this.list=resultarray;
+             this.$nextTick(function () {
+               var syearmonth=0,eyearmonth=0;
+               syearmonth=$("body").find(".month-list .list.start-date").attr("yearmonth").replace("/","");
+               eyearmonth=$("body").find(".month-list .list.end-date").attr("yearmonth").replace("/","");
+               $("body").find(".month-list .list:not('.disabled')").each(function () {
+                 var curr=$(this).attr("yearmonth").split("/")[0]+""+$(this).attr("yearmonth").split("/")[1];
+                 if(Number(curr)>Number(syearmonth)&&Number(curr)<Number(eyearmonth)){
+                   $(this).addClass("interval");
+                 }else{
+                   $(this).removeClass("interval");
+                 }
+               })
+             })
           },
         p(s) {
           return s < 10 ? '0' + s : s
         },
         onClosecalendar(){
+            var that=this;
           $("body").find("#mycalendar").removeClass("open");
-          this.$store.commit('changeMyCalendar',false);
+          $("body").find("#mycalendar").find(".footer-btn").css("opacity","0");
+          setTimeout(function () {
+            that.$store.commit('changeMyCalendar',false);
+          },300);
+
         }
       }
     }
@@ -237,10 +256,10 @@
       height:0%;
       background-color: white;
       border-radius: 40px 40px 0 0;
-      transition:all 2s ease-out;;
-      -moz-transition:all 2s ease-out;; /* Firefox 4 */
-      -webkit-transition:all 2s ease-out;; /* Safari and Chrome */
-      -o-transition:all 2s ease-out;; /* Opera */
+      transition:all 0.3s ease-out;;
+      -moz-transition:all 0.3s ease-out;; /* Firefox 4 */
+      -webkit-transition:all 0.3s ease-out;; /* Safari and Chrome */
+      -o-transition:all 0.3s ease-out;; /* Opera */
       .header-title{
       position: relative;
       height: 88px;
@@ -324,6 +343,10 @@
         }
       }
       .footer-btn{
+        transition:all 0.3s ease-out;;
+        -moz-transition:all 0.3s ease-out;; /* Firefox 4 */
+        -webkit-transition:all 0.3s ease-out;; /* Safari and Chrome */
+        -o-transition:all 0.3s ease-out;; /* Opera */
         position: absolute;
         bottom: 20px;
         left: 0;
@@ -337,6 +360,7 @@
         width:90%;
          margin: auto;
         text-align: center;
+        opacity: 0;
       }
       .footer-btn.disabled{
         opacity: 0.5;
