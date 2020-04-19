@@ -21,6 +21,14 @@ module.exports = {
       "/mail": {
         target: host,
         changeOrigin: true
+      },
+      "/car/brand": {
+        target: host,
+        changeOrigin: true
+      },
+      "/car/series": {
+        target: host,
+        changeOrigin: true
       }
     },
 

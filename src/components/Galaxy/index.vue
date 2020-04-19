@@ -11,10 +11,8 @@
           <span class="name">品牌</span>
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select>
-              <option>Jeep</option>
-              <option>三菱</option>
-              <option>丰田</option>
+            <select v-model="brandName" @change="changeBrandList($event)">
+              <option v-for="(item,index) in brandList" v-bind:value="item.id">{{item.name}}</option>
             </select>
           </div>
         </div>
@@ -22,10 +20,9 @@
           <span class="name">车型</span>
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select>
-              <option>Jeep</option>
-              <option>三菱</option>
-              <option>丰田</option>
+            <select v-model="carName">
+              <option v-for="(item,index) in carTypeList" v-bind:value="item.id">{{item.name}}</option>
+
             </select>
           </div>
         </div>
@@ -169,6 +166,10 @@
     },
       data () {
         return {
+          brandList:[],
+          brandName:'',
+          carTypeList:[],
+          carName:'',
           timer: '',
           dateType:'month',//按月，按天
           currentEndDateText:'结束日期',
@@ -216,6 +217,7 @@
       created(){
         var  target=  this.$route.query.target;
         console.log(target);
+        this.init()//初始化默认参数
         $("body").on("click",'.item-time .radio-option',function () {
            $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
           $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
@@ -257,6 +259,42 @@
       },
     },
       methods:{
+       init(){
+         this.getBrandList();
+       },
+        changeBrandList(event){
+          this.getCarTypeByBrand();
+        },
+        getBrandList(){//获取品牌下拉列表数据
+          this.$axios
+            .get("car/brand", {})
+            .then(res => {
+              if (res.data.status === 1) {
+                for(var val of res.data.data){
+                 this.brandList.push(val);
+                }
+                this.brandName=this.brandList[0].name;
+                this.getCarTypeByBrand();
+              } else {
+                this.$toast(res.data.msg);
+              }
+            });
+        },
+        getCarTypeByBrand(){
+         this.carTypeList=[];
+          this.$axios
+            .get("car/series?brand="+this.brandName)
+            .then(res => {
+              if (res.data.status === 1) {
+                for(var val of res.data.data){
+                  this.carTypeList.push(val);
+                }
+                this.carName=this.carTypeList[0].name
+              } else {
+                this.$toast(res.data.msg);
+              }
+            });
+        },
         handleLoad () {
           this.timer = new Date().getTime()
         },
