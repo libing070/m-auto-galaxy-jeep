@@ -1,10 +1,10 @@
 <template>
    <div class="galaxy">
-    <top-bar :isshowBackbtn="true"></top-bar>
+    <top-bar :isshowBackbtn="true" :backurl="backurl"></top-bar>
     <div class="galaxy-warp" id="galaxyWarp">
       <div class="title">
         <span class="line"></span>
-        <div class="desc">{{this.$t('dimension.depart1')}}</div>
+        <div class="desc">{{titleName}}</div>
       </div>
       <div class="item-type">
         <div class="box">
@@ -166,6 +166,8 @@
     },
       data () {
         return {
+          backurl:'/dimensions',
+          titleName:'',
           brandList:[],
           brandName:'',
           carTypeList:[],
@@ -209,6 +211,7 @@
 
           currPList:[],//当前选中的省份
           currCList:[],//当前选中的城市
+          currProvinceCity:[],//当前选中省下面的市集合
           resultDataList:[],//最终展示的结果
 
           retractable_url:retractable_open
@@ -216,7 +219,9 @@
       },
       created(){
         var  target=  this.$route.query.target;
-        console.log(target);
+        var  name=  this.$route.query.name;
+        console.log(target+"  "+name);
+        this.titleName=name;
         this.init()//初始化默认参数
         $("body").on("click",'.item-time .radio-option',function () {
            $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
@@ -363,14 +368,30 @@
          else{
             this.provinceDisabled=false;//省市选择开启
             this.cityDisabled=true;//城市选择关闭
-            this.provinceActions=[];
-            for(var i=0;i<pData.length;i++){
-              this.provinceActions.push({name:pData[i].regionName,color:'',className:''});
-            }
-            item.name=='省市'?this.provinceActions=this.provinceActions.concat({name:'',color:'',className:''}):'';
           }
         },
         chooseProvinceSheetClick(event){
+         var that=this;
+          that.provinceActions=[];
+          for(var i = 0; i < pData.length; i++){
+            var obj = pData[i];
+            var num = obj.regionName;
+            var isExist = false;
+            for(var j = 0; j < that.currPList.length; j++){
+              var aj = that.currPList[j];
+              var n = aj;
+              if(n == num){
+                isExist = true;
+                break;
+              }
+            }
+            if(isExist){
+              that.provinceActions.push({name:pData[i].regionName,color:'#fabe00',className:'active'});
+            }else{
+             that.provinceActions.push({name:pData[i].regionName,color:'',className:''});
+            }
+          }
+          this.areaText=='省市'?that.provinceActions=that.provinceActions.concat({name:'',color:'',className:''}):'';//最后追加一个空值 否则确定按钮挡住最后一个省份
           this.provinceShow = true;
         },
         onProvinceSelect(item){
@@ -390,27 +411,42 @@
             this.provinceShow = false;//省市选择开启
             this.cityDisabled=false;//城市选择开启
             this.provinceText=item.name;
-            this.cityActions=[];
-            var currProvinceCity=[];
+            that.currProvinceCity=[];
             pData.forEach((val)=>{
               if(val.regionName==item.name){
-                currProvinceCity=val;
+                that.currProvinceCity=val;
               }
             })
-            if(currProvinceCity.children!=undefined){
-              for(var k=0;k<currProvinceCity.children.length;k++){
-                 this.cityActions.push({name:currProvinceCity.children[k].regionName,color:'',className:''});
-              }
-            }else{
-              this.cityActions.push({name:currProvinceCity.regionName,color:'',className:''});//说明是直辖市
-            }
-           this.cityActions=this.cityActions.concat({name:'',color:''});
           }
 
         },
         chooseCitySheetClick(){
+         var that=this;
+          this.cityActions=[];
+          if(that.currProvinceCity.children!=undefined){
+            for(var i = 0; i < that.currProvinceCity.children.length; i++){
+              var obj = that.currProvinceCity.children[i];
+              var num = obj.regionName;
+              var isExist = false;
+              for(var j = 0; j < that.currCList.length; j++){
+                var aj = that.currCList[j];
+                var n = aj;
+                if(n == num){
+                  isExist = true;
+                  break;
+                }
+              }
+              if(isExist){
+                that.cityActions.push({name:that.currProvinceCity.children[i].regionName,color:'#fabe00',className:'active'});
+              }else{
+                that.cityActions.push({name:that.currProvinceCity.children[i].regionName,color:'',className:''});
+              }
+            }
+          }else{
+            this.cityActions.push({name:that.currProvinceCity.regionName,color:'',className:''});//说明是直辖市
+          }
+          this.cityActions=this.cityActions.concat({name:'',color:''});
           this.cityShow = true;
-
         },
         onCitySelect(item){
           item.color=item.color==''?'#fabe00':'';
@@ -450,7 +486,7 @@
               zhedie[i].classList.remove("hidediv");
               (function(a) {
                 setTimeout(function() {
-                  console.log(a);
+                //  console.log(a);
                   zhedie[a].classList.add("showdiv");
                   zhedie[a].style.display="block";
                 },100*a);
@@ -467,7 +503,7 @@
                   zhedie[i].classList.remove("showdiv");
                   (function(a) {
                     setTimeout(function() {
-                      console.log(a);
+                      //console.log(a);
                       zhedie[a].classList.add("hidediv");
                       zhedie[a].style.display="none";
                     }, 400/a);

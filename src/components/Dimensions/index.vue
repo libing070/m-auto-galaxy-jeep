@@ -83,7 +83,29 @@
       },
     methods:{
       toAnalysisPage(key){
-        this.$router.push({path: '/galaxy', query: {'target': key}})
+        var that=this;
+        var name='';
+        switch(key) {
+          case 'buy':
+            name=that.$t("dimension.list112");
+            break;
+          case 'sound':
+            name=that.$t("dimension.list27");
+            break;
+          case 'koubei':
+            name=that.$t("dimension.list15");
+            break;
+          case 'pleased':
+            name=that.$t("dimension.list14");
+            break;
+          case 'reason':
+            name=that.$t("dimension.list12");
+            break;
+          case 'doubt':
+            name=that.$t("dimension.list28");
+            break;
+        }
+        this.$router.push({path: '/galaxy', query: {'target': key,'name':name}})
       }
     }
     }

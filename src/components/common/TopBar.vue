@@ -36,7 +36,7 @@
 
     </div>
 
-    <div class="back-btn" v-show="isshowBackbtn">
+    <div class="back-btn" v-show="isshowBackbtn" @click="goBack()">
       <img :src="require('../../assets/img/icon-back.png')">
     </div>
 
@@ -52,13 +52,17 @@
           textareaContent:'',
         }
       },
-      props: ['isshowBackbtn'],
+      props: ['isshowBackbtn',"backurl"],
       computed: {
         curLang() {
           return this.$i18n.locale;
         },
       },
       methods:{
+        goBack(){
+            this.$router.push({path:this.backurl});
+
+        },
         showPopup() {
           this.newdemandShow = true;
         },
