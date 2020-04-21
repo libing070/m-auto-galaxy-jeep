@@ -29,7 +29,7 @@
         <div class="zhedie big-box">
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select>
+            <select v-bind:disabled="isDisabledNiankuan">
               <option>年款</option>
               <option>2019款</option>
               <option>2018款</option>
@@ -42,8 +42,8 @@
       <div class="zhedie item-time">
         <div class="box">
           <span class="radio-name">时间选择：</span>
-          <span  class="radio-option"><img :src="require('../../assets/img/radio-checked.png')">自定义</span>
-          <span  class="radio-option"><img :src="require('../../assets/img/radio-nochecked.png')">上市期</span>
+          <span v-show="isShowTimeChoose"  class="radio-option"><img :src="require('../../assets/img/radio-checked.png')">自定义</span>
+          <span v-show="isShowTimeChoose" class="radio-option"><img :src="require('../../assets/img/radio-nochecked.png')">上市期</span>
         </div>
         <div class="box">
           <div class="cc">
@@ -90,10 +90,10 @@
           <span class="user-attribute">用户属性：</span>
         </div>
         <div class="box">
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">车主</span></span>
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">一般用户</span></span>
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">水军</span></span>
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">媒体</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActivechezhu,disabledchecked.isDisabledchezhu]"><img v-bind:src="activechecked.isActivechezhu=='active'?checked_url:nochecked_url"><span class="text">车主</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActiveyonghu,disabledchecked.isDisabledyonghu]"><img v-bind:src="activechecked.isActiveyonghu=='active'?checked_url:nochecked_url"><span class="text">一般用户</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActiveshuijun,disabledchecked.isDisabledshuijun]"><img v-bind:src="activechecked.isActiveshuijun=='active'?checked_url:nochecked_url"><span class="text">水军</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActivemeiti,disabledchecked.isDisabledmeiti]"><img v-bind:src="activechecked.isActivemeiti=='active'?checked_url:nochecked_url"><span class="text">媒体</span></span>
         </div>
       </div>
       <div class="zhedie item-user-form" style="border: none">
@@ -101,10 +101,10 @@
           <span class="user-attribute">来源媒体：</span>
         </div>
         <div class="box">
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">汽车之家</span></span>
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">易车</span></span>
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">爱卡汽车</span></span>
-          <span class="checked-option active"><img :src="require('../../assets/img/icon-checkbox-checked.png')"><span class="text">太平洋汽车</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActivezhijia,disabledchecked.isDisabledzhijia]"><img v-bind:src="activechecked.isActivezhijia=='active'?checked_url:nochecked_url"><span class="text">汽车之家</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActiveyiche,disabledchecked.isDisabledyiche]"><img v-bind:src="activechecked.isActiveyiche=='active'?checked_url:nochecked_url"><span class="text">易车</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActiveaika,disabledchecked.isDisabledaika]"><img v-bind:src="activechecked.isActiveaika=='active'?checked_url:nochecked_url"><span class="text">爱卡汽车</span></span>
+          <span class="checked-option" v-bind:class="[activechecked.isActivetaipinyang,disabledchecked.isDisabledtaipinyang]"><img v-bind:src="activechecked.isActivetaipinyang=='active'?checked_url:nochecked_url"><span class="text">太平洋汽车</span></span>
 
         </div>
       </div>
@@ -154,7 +154,6 @@
   import * as t  from '../../assets/js/common'
   import TopBar from "../common/TopBar";
   import MyCalendar from "../common/MyCalendar";
-
   // 下面是导入两张图片的相对地址
   import retractable_close from '../../assets/img/retractable-button-close.png'
   import retractable_open from '../../assets/img/retractable-button.png'
@@ -166,7 +165,32 @@
     },
       data () {
         return {
+          target:'',
           backurl:'/dimensions',
+          isDisabledNiankuan:false,//年款是否禁用
+          isShowTimeChoose:true,//是否显示时间选择
+          checked_url:require('../../assets/img/icon-checkbox-checked.png'),
+          nochecked_url:require('../../assets/img/icon-checkbox-nochecked.png'),
+          activechecked:{//是否选中
+            isActivechezhu:'',//车主
+            isActiveyonghu:'',//一般用户
+            isActiveshuijun:'',//水军
+            isActivemeiti:'',//媒体
+            isActivezhijia:'',//汽车之家
+            isActiveyiche:'',//易车
+            isActiveaika:'',//爱卡汽车
+            isActivetaipinyang:'',//太平洋汽车
+          },
+          disabledchecked:{//是否可选
+            isDisabledchezhu:'',//车主
+            isDisabledyonghu:'',//一般用户
+            isDisabledshuijun:'',//水军
+            isDisabledmeiti:'',//媒体
+            isDisabledzhijia:'',//汽车之家
+            isDisabledyiche:'',//易车
+            isDisabledaika:'',//爱卡汽车
+            isDisabledtaipinyang:'',//太平洋汽车
+          },
           titleName:'',
           brandList:[],
           brandName:'',
@@ -218,11 +242,13 @@
         }
       },
       created(){
-        var  target=  this.$route.query.target;
+        console.log('created.......');
+          var that=this;
+        this.target=  this.$route.query.target;
         var  name=  this.$route.query.name;
-        console.log(target+"  "+name);
+        console.log(this.target+"  "+name);
         this.titleName=name;
-        this.init()//初始化默认参数
+        this.initParameters()//初始化默认参数
         $("body").on("click",'.item-time .radio-option',function () {
            $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
           $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
@@ -248,24 +274,113 @@
         this.currEndDate=new Date(nowdate - 1000 * 60 * 60 * 24 * 1);//获取前一天
 
 
-        $("body").on("click",'.item-user-form .checked-option',function () {
-           if($(this).hasClass("active")){
-             $(this).removeClass("active");
-             $(this).find('img').attr("src",require("../../assets/img/icon-checkbox-nochecked.png"));
-           }else{
-             $(this).addClass("active");
-             $(this).find('img').attr("src",require("../../assets/img/icon-checkbox-checked.png"));
-           }
-        })
+
       },
+    mounted(){
+          var that=this;
+         that.$nextTick(() => {
+           console.log('mounted....');
+        $("body").off('click','.item-user-form .checked-option').on("click",'.item-user-form .checked-option',function () {
+          if(!$(this).hasClass("disabled")){
+            if($(this).hasClass("active")){
+              $(this).removeClass("active");
+              $(this).find('img').attr("src",that.nochecked_url);
+            }else{
+              $(this).addClass("active");
+              $(this).find('img').attr("src",that.checked_url);
+            }
+          }
+
+        })
+      })
+
+    },
     watch:{
       '$store.state.mycalendarshow': function () {
         this.mycalendarshow= this.$store.state.mycalendarshow;
       },
     },
       methods:{
-       init(){
+       initParameters(){
+         var that=this;
          this.getBrandList();
+         switch(this.target) {
+           case 'buy':
+            that.isDisabledNiankuan=true;
+            that.isShowTimeChoose=false;
+             that.disabledchecked.isDisabledchezhu='disabled';
+             that.disabledchecked.isDisabledyonghu='disabled';
+             that.disabledchecked.isDisabledshuijun='disabled';
+             that.disabledchecked.isDisabledmeiti='disabled';
+             that.disabledchecked.isDisabledzhijia='disabled';
+             that.disabledchecked.isDisabledyiche='disabled';
+             that.disabledchecked.isDisabledaika='disabled';
+             that.disabledchecked.isDisabledtaipinyang='disabled';
+             break;
+           case 'sound':
+             that.isDisabledNiankuan=true;
+
+             that.activechecked.isActivechezhu='active';
+             that.activechecked.isActiveyonghu='active';
+             that.activechecked.isActiveshuijun='active';
+             that.activechecked.isActivemeiti='active';
+             that.activechecked.isActivezhijia='active';
+             that.activechecked.isActiveyiche='active';
+             that.activechecked.isActiveaika='active';
+             that.activechecked.isActivetaipinyang='active';
+             break;
+           case 'koubei':
+             that.isDisabledNiankuan=true;
+
+             that.activechecked.isActivechezhu='active';
+             that.activechecked.isActiveyonghu='active';
+             that.activechecked.isActiveshuijun='active';
+             that.activechecked.isActivemeiti='active';
+             that.activechecked.isActivezhijia='active';
+             that.activechecked.isActiveyiche='active';
+             that.activechecked.isActiveaika='active';
+             that.activechecked.isActivetaipinyang='active';
+             break;
+           case 'pleased':
+             that.activechecked.isActivezhijia='active';
+             that.activechecked.isActiveyiche='active';
+             that.activechecked.isActiveaika='active';
+             that.activechecked.isActivetaipinyang='active';
+
+             that.disabledchecked.isDisabledchezhu='disabled';
+             that.disabledchecked.isDisabledyonghu='disabled';
+             that.disabledchecked.isDisabledshuijun='disabled';
+             that.disabledchecked.isDisabledmeiti='disabled';
+             break;
+           case 'reason':
+             that.activechecked.isActivezhijia='active';
+             that.activechecked.isActiveyiche='active';
+             that.activechecked.isActiveaika='active';
+             that.activechecked.isActivetaipinyang='active';
+
+
+             that.disabledchecked.isDisabledchezhu='disabled';
+             that.disabledchecked.isDisabledyonghu='disabled';
+             that.disabledchecked.isDisabledshuijun='disabled';
+             that.disabledchecked.isDisabledmeiti='disabled';
+
+             break;
+           case 'doubt':
+             that.isDisabledNiankuan=true;
+
+             that.activechecked.isActivechezhu='active';
+             that.activechecked.isActiveyonghu='active';
+             that.activechecked.isActiveshuijun='active';
+             that.activechecked.isActivezhijia='active';
+             that.activechecked.isActiveyiche='active';
+             that.activechecked.isActiveaika='active';
+             that.activechecked.isActivetaipinyang='active';
+
+             that.disabledchecked.isDisabledmeiti='disabled';
+
+             break;
+         }
+
        },
         changeBrandList(event){
           this.getCarTypeByBrand();
@@ -872,6 +987,7 @@
               display: inline-block;
               height: 35px;
               padding: 8px 20px 8px 5px;
+
               img {
                 vertical-align: middle;
                 padding-right: 15px;
@@ -880,6 +996,9 @@
               .text {
                 display: inline-block;
               }
+            }
+            .checked-option.disabled{
+              opacity: 0.5;
             }
           }
         }
