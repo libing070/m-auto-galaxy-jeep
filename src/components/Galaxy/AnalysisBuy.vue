@@ -2,14 +2,14 @@
   <div class="analysisbuy">
     <div class="item">
       <div class="draw" id="echartbuy1" :style="{ height: '300px'}"></div>
-      <img @click="zoomInClick('echartbuy1')" class="zoom-btn" src="../../assets/img/zoom-in-icon.png"/>
+      <img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/zoom-in-icon.png"/>
     </div>
     <div class="item">
       <div class="draw" id="echartbuy2" :style="{ height: '300px'}"></div>
-      <img @click="zoomInClick('echartbuy2')"  class="zoom-btn" src="../../assets/img/zoom-in-icon.png"/>
+      <img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/zoom-in-icon.png"/>
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
-      <zoom-in v-on:isShowZoomOut="isShowZoomOutMethods" :zoomDrawId="zoomDrawId"></zoom-in>
+      <zoom-in v-on:isShowZoomOut="isShowZoomOutMethods"></zoom-in>
     </div>
 
   </div>
@@ -207,10 +207,13 @@
           }]
         });
       },
-      zoomInClick($el){
+      zoomInClick(num){
         var that=this;
         that.isShowZoomIn=true;
-        that.zoomDrawId=$el;
+        that.$nextTick(() => {
+          num==1?that.drawLine1('zoomIds'):that.drawLine2('zoomIds');
+        });
+
       },
       isShowZoomOutMethods: function (val) {
         // childValue就是子组件传过来的值

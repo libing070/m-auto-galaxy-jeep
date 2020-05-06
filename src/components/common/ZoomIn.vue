@@ -9,16 +9,13 @@
 <script>
     export default {
       name: "zoom-in",
-      props:['zoomDrawId'],
       data () {
         return {
-          ids:'',
         }
       },
       mounted(){
         var that=this;
-        console.log(that.zoomDrawId);
-        this.$parent.drawLine1('zoomIds');
+
       },
       methods:{
         zoomOutClick(){
