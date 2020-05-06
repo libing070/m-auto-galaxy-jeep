@@ -10,6 +10,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "echarts": "^4.7.0",
     "vant": "^2.5.9",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"

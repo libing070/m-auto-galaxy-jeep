@@ -26,15 +26,14 @@
             </select>
           </div>
         </div>
-        <div class="zhedie big-box">
+        <div class="zhedie big-box"  v-show="isShowNiankuan">
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select v-bind:disabled="isDisabledNiankuan">
-              <option>年款</option>
-              <option>2019款</option>
-              <option>2018款</option>
-              <option>2017款</option>
-
+            <select v-bind:disabled="isDisabledNiankuan" v-model="niankuanName">
+              <option value="">年款</option>
+              <option value="2019款">2019款</option>
+              <option value="2018款">2018款</option>
+              <option value="2017款">2017款</option>
             </select>
           </div>
         </div>
@@ -42,10 +41,10 @@
       <div class="zhedie item-time">
         <div class="box">
           <span class="radio-name">时间选择：</span>
-          <span v-show="isShowTimeChoose"  class="radio-option"><img :src="require('../../assets/img/radio-checked.png')">自定义</span>
-          <span v-show="isShowTimeChoose" class="radio-option"><img :src="require('../../assets/img/radio-nochecked.png')">上市期</span>
+          <span v-show="isShowTimeChoose" type="0" class="radio-option active"><img :src="require('../../assets/img/radio-checked.png')">自定义</span>
+          <span v-show="isShowTimeChoose" type="1" class="radio-option"><img :src="require('../../assets/img/radio-nochecked.png')">上市期</span>
         </div>
-        <div class="box">
+        <div class="box" v-if="timeRadiooption==0">
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
             <select v-model="dateType" @change="changeDateType($event)">
@@ -54,9 +53,17 @@
             </select>
           </div>
           <div class="choose-time">
-            <span class="text start-time-text" @click="chooseCalendarClick">{{currentStartDateText}}</span>
+            <span class="text start-time-text" @click="chooseCalendarClick($event)">{{currentStartDateText}}</span>
             <span class="time-line"></span>
-            <span class="text end-time-text" @click="chooseCalendarClick">{{currentEndDateText}}</span>
+            <span class="text end-time-text" @click="chooseCalendarClick($event)">{{currentEndDateText}}</span>
+          </div>
+        </div>
+        <div class="box" v-else-if="timeRadiooption==1" v-bind:class="[shangshiqiTimeBox]">
+          <div class="desc" v-show="shangshiDesc">请注意：同一车系不同年款的上市期不同，请选择年款</div>
+          <div class="choose-time" style="width: 100%">
+            <span style="width: 46%" class="text start-time-text" @click="chooseCalendarClick($event)">{{currentStartDateText}}</span>
+            <span class="time-line"></span>
+            <span style="width: 46%" class="text end-time-text" @click="chooseCalendarClick($event)">{{currentEndDateText}}</span>
           </div>
         </div>
       </div>
@@ -90,10 +97,10 @@
           <span class="user-attribute">用户属性：</span>
         </div>
         <div class="box">
-          <span class="checked-option" v-bind:class="[activechecked.isActivechezhu,disabledchecked.isDisabledchezhu]"><img v-bind:src="activechecked.isActivechezhu=='active'?checked_url:nochecked_url"><span class="text">车主</span></span>
-          <span class="checked-option" v-bind:class="[activechecked.isActiveyonghu,disabledchecked.isDisabledyonghu]"><img v-bind:src="activechecked.isActiveyonghu=='active'?checked_url:nochecked_url"><span class="text">一般用户</span></span>
-          <span class="checked-option" v-bind:class="[activechecked.isActiveshuijun,disabledchecked.isDisabledshuijun]"><img v-bind:src="activechecked.isActiveshuijun=='active'?checked_url:nochecked_url"><span class="text">水军</span></span>
-          <span class="checked-option" v-bind:class="[activechecked.isActivemeiti,disabledchecked.isDisabledmeiti]"><img v-bind:src="activechecked.isActivemeiti=='active'?checked_url:nochecked_url"><span class="text">媒体</span></span>
+          <span class="checked-option user" v-bind:class="[activechecked.isActivechezhu,disabledchecked.isDisabledchezhu]"><img v-bind:src="activechecked.isActivechezhu=='active'?checked_url:nochecked_url"><span class="text">车主</span></span>
+          <span class="checked-option user" v-bind:class="[activechecked.isActiveyonghu,disabledchecked.isDisabledyonghu]"><img v-bind:src="activechecked.isActiveyonghu=='active'?checked_url:nochecked_url"><span class="text">一般用户</span></span>
+          <span class="checked-option user" v-bind:class="[activechecked.isActiveshuijun,disabledchecked.isDisabledshuijun]"><img v-bind:src="activechecked.isActiveshuijun=='active'?checked_url:nochecked_url"><span class="text">水军</span></span>
+          <span class="checked-option user" v-bind:class="[activechecked.isActivemeiti,disabledchecked.isDisabledmeiti]"><img v-bind:src="activechecked.isActivemeiti=='active'?checked_url:nochecked_url"><span class="text">媒体</span></span>
         </div>
       </div>
       <div class="zhedie item-user-form" style="border: none">
@@ -101,20 +108,40 @@
           <span class="user-attribute">来源媒体：</span>
         </div>
         <div class="box">
-          <span class="checked-option" v-bind:class="[activechecked.isActivezhijia,disabledchecked.isDisabledzhijia]"><img v-bind:src="activechecked.isActivezhijia=='active'?checked_url:nochecked_url"><span class="text">汽车之家</span></span>
-          <span class="checked-option" v-bind:class="[activechecked.isActiveyiche,disabledchecked.isDisabledyiche]"><img v-bind:src="activechecked.isActiveyiche=='active'?checked_url:nochecked_url"><span class="text">易车</span></span>
-          <span class="checked-option" v-bind:class="[activechecked.isActiveaika,disabledchecked.isDisabledaika]"><img v-bind:src="activechecked.isActiveaika=='active'?checked_url:nochecked_url"><span class="text">爱卡汽车</span></span>
-          <span class="checked-option" v-bind:class="[activechecked.isActivetaipinyang,disabledchecked.isDisabledtaipinyang]"><img v-bind:src="activechecked.isActivetaipinyang=='active'?checked_url:nochecked_url"><span class="text">太平洋汽车</span></span>
+          <span class="checked-option media" v-bind:class="[activechecked.isActivezhijia,disabledchecked.isDisabledzhijia]"><img v-bind:src="activechecked.isActivezhijia=='active'?checked_url:nochecked_url"><span class="text">汽车之家</span></span>
+          <span class="checked-option media" v-bind:class="[activechecked.isActiveyiche,disabledchecked.isDisabledyiche]"><img v-bind:src="activechecked.isActiveyiche=='active'?checked_url:nochecked_url"><span class="text">易车</span></span>
+          <span class="checked-option media" v-bind:class="[activechecked.isActiveaika,disabledchecked.isDisabledaika]"><img v-bind:src="activechecked.isActiveaika=='active'?checked_url:nochecked_url"><span class="text">爱卡汽车</span></span>
+          <span class="checked-option media" v-bind:class="[activechecked.isActivetaipinyang,disabledchecked.isDisabledtaipinyang]"><img v-bind:src="activechecked.isActivetaipinyang=='active'?checked_url:nochecked_url"><span class="text">太平洋汽车</span></span>
 
         </div>
       </div>
-      <div class="zhedie start-wrap">
+      <div class="zhedie start-wrap" @click="startAnalysisClick">
         开始分析
       </div>
       <div class="retractable-btn" @click="retractableClick">
         <img :src="retractable_url">
       </div>
     </div>
+     <div class="echarts-wrap" v-if="isShowEchartsWrap">
+       <span v-if="target=='buy'">
+         <analysis-buy :chidlrenParams="chidlrenParams"></analysis-buy>
+       </span>
+       <span v-else-if="target=='doubt'">
+         <analysis-doubt></analysis-doubt>
+       </span>
+       <span v-else-if="target=='koubei'">
+         <analysis-koubei></analysis-koubei>
+       </span>
+       <span v-else-if="target=='pleased'">
+         <analysis-pleased></analysis-pleased>
+       </span>
+       <span v-else-if="target=='reason'">
+         <analysis-reason></analysis-reason>
+       </span>
+       <span v-else-if="target=='sound'">
+         <analysis-sound></analysis-sound>
+       </span>
+     </div>
      <span v-if="dateType=='month'">
        <my-calendar  v-show="mycalendarshow"
                      :min-date="myminDate"
@@ -153,22 +180,42 @@
   import pData from '../../assets/json/province'
   import * as t  from '../../assets/js/common'
   import TopBar from "../common/TopBar";
-  import MyCalendar from "../common/MyCalendar";
+  import MyCalendar from "./../common/MyCalendar";
   // 下面是导入两张图片的相对地址
   import retractable_close from '../../assets/img/retractable-button-close.png'
   import retractable_open from '../../assets/img/retractable-button.png'
+
+  import AnalysisBuy from "./AnalysisBuy";
+  import AnalysisDoubt from "./AnalysisDoubt";
+  import AnalysisKoubei from "./AnalysisKoubei";
+  import AnalysisPleased from "./AnalysisPleased";
+  import AnalysisReason from "./AnalysisReason";
+  import AnalysisSound from "./AnalysisSound";
+
+
   export default {
         name: "index",
     components: {
       TopBar,
-      MyCalendar
+      MyCalendar,
+      AnalysisBuy,
+      AnalysisDoubt,
+      AnalysisKoubei,
+      AnalysisPleased,
+      AnalysisReason,
+      AnalysisSound
     },
       data () {
         return {
           target:'',
           backurl:'/dimensions',
+          isShowNiankuan:true,//年款是否显示
+          niankuanName:'',
           isDisabledNiankuan:false,//年款是否禁用
           isShowTimeChoose:true,//是否显示时间选择
+          timeRadiooption:'-1',//当前是0自定义，还是1上市期
+          shangshiDesc:false,//只有满意&不满意，购买&拒绝显示
+          shangshiqiTimeBox:'disabled',//当单选按钮是上市期时 默认时间禁止选择
           checked_url:require('../../assets/img/icon-checkbox-checked.png'),
           nochecked_url:require('../../assets/img/icon-checkbox-nochecked.png'),
           activechecked:{//是否选中
@@ -191,6 +238,8 @@
             isDisabledaika:'',//爱卡汽车
             isDisabledtaipinyang:'',//太平洋汽车
           },
+          userattributeList:[],
+          mediaList:[],
           titleName:'',
           brandList:[],
           brandName:'',
@@ -238,7 +287,9 @@
           currProvinceCity:[],//当前选中省下面的市集合
           resultDataList:[],//最终展示的结果
 
-          retractable_url:retractable_open
+          retractable_url:retractable_open,
+          chidlrenParams:[],//图表需要的参数集合
+          isShowEchartsWrap:false,
         }
       },
       created(){
@@ -249,12 +300,6 @@
         console.log(this.target+"  "+name);
         this.titleName=name;
         this.initParameters()//初始化默认参数
-        $("body").on("click",'.item-time .radio-option',function () {
-           $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
-          $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
-        });
-
-
 
         var nowdate=new Date();
         //按月，设置默认起止日期（不包括当前月）
@@ -280,17 +325,57 @@
           var that=this;
          that.$nextTick(() => {
            console.log('mounted....');
-        $("body").off('click','.item-user-form .checked-option').on("click",'.item-user-form .checked-option',function () {
+
+           //自定义 上市期单选按钮切换事件
+           $("body").on("click",'.item-time .radio-option',function () {
+             $(this).addClass("active").siblings().removeClass("active");
+             $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
+             $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
+
+             that.timeRadiooption=$(this).attr('type');
+             switch(that.target) {
+               case 'buy':
+               break;
+               case 'sound':
+                 break;
+               case 'koubei':
+                 break;
+               case 'pleased':
+                 that.shangshiDesc=true;//描述显示
+                 break;
+               case 'reason':
+                 that.shangshiDesc=true;//描述显示
+                 break;
+               case 'doubt':
+                 break;
+             }
+           });
+
+
+
+           $("body").off('click','.item-user-form .checked-option').on("click",'.item-user-form .checked-option',function () {
           if(!$(this).hasClass("disabled")){
             if($(this).hasClass("active")){
               $(this).removeClass("active");
               $(this).find('img').attr("src",that.nochecked_url);
+              if($(this).hasClass("user")){
+                that.userattributeList.remove( $(this).find('.text').html());
+              }
+              if($(this).hasClass("media")){
+                that.mediaList.remove( $(this).find('.text').html());
+              }
+
             }else{
               $(this).addClass("active");
               $(this).find('img').attr("src",that.checked_url);
+              if($(this).hasClass("user")){
+                that.userattributeList.push( $(this).find('.text').html());
+              }
+              if($(this).hasClass("media")){
+                that.mediaList.push( $(this).find('.text').html());
+              }
             }
           }
-
         })
       })
 
@@ -316,6 +401,8 @@
              that.disabledchecked.isDisabledyiche='disabled';
              that.disabledchecked.isDisabledaika='disabled';
              that.disabledchecked.isDisabledtaipinyang='disabled';
+             that.timeRadiooption=1;//上市期
+             that.shangshiqiTimeBox='';//可选
              break;
            case 'sound':
              that.isDisabledNiankuan=true;
@@ -328,6 +415,9 @@
              that.activechecked.isActiveyiche='active';
              that.activechecked.isActiveaika='active';
              that.activechecked.isActivetaipinyang='active';
+             that.timeRadiooption=0;//自定义
+             that.userattributeList=['车主','一般用户','水军','媒体'];
+             that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
              break;
            case 'koubei':
              that.isDisabledNiankuan=true;
@@ -340,6 +430,9 @@
              that.activechecked.isActiveyiche='active';
              that.activechecked.isActiveaika='active';
              that.activechecked.isActivetaipinyang='active';
+             that.timeRadiooption=0;//自定义
+             that.userattributeList=['车主','一般用户','水军','媒体'];
+             that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
              break;
            case 'pleased':
              that.activechecked.isActivezhijia='active';
@@ -351,6 +444,9 @@
              that.disabledchecked.isDisabledyonghu='disabled';
              that.disabledchecked.isDisabledshuijun='disabled';
              that.disabledchecked.isDisabledmeiti='disabled';
+
+             that.timeRadiooption=0;//自定义
+             that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
              break;
            case 'reason':
              that.activechecked.isActivezhijia='active';
@@ -364,6 +460,9 @@
              that.disabledchecked.isDisabledshuijun='disabled';
              that.disabledchecked.isDisabledmeiti='disabled';
 
+             that.timeRadiooption=0;//自定义
+
+             that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
              break;
            case 'doubt':
              that.isDisabledNiankuan=true;
@@ -377,7 +476,10 @@
              that.activechecked.isActivetaipinyang='active';
 
              that.disabledchecked.isDisabledmeiti='disabled';
+             that.timeRadiooption=0;//自定义
 
+             that.userattributeList=['车主','一般用户','水军'];
+             that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
              break;
          }
 
@@ -401,6 +503,8 @@
             });
         },
         getCarTypeByBrand(){
+         this.isShowNiankuan=this.brandName=="Jeep"?true:false;
+         this.isShowTimeChoose=this.brandName=="Jeep"?true:false;
          this.carTypeList=[];
           this.$axios
             .get("car/series?brand="+this.brandName)
@@ -418,7 +522,11 @@
         handleLoad () {
           this.timer = new Date().getTime()
         },
-        chooseCalendarClick(){
+        chooseCalendarClick(e){
+        var hasDisabled=e.target.parentElement.parentElement.classList;
+        if(hasDisabled.contains("disabled")){//非交叉购买率 且时间选择是上市期 默认时间不能选择
+          return;
+        }
           var that=this;
           if(this.dateType=='month'){
             this.calendarshow=false;
@@ -680,6 +788,23 @@
           var t2 = year2 + '/' + month2 + '/' + days2;
           return t2;
         },
+        startAnalysisClick(){
+          var that=this;
+          that.isShowEchartsWrap=true;
+          var data={
+            yType:that.target,
+            series:that.carName,
+            year:that.niankuanName,
+            date:[that.currentStartDateText.replace(/\//g,"-"),that.currentEndDateText.replace(/\//g,"-")],
+            area:that.areaText=='全国'?'all':that.areaText=='省市'?"province":"city",//all,province,city
+            province:that.areaText=='省市'?that.resultDataList:[],
+            city:that.areaText=='城市'?that.resultDataList:[],
+            user:that.userattributeList,
+            media:that.mediaList,
+            terminal:'app'
+          }
+          that.chidlrenParams=data;
+        },
 
       }
     }
@@ -892,6 +1017,9 @@
                 display: inline-block;
               }
             }
+          }
+          .box.disabled{
+            opacity: 0.5;
           }
         }
         .item-area{

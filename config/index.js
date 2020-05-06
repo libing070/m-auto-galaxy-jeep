@@ -29,6 +29,14 @@ module.exports = {
       "/car/series": {
         target: host,
         changeOrigin: true
+      },
+      "/cross/media": {
+        target: host,
+        changeOrigin: true
+      },
+      "/praise/compet": {
+        target: host,
+        changeOrigin: true
       }
     },
 

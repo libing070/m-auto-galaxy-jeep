@@ -7,12 +7,13 @@ import router from './router'
 import axios from 'axios'
 // 引入vuex-store
 import store from './store/index';
-
+import echarts from 'echarts'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 
 Vue.use(Vant);
 Vue.prototype.$axios = axios
+Vue.prototype.$echarts = echarts
 
 
 // 导入资源文件
