@@ -57,6 +57,10 @@ module.exports = {
       "/praise/opinions": {
         target: host,
         changeOrigin: true
+      },
+      "/praise/first": {
+        target: host,
+        changeOrigin: true
       }
     },
 

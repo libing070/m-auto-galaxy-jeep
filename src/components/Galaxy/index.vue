@@ -797,6 +797,7 @@
           that.isShowEchartsWrap=true;
           var data={
             yType:that.target,
+            brand:that.brandName,
             series:that.carName,
             year:that.niankuanName,
             date:[that.currentStartDateText.replace(/\//g,"-"),that.currentEndDateText.replace(/\//g,"-")],
@@ -808,7 +809,7 @@
             terminal:'app'
           }
           that.chidlrenParams=data;
-          console.log( that.chidlrenParams);
+         // console.log( that.chidlrenParams);
         },
 
       }
