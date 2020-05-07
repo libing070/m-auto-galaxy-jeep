@@ -80,7 +80,6 @@
               },
             );
           }
-
           // 基于准备好的dom，初始化echarts实例
           let echartkoubei1 = that.$echarts.init(document.getElementById($el))
           echartkoubei1.setOption({
