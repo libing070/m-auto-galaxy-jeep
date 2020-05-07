@@ -126,21 +126,22 @@
        <span v-if="target=='buy'">
          <analysis-buy :chidlrenParams="chidlrenParams"></analysis-buy>
        </span>
-       <span v-else-if="target=='doubt'">
-         <analysis-doubt></analysis-doubt>
+       <span v-else-if="target=='sound'">
+         <analysis-sound :chidlrenParams="chidlrenParams"></analysis-sound>
        </span>
        <span v-else-if="target=='koubei'">
-         <analysis-koubei></analysis-koubei>
+         <analysis-koubei :chidlrenParams="chidlrenParams"></analysis-koubei>
+       </span>
+       <span v-else-if="target=='doubt'">
+         <analysis-doubt :chidlrenParams="chidlrenParams"></analysis-doubt>
        </span>
        <span v-else-if="target=='pleased'">
-         <analysis-pleased></analysis-pleased>
+         <analysis-pleased :chidlrenParams="chidlrenParams"></analysis-pleased>
        </span>
        <span v-else-if="target=='reason'">
-         <analysis-reason></analysis-reason>
+         <analysis-reason :chidlrenParams="chidlrenParams"></analysis-reason>
        </span>
-       <span v-else-if="target=='sound'">
-         <analysis-sound></analysis-sound>
-       </span>
+
      </div>
      <span v-if="dateType=='month'">
        <my-calendar  v-show="mycalendarshow"
@@ -698,6 +699,7 @@
           var currClass=document.getElementById("galaxyWarp").className;
           var zhedie=  document.getElementsByClassName("zhedie");
           if(currClass.indexOf("close")>-1){
+            this.isShowEchartsWrap=false;
             document.getElementById("galaxyWarp").classList.add("open");
             document.getElementById("galaxyWarp").classList.remove("close");
             for(var i=0;i<zhedie.length;i++){
@@ -718,6 +720,7 @@
 
             }
           }else{
+            this.isShowEchartsWrap=true;
             document.getElementById("galaxyWarp").classList.add("close");
             document.getElementById("galaxyWarp").classList.remove("open");
             document.getElementsByClassName("item-type")[0].style.borderBottom="none";
@@ -790,6 +793,7 @@
         },
         startAnalysisClick(){
           var that=this;
+          that.retractableClick();
           that.isShowEchartsWrap=true;
           var data={
             yType:that.target,
@@ -804,6 +808,7 @@
             terminal:'app'
           }
           that.chidlrenParams=data;
+          console.log( that.chidlrenParams);
         },
 
       }

@@ -37,6 +37,26 @@ module.exports = {
       "/praise/compet": {
         target: host,
         changeOrigin: true
+      },
+      "/sound/day": {
+        target: host,
+        changeOrigin: true
+      },
+      "/sound/all": {
+        target: host,
+        changeOrigin: true
+      },
+      "/praise/day": {
+        target: host,
+        changeOrigin: true
+      },
+      "/praise/emotion": {
+        target: host,
+        changeOrigin: true
+      },
+      "/praise/opinions": {
+        target: host,
+        changeOrigin: true
       }
     },
 

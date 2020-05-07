@@ -1,17 +1,23 @@
 <template>
   <div class="zoomin">
     <div class="draw" id="zoomIds" :style="{ height: '97%'}"></div>
-    <img @click="zoomOutClick" class="zoom-btn" src="../../assets/img/zoom-out-iocn.png"/>
-
+    <img @click="cameraClick" class="camera-btn" src="../../assets/img/icon-camera.png"/>
+    <img @click="zoomOutClick" class="zoom-btn" src="../../assets/img/icon-zoom-out.png"/>
   </div>
 </template>
 
 <script>
     export default {
       name: "zoom-in",
+      props:['downloadName'],
       data () {
         return {
         }
+      },
+      watch:{
+        'downloadName': function () {
+         // console.log(this.downloadName);
+        },
       },
       mounted(){
         var that=this;
@@ -22,6 +28,15 @@
           // childByValue是在父组件on监听的方法
           // 第二个参数this.childValue是需要传的值
           this.$emit('isShowZoomOut', false)
+        },
+        cameraClick(){
+          var that=this;
+          var mycanvas = $("#zoomIds").find("canvas")[0];
+          var image = mycanvas.toDataURL("image/png");
+          var $a = document.createElement('a');
+          $a.setAttribute("href", image);
+          $a.setAttribute("download", that.downloadName);
+          $a.click();
         }
       }
     }
@@ -50,6 +65,12 @@
   .zoom-btn{
     position: absolute;
     right: 30px;
+    top: 30px;
+    width: 60px;
+  }
+  .camera-btn{
+    position: absolute;
+    right: 140px;
     top: 30px;
     width: 60px;
   }
