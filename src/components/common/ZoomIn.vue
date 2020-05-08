@@ -52,6 +52,7 @@
   -webkit-transform-origin:50vw 50vw; /* Safari and Chrome */
   width: 100vh;
   height: 100vw;
+  overflow-x: scroll;
   .draw{
     background-color: white;
     position: relative;

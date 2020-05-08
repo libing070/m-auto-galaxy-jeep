@@ -1,11 +1,11 @@
 <template>
   <div class="analysissound">
     <div class="item">
-      <div class="draw" id="echartsound1" :style="{ height: '300px'}"></div>
+      <div class="draw" id="echartsound1" :style="{ height: '350px'}"></div>
       <img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
-      <div class="draw" id="echartsound2" :style="{ height: '300px'}"></div>
+      <div class="draw" id="echartsound2" :style="{ height: '350px'}"></div>
       <img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
@@ -82,6 +82,11 @@
           echartsound1.setOption({
             title: {
               text: '本竞品垂媒声量趋势',
+              left:'10',
+              top:'10',
+              textStyle:{
+                fontSize:'14'
+              },
               // subtext:'声量',
             },
             tooltip: {
@@ -90,16 +95,14 @@
             legend: {
             //  data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
               data:legendData,
-              top:20,
+              top:30,
               textStyle:{
                 fontSize:'10'
               },
             },
             grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
+              left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
+              bottom:'10%',
             },
             // toolbox: {
             //   feature: {
@@ -151,10 +154,16 @@
           // 绘制图表
           echartsound2.setOption({
             grid: {
-              top:90
+              left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
+              bottom:'10%',
             },
             title: {
               text: '本竞品产品销量对比',
+              left:'10',
+              top:'10',
+              textStyle:{
+                fontSize:'14'
+              },
               // subtext:'声量',
             },
             tooltip: {
@@ -176,7 +185,7 @@
             },
             legend: {
               data: ['声量', '销量'],
-              top:20
+              top:30
             },
             xAxis: [
               {

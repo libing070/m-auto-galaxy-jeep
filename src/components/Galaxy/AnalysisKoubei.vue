@@ -85,6 +85,11 @@
           echartkoubei1.setOption({
             title: {
               text: '口碑变化趋势',
+              left:'10',
+              top:'10',
+              textStyle:{
+                fontSize:'14'
+              },
               // subtext:'声量',
             },
             tooltip: {
@@ -157,6 +162,11 @@
           echartkoubei2.setOption({
             title: {
               text: '口碑正负分布',
+              left:'10',
+              top:'10',
+              textStyle:{
+                fontSize:'14'
+              },
               // left: 'center'
             },
             tooltip: {
@@ -217,6 +227,11 @@
           echartkoubei3.setOption({
             title: {
               text: '口碑详情',
+              left:'10',
+              top:'10',
+              textStyle:{
+                fontSize:'14'
+              },
             },
             tooltip: {
               trigger: 'axis',

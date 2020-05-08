@@ -93,7 +93,7 @@
             left:'10',
             top:'10',
             textStyle:{
-              fontSize:'16'
+              fontSize:'14'
             },
             subtext:'反向线索重合度',
           },
@@ -166,7 +166,7 @@
             left:'10',
             top:'10',
             textStyle:{
-              fontSize:'16'
+              fontSize:'14'
             },
             subtext:'提及量',
             // subtextStyle:{
