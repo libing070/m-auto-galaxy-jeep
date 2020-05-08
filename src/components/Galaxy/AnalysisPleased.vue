@@ -45,10 +45,16 @@
     },
     data () {
       return {
+        firstLoad:0,//0 第一次加载，1非第一次加载
         isShowZoomIn:false,
         drawData1:[],
         drawData2:[],
+        drawData3:[],
         downloadName:'',
+        currFirstBarColumnSeriesName:'',//当前选中的车型
+        currFirstBarActiveyAxisName:'',//当前选中的yAxis
+        currSecondBarActiveyAxisName:'',
+        currThirdBarActiveyAxisName:''
       }
     },
     created(){
@@ -66,9 +72,7 @@
       $("#echartpleased1 .item").remove();
       var obj=this.chidlrenParams;
       that.chidlrenParams['xType']="pleasure";//默认满意
-      that.loadData1();
-      that.loadData2();
-      that.loadData3();
+      that.init();
       $(".analysispleased").on("click",'.column .btn',function () {
         $("#echartpleased1 .item").remove();
           if(!$(this).hasClass("active")){
@@ -79,25 +83,44 @@
         }else if($(this).hasClass("unpleasure-btn")){//不满意
           that.chidlrenParams['xType']="unpleasure";
         }
-        that.loadData1();
-      })
+        that.init();
+      });
     },
     methods: {
-      loadData1(){
+      async init(){
         var that=this;
-        this.$axios
-          .post("praise/first", that.chidlrenParams)
-          .then(res => {
-            if (res.data.status ==1) {
-              that.drawData1=res.data.data;
-               that.drawLine1('echartpleased1');
-            } else {
-              this.$toast(res.data.msg);
-            }
-          });
+        that.drawData1=  await that.loadData1();
+        if(that.firstLoad==0){
+          that.currFirstBarColumnSeriesName=that.drawData1.series[0].name;
+          that.currFirstBarActiveyAxisName=that.drawData1.x[that.drawData1.x.length-1];
+        }
+        that.drawLine1('echartpleased1');
+
+        that.drawData2= await that.loadData2();
+        that.currSecondBarActiveyAxisName=that.drawData2.x[that.drawData2.x.length-1];
+        that.drawLine2('echartpleased2');
+
+        that.drawData3=  await that.loadData3();
+        that.currThirdBarActiveyAxisName=that.drawData3.x[that.drawData3.x.length-1];
+        that.drawLine3('echartpleased3');
+      },
+        loadData1(){
+        var that=this;
+         return new Promise(resolve => {
+           that.$axios
+             .post("praise/first", that.chidlrenParams)
+             .then(res => {
+               if (res.data.status ==1) {
+                 resolve(res.data.data);
+               } else {
+                 that.$toast(res.data.msg);
+               }
+             });
+         });
+
       },
       drawLine1($el){
-         var that=this;
+        var that=this;
          var groupLen=that.drawData1.series.length;
          var yAxisData=that.drawData1.x;
          var html='';
@@ -126,7 +149,6 @@
              },
              legend: {
                show:false
-               //data: ['2011年']
              },
              grid: {
                left: '3%',
@@ -138,22 +160,27 @@
              xAxis: {
                show:false,
              },
-             yAxis: {
+             yAxis:{
                type: 'category',
-               data: k==1?yAxisData:'',
-               // axisLabel: {
-               //   interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-               //   rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
-               // }
+               data:yAxisData,
+               axisLabel: {
+                 show: k==1?true:false,
+               },
              },
              series: [
                {
-                 name: '2011年',
+                 name: that.drawData1.series[k-1].name,
                  type: 'bar',
                  data: that.drawData1.series[k-1].data,
                  itemStyle: {
                    normal: {
-                     color: '#fabe00',
+                     color:function (params) {
+                       if(params.seriesName==that.currFirstBarColumnSeriesName&&that.currFirstBarActiveyAxisName==params.name){
+                         return '#fabe00';
+                       }else{
+                         return '#BFBFBF';
+                       }
+                     },
                      label : {
                        show: true,
                        position: 'right',
@@ -162,15 +189,35 @@
                  },
                }
              ]
+           });
+           that.$echarts.init(document.getElementById($el+k)).on('click', function (params) {
+             $("#echartpleased1 .item").remove();
+             that.currFirstBarColumnSeriesName=params.seriesName;
+             that.currFirstBarActiveyAxisName=params.name;
+             that.firstLoad=1;
+             that.init();//重绘
            })
          }
       },
       loadData2(){
         var that=this;
-        that.drawLine2('echartpleased2');
+        that.chidlrenParams['first']=that.currFirstBarActiveyAxisName;
+        return new Promise(resolve => {
+          that.$axios
+            .post("praise/second", that.chidlrenParams)
+            .then(res => {
+              if (res.data.status ==1) {
+                resolve(res.data.data);
+              } else {
+                that.$toast(res.data.msg);
+              }
+            });
+        });
       },
       drawLine2($el){
         var that=this;
+        var yAxisData=that.drawData2.x;
+        var seriesData=that.drawData2.series;
         // 基于准备好的dom，初始化echarts实例
         let echartpleased2 = that.$echarts.init(document.getElementById($el))
         echartpleased2.setOption({
@@ -205,16 +252,22 @@
           },
           yAxis: {
             type: 'category',
-            data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
+            data: yAxisData
           },
           series: [
             {
               name: '2012年',
               type: 'bar',
-              data: [19325, 23438, 31000, 121594, 134141, 681807],
+              data: seriesData,
               itemStyle: {
                 normal: {
-                  color: '#fabe00',
+                  color:function (params) {
+                    if(that.currSecondBarActiveyAxisName==params.name){
+                      return '#fabe00';
+                    }else{
+                      return '#BFBFBF';
+                    }
+                  },
                   label : {
                     show: true,
                     position: 'right',
@@ -224,13 +277,39 @@
             }
           ]
         });
+        echartpleased2.off('click');
+        echartpleased2.on('click', function (params) {
+          that.currSecondBarActiveyAxisName=params.name;
+          that.currThirdBarActiveyAxisName=params.name;
+          that.drawLine2('echartpleased2');
+          that.reload3();
+        })
       },
-      loadData3(){
+      async reload3(){
         var that=this;
+        that.drawData3= await that.loadData3();
         that.drawLine3('echartpleased3');
+      },
+       loadData3(){
+        var that=this;
+        that.chidlrenParams['first']=that.currFirstBarActiveyAxisName;
+        that.chidlrenParams['second']=that.currSecondBarActiveyAxisName;
+        return new Promise(resolve => {
+              that.$axios
+                .post("praise/third", that.chidlrenParams)
+                .then(res => {
+                  if (res.data.status ==1) {
+                    resolve(res.data.data);
+                  } else {
+                    that.$toast(res.data.msg);
+                  }
+                });
+        })
       },
       drawLine3($el){
         var that=this;
+        var yAxisData=that.drawData3.x;
+        var seriesData=that.drawData3.series;
         // 基于准备好的dom，初始化echarts实例
         let echartpleased3 = that.$echarts.init(document.getElementById($el))
         echartpleased3.setOption({
@@ -265,16 +344,22 @@
           },
           yAxis: {
             type: 'category',
-            data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
+            data: yAxisData
           },
           series: [
             {
-              name: '2012年',
+              name: '',
               type: 'bar',
-              data: [19325, 23438, 31000, 121594, 134141, 681807],
+              data: seriesData,
               itemStyle: {
                 normal: {
-                  color: '#fabe00',
+                  color:function (params) {
+                    if(that.currThirdBarActiveyAxisName==params.name){
+                      return '#fabe00';
+                    }else{
+                      return '#BFBFBF';
+                    }
+                  },
                   label : {
                     show: true,
                     position: 'right',
@@ -284,6 +369,12 @@
             }
           ]
         });
+        echartpleased3.off('click');
+        echartpleased3.on('click', function (params) {
+          that.currThirdBarActiveyAxisName=params.name;
+          that.drawLine3('echartpleased3');
+
+        })
       },
       zoomInClick(num){
         var that=this;

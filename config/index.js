@@ -61,6 +61,14 @@ module.exports = {
       "/praise/first": {
         target: host,
         changeOrigin: true
+      },
+      "/praise/second": {
+        target: host,
+        changeOrigin: true
+      },
+      "/praise/third": {
+        target: host,
+        changeOrigin: true
       }
     },
 
