@@ -7,6 +7,7 @@
 </template>
 
 <script>
+  import html2canvas from 'html2canvas';
     export default {
       name: "zoom-in",
       props:['downloadName'],
@@ -21,9 +22,21 @@
       },
       mounted(){
         var that=this;
-
+        if(that.isSafari()){
+          $(".zoomin").css("width","90vh");
+        }
       },
       methods:{
+        isSafari(){
+          var ua = navigator.userAgent.toLowerCase();
+          if (ua.indexOf('applewebkit') > -1 && ua.indexOf('mobile') > -1 && ua.indexOf('safari') > -1 &&
+            ua.indexOf('linux') === -1 && ua.indexOf('android') === -1 && ua.indexOf('chrome') === -1 &&
+            ua.indexOf('ios') === -1 && ua.indexOf('browser') === -1) {
+            return true;
+          }else{
+            return false;
+          }
+        },
         zoomOutClick(){
           // childByValue是在父组件on监听的方法
           // 第二个参数this.childValue是需要传的值
@@ -31,13 +44,46 @@
         },
         cameraClick(){
           var that=this;
+          // var mycanvas = $("#zoomIds").find("canvas")[0];
+          // var image = mycanvas.toDataURL("image/png");
+          // var $a = document.createElement('a');
+          // $a.setAttribute("href", image);
+          // $a.setAttribute("download", that.downloadName);
+          // $a.click();
+
           var mycanvas = $("#zoomIds").find("canvas")[0];
-          var image = mycanvas.toDataURL("image/png");
-          var $a = document.createElement('a');
-          $a.setAttribute("href", image);
-          $a.setAttribute("download", that.downloadName);
-          $a.click();
-        }
+          var canvasToImage = mycanvas.toDataURL("image/png");
+          var image=new Image();
+           image.src=canvasToImage;
+           image.id="zoomImage";
+           document.body.appendChild(image);
+          var cloneDom=$("body #zoomImage");
+          setTimeout(function () {
+            html2canvas(cloneDom[0],{
+              useCORS: true,
+            }).then(canvas => {
+              var pageData = canvas.toDataURL('image/png');
+             // console.log(pageData);
+              that.saveFile(pageData.replace("image/png", "image/octet-stream"), that.downloadName + ".png");
+            });
+          },100);
+        },
+        /**
+         * 在本地进行文件保存
+         * @param  {String} data     要保存到本地的图片数据
+         * @param  {String} filename 文件名
+         */
+        saveFile(data,filename){
+          var that=this;
+          var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+          save_link.href = data;
+          save_link.download = filename;
+          var event = document.createEvent('MouseEvents');
+          event.initEvent('click', true, true);
+          save_link.dispatchEvent(event);
+          $("body #zoomImage").remove();
+        },
+
       }
     }
 </script>
@@ -53,6 +99,7 @@
   width: 100vh;
   height: 100vw;
   overflow-x: scroll;
+  overflow-y: scroll;
   .draw{
     background-color: white;
     position: relative;

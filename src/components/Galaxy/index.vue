@@ -385,6 +385,13 @@
       '$store.state.mycalendarshow': function () {
         this.mycalendarshow= this.$store.state.mycalendarshow;
       },
+      'resultDataList':function () {
+        if(this.resultDataList.length>3){
+            $(".galaxy .galaxy-warp").css("padding-bottom","8rem");
+        }else{
+          $(".galaxy .galaxy-warp").css("padding-bottom","4rem");
+        }
+      }
     },
       methods:{
        initParameters(){
@@ -840,6 +847,7 @@
       left: 0;
       overflow: auto;
       position: relative;
+      padding-bottom: 3rem;
       .galaxy-warp {
         position: relative;
         margin: auto;
@@ -847,7 +855,7 @@
         border-radius: 5px;
         background: white;
         margin-bottom: 1rem;
-        padding-bottom: 2rem;
+        padding-bottom: 4rem;
         margin-top: -6rem;
         height:100%;
         transition: all 0.6s ease-out;
@@ -898,7 +906,7 @@
             .cc {
               position: relative;
               background-color: #f9f9f9;
-              width: 79%;
+              width: 78%;
               height: 65px;
               display: inline-block;
               .select-arrow {
@@ -1092,7 +1100,7 @@
               border-radius: 10px;
               font-size: 28px;
               .icon{
-                height: 50%;
+                height: 30%;
                 padding-left: 10px;
                 vertical-align: middle;
               }

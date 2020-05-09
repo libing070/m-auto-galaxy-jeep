@@ -107,7 +107,7 @@
 <style lang="scss" scoped>
   .topbar{
     .top{
-      z-index: 1;
+      z-index: 0;
       position: relative;
       width: 100%;
       height: 91px;

@@ -17,15 +17,17 @@
       <div class="column">
         <span class="title">二级维度</span>
       </div>
-      <div class="draw" id="echartpleased2" :style="{ height: '260px'}"></div>
-      <img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw" id="echartpleased2" :style="{ height: '260px'}">
+        <div class="loading"></div>
+      </div>
+      <!--<img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>-->
     </div>
     <div class="item">
       <div class="column">
         <span class="title">三级维度</span>
       </div>
       <div class="draw" id="echartpleased3" :style="{ height: '260px'}"></div>
-      <img @click="zoomInClick(3)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <!--<img @click="zoomInClick(3)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>-->
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
       <zoom-in :downloadName="downloadName" v-on:isShowZoomOut="isShowZoomOutMethods"></zoom-in>
@@ -104,7 +106,7 @@
         that.currThirdBarActiveyAxisName=that.drawData3.x[that.drawData3.x.length-1];
         that.drawLine3('echartpleased3');
       },
-        loadData1(){
+      loadData1(){
         var that=this;
          return new Promise(resolve => {
            that.$axios
@@ -117,26 +119,25 @@
                }
              });
          });
-
       },
       drawLine1($el){
-        var that=this;
+         var that=this;
          var groupLen=that.drawData1.series.length;
          var yAxisData=that.drawData1.x;
          var html='';
+         var widthRate = 100/(groupLen+3);
          for(var i=1;i<=groupLen;i++){
-           var w=i==1?"300":'200';
-           html+='<div class="item" style="display: inline-block;width: '+w+'px;height: 350px" id="'+$el+i+'"></div>';
+           var w=i==1? (widthRate*3.5+"%"):(widthRate+'%');
+           html+='<div class="item" style="display: inline-block;width: '+w+';height: 350px" id="'+$el+i+'"></div>';
          }
          $("#"+$el).append(html);
-         $("#"+$el).css("width",(220*groupLen)+"px");
          for(var k=1;k<=groupLen;k++){
            that.$echarts.init(document.getElementById($el+k)).setOption({
              title: {
                top:0,
-               left:(k-1)==0?145:'',
+               left:(k-1)==0?'70%':'',
                textStyle:{
-                 fontSize:'14'
+                 fontSize:'8'
                },
                text: that.drawData1.series[k-1].name,
              },
@@ -152,7 +153,7 @@
              },
              grid: {
                left: '3%',
-               right: '4%',
+               right: (k-1)==0?'12%':'44%',
                bottom:'0',
                top:'6%',
                containLabel: true
@@ -162,10 +163,12 @@
              },
              yAxis:{
                type: 'category',
-               data:yAxisData,
+               data: yAxisData,
                axisLabel: {
                  show: k==1?true:false,
+                 fontSize: '8'
                },
+               show: k==1?true:false,
              },
              series: [
                {
@@ -184,6 +187,7 @@
                      label : {
                        show: true,
                        position: 'right',
+                       fontSize: '8'
                      }
                    }
                  },
@@ -191,13 +195,22 @@
              ]
            });
            that.$echarts.init(document.getElementById($el+k)).on('click', function (params) {
-             $("#echartpleased1 .item").remove();
-             that.currFirstBarColumnSeriesName=params.seriesName;
-             that.currFirstBarActiveyAxisName=params.name;
-             that.firstLoad=1;
-             that.init();//重绘
+              $("#echartpleased2 .item").remove();
+              $("#echartpleased3 .item").remove();
+              that.currFirstBarColumnSeriesName=params.seriesName;
+              that.currFirstBarActiveyAxisName=params.name;
+              that.reloadEchar1();
+              that.reloadEchar2(true);
            })
          }
+      },
+      async reloadEchar1(reloadData = false) {
+         var that = this;
+         $("#echartpleased1 .item").remove();
+         if (reloadData) {
+            that.drawData1=  await that.loadData1();
+         }
+         that.drawLine1('echartpleased1');
       },
       loadData2(){
         var that=this;
@@ -281,16 +294,20 @@
         echartpleased2.on('click', function (params) {
           that.currSecondBarActiveyAxisName=params.name;
           that.currThirdBarActiveyAxisName=params.name;
-          that.drawLine2('echartpleased2');
-          that.reload3();
+          that.reloadEchar2(false);
         })
       },
-      async reload3(){
-        var that=this;
-        that.drawData3= await that.loadData3();
-        that.drawLine3('echartpleased3');
+      async reloadEchar2(reloadData = false) {
+         var that = this;
+         $("#echartpleased2 .item").remove();
+         if (reloadData) {
+            that.drawData2=  await that.loadData2();
+            that.currSecondBarActiveyAxisName=that.drawData2.x[that.drawData2.x.length-1];
+         }
+         that.drawLine2('echartpleased2');
+         that.reloadEchar3(true);
       },
-       loadData3(){
+      loadData3(){
         var that=this;
         that.chidlrenParams['first']=that.currFirstBarActiveyAxisName;
         that.chidlrenParams['second']=that.currSecondBarActiveyAxisName;
@@ -372,9 +389,18 @@
         echartpleased3.off('click');
         echartpleased3.on('click', function (params) {
           that.currThirdBarActiveyAxisName=params.name;
-          that.drawLine3('echartpleased3');
+          that.reloadEchar3(false);
 
         })
+      },
+      async reloadEchar3(reloadData = false) {
+         var that = this;
+         $("#echartpleased3 .item").remove();
+         if (reloadData) {
+            that.drawData3=  await that.loadData3();
+            that.currThirdBarActiveyAxisName=that.drawData3.x[that.drawData3.x.length-1];
+         }
+         that.drawLine3('echartpleased3');
       },
       zoomInClick(num){
         var that=this;
@@ -459,6 +485,12 @@
         overflow: scroll;
         .draw{
           height: 750px;
+          .loading {
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            background: #000;
+          }
         }
       }
       .zoom-btn{

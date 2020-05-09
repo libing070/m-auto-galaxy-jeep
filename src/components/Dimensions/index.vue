@@ -114,7 +114,7 @@
 <style lang="scss" scoped>
   .dimension-wrap{
     background: #fabe00;
-    padding-bottom: 1rem;
+    padding-bottom: 2rem;
     .dimension-item{
       position: relative;
       margin: auto;
