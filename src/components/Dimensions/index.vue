@@ -6,32 +6,32 @@
         <span class="line"></span>
         <div class="desc">{{this.$t('dimension.depart1')}}</div>
       </div>
-      <div class="item" @click="toAnalysisPage('buy')">
+      <div class="item" @click="toAnalysisPage(['buy','icon-menus1-1'])">
         <img class="icon" :src="require('../../assets/img/icon-menus1-1.png')">
         <span class="desc">{{this.$t('dimension.list112')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item" @click="toAnalysisPage('sound')">
+      <div class="item" @click="toAnalysisPage(['sound','icon-menus1-2'])">
         <img class="icon" :src="require('../../assets/img/icon-menus1-2.png')">
         <span class="desc">{{this.$t('dimension.list27')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item" @click="toAnalysisPage('koubei')">
+      <div class="item" @click="toAnalysisPage(['koubei','icon-menus1-3'])">
         <img class="icon" :src="require('../../assets/img/icon-menus1-3.png')">
         <span class="desc">{{this.$t('dimension.list15')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item" @click="toAnalysisPage('pleased')">
+      <div class="item" @click="toAnalysisPage(['pleased','icon-menus1-4'])">
         <img class="icon" :src="require('../../assets/img/icon-menus1-4.png')">
         <span class="desc">{{this.$t('dimension.list14')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item" @click="toAnalysisPage('reason')">
+      <div class="item" @click="toAnalysisPage(['reason','icon-menus1-5'])">
         <img class="icon" :src="require('../../assets/img/icon-menus1-5.png')">
         <span class="desc">{{this.$t('dimension.list12')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
       </div>
-      <div class="item" @click="toAnalysisPage('doubt')">
+      <div class="item" @click="toAnalysisPage(['doubt','icon-menus1-6'])">
         <img class="icon" :src="require('../../assets/img/icon-menus1-6.png')">
         <span class="desc">{{this.$t('dimension.list28')}}</span>
         <img class="arrow-right" :src="require('../../assets/img/arrow-right.png')">
@@ -85,7 +85,7 @@
       toAnalysisPage(key){
         var that=this;
         var name='';
-        switch(key) {
+        switch(key[0]) {
           case 'buy':
             name=that.$t("dimension.list112");
             break;
@@ -105,7 +105,7 @@
             name=that.$t("dimension.list28");
             break;
         }
-        this.$router.push({path: '/galaxy', query: {'target': key,'name':name}})
+        this.$router.push({path: '/galaxy', query: {'target': key[0],'name':name,'icon':key[1]}})
       }
     }
     }
@@ -114,14 +114,14 @@
 <style lang="scss" scoped>
   .dimension-wrap{
     background: #fabe00;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
     .dimension-item{
       position: relative;
       margin: auto;
       width: 95%;
       border-radius: 5px;
       background: white;
-      padding-bottom: 2rem;
+      padding-bottom: 1rem;
       .title{
         width: 100%;
         position: relative;

@@ -9,23 +9,23 @@
         </span>
       </div>
       <div class="draw-group">
-        <div class="draw" id="analysisreason1"></div>
+        <div class="draw small" id="analysisreason1"></div>
       </div>
-      <!--<img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>-->
+      <img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
       <div class="column">
         <span class="title">二级维度</span>
       </div>
-      <div class="draw" id="analysisreason2" :style="{ height: '260px'}"></div>
-      <!--<img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>-->
+      <div class="draw small" id="analysisreason2" :style="{ height: '260px'}"></div>
+      <img @click="zoomInClick(2,$event)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
       <div class="column">
         <span class="title">三级维度</span>
       </div>
-      <div class="draw" id="analysisreason3" :style="{ height: '260px'}"></div>
-      <!--<img @click="zoomInClick(3)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>-->
+      <div class="draw small" id="analysisreason3" :style="{ height: '260px'}"></div>
+      <img @click="zoomInClick(3,$event)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
       <zoom-in :downloadName="downloadName" v-on:isShowZoomOut="isShowZoomOutMethods"></zoom-in>
@@ -117,9 +117,10 @@
              });
          });
       },
-      drawLine1($el){
+      drawLine1($el,title){
          var that=this;
-         var groupLen=that.drawData1.series.length;
+         //var groupLen=that.drawData1.series.length;
+         var groupLen=1;
          var yAxisData=that.drawData1.x;
          var html='';
          var widthRate = 100/(groupLen+2.5);
@@ -132,11 +133,17 @@
            that.$echarts.init(document.getElementById($el+k)).setOption({
              title: {
                top:0,
-               left:(k-1)==0?'70%':'',
+               //  left:(k-1)==0?'70%':'',
+               left:'20%',
                textStyle:{
-                 fontSize:'8'
+                 fontSize:'14',
                },
-               text: that.drawData1.series[k-1].name,
+               text: title,
+               subtext:that.drawData1.series[k-1].name,
+               subtextStyle:{
+                 // fontSize:8,
+                 // align:'center'
+               }
              },
              tooltip: {
                show:false,
@@ -152,7 +159,7 @@
                left: '3%',
                right: (k-1)==0?'12%':'44%',
                bottom:'0',
-               top:'6%',
+               top:title!=''?'15%':'0%',
                containLabel: true
              },
              xAxis: {
@@ -224,7 +231,7 @@
             });
         });
       },
-      drawLine2($el){
+      drawLine2($el,title){
         var that=this;
         var yAxisData=that.drawData2.x;
         var seriesData=that.drawData2.series;
@@ -233,11 +240,17 @@
         analysisreason2.setOption({
           grid: {
             left: '3%',
-            top:'0',
+            top:'8%',
             bottom:'4%',
             containLabel: true
           },
           title: {
+            top:'3%',
+            left:'3%',
+            textStyle:{
+              fontSize:'14',
+            },
+            text: title,
             //top:0,
               // text: '世界人口总量',
               // subtext: '数据来自网络'
@@ -256,8 +269,8 @@
             type: 'value',
             boundaryGap: [0, 0.01],
             axisLabel: {
-              interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-              rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+              // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+              // rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
             }
           },
           yAxis: {
@@ -269,6 +282,7 @@
               name: '2012年',
               type: 'bar',
               data: seriesData,
+              barMaxWidth: 30, // 最大宽度
               itemStyle: {
                 normal: {
                   color:function (params) {
@@ -320,7 +334,7 @@
                 });
         })
       },
-      drawLine3($el){
+      drawLine3($el,title){
         var that=this;
         var yAxisData=that.drawData3.x;
         var seriesData=that.drawData3.series;
@@ -329,11 +343,17 @@
         analysisreason3.setOption({
           grid: {
             left: '3%',
-            top:'0',
+            top:'8%',
             bottom:'4%',
             containLabel: true
           },
           title: {
+            top:'3%',
+            left:'3%',
+            textStyle:{
+              fontSize:'14',
+            },
+            text: title,
             //top:0,
             // text: '世界人口总量',
             // subtext: '数据来自网络'
@@ -352,8 +372,8 @@
             type: 'value',
             boundaryGap: [0, 0.01],
             axisLabel: {
-              interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-              rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+              // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+              // rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
             }
           },
           yAxis: {
@@ -365,6 +385,7 @@
               name: '',
               type: 'bar',
               data: seriesData,
+              barMaxWidth: 30, // 最大宽度
               itemStyle: {
                 normal: {
                   color:function (params) {
@@ -399,16 +420,21 @@
          }
          that.drawLine3('analysisreason3');
       },
-      zoomInClick(num){
+      zoomInClick(num,$event){
         var that=this;
         that.isShowZoomIn=true;
         that.$nextTick(() => {
-          if(num==2){
-            that.drawLine2('zoomIds');
+          $($event).siblings(".draw.small").fadeOut();
+          if(num==1){
+            that.drawLine1('zoomIds','一级维度');
             that.downloadName='一级维度';
-          }else if(num==3){
-            that.drawLine3('zoomIds');
+          }
+          else if(num==2){
+            that.drawLine2('zoomIds','二级维度');
             that.downloadName='二级维度';
+          }else if(num==3){
+            that.drawLine3('zoomIds','三级维度');
+            that.downloadName='三级维度';
           }
         });
 

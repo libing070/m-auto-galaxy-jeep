@@ -284,6 +284,8 @@
         font-size: 28px;
       }
       .header-body{
+        position: relative;
+        z-index: 1;
         height: 850px;
         overflow-y: auto;
         .item{
@@ -348,7 +350,7 @@
         -webkit-transition:all 0.3s ease-out;; /* Safari and Chrome */
         -o-transition:all 0.3s ease-out;; /* Opera */
         position: absolute;
-        bottom: 20px;
+        bottom: 0;
         left: 0;
         right: 0;
         height: 72px;
@@ -361,6 +363,7 @@
          margin: auto;
         text-align: center;
         opacity: 0;
+        z-index: 3;
       }
       .footer-btn.disabled{
         opacity: 0.5;

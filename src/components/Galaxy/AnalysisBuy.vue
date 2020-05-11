@@ -1,12 +1,12 @@
 <template>
   <div class="analysisbuy">
     <div class="item">
-      <div class="draw" id="echartbuy1" :style="{ height: '300px'}"></div>
-      <img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartbuy1" :style="{ height: '300px'}"></div>
+      <img @click="zoomInClick(1,$event)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
-      <div class="draw" id="echartbuy2" :style="{ height: '600px'}"></div>
-      <img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartbuy2" :style="{ height: '600px'}"></div>
+      <img @click="zoomInClick(2,$event)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
       <zoom-in :downloadName="downloadName" v-on:isShowZoomOut="isShowZoomOutMethods"></zoom-in>
@@ -159,7 +159,7 @@
         // 绘制图表
         echartbuy2.setOption({
           grid: {
-            left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
+            left: '30%', //grid 组件离容器左侧的距离。默认值是10%。
           },
           title: {
             text: '交叉购买考虑-用户提及数据',
@@ -195,8 +195,8 @@
             type: 'category',
             data: yAxisData,
             axisLabel: {
-              interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-              rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+              // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+              // rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
             }
           },
           series: [{
@@ -215,10 +215,11 @@
           }]
         });
       },
-      zoomInClick(num){
+      zoomInClick(num,$event){
         var that=this;
         that.isShowZoomIn=true;
         that.$nextTick(() => {
+          $($event).siblings(".draw.small").fadeOut();
           if(num==1){
             that.drawLine1('zoomIds');
             that.downloadName='交叉购买考虑-垂媒留资数据';

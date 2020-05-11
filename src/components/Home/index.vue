@@ -1,7 +1,7 @@
 <template>
   <div class="page-sign-in">
     <div class="top">
-      <div class="lang-box">
+      <div class="lang-box" style="display: none">
         <span :class="['item',{lang:true, active:curLang === 'en'}]" data-type="en" @click="toggleLang">EN</span>
         <span :class="['item',{lang:true, active:curLang === 'zh'}]" data-type="zh" @click="toggleLang">中文</span>
       </div>
@@ -23,11 +23,54 @@
       <div class="login-btn" @click="loginSystem">{{this.$t('login.button')}}</div>
     </div>
     <div class="end">
-      <span class="item">{{this.$t('login.bottom1')}}</span>
-      <span class="item">{{this.$t('login.bottom2')}}</span>
-      <span class="item">{{this.$t('login.bottom3')}}</span>
-
+      <span @click="show1 = true" class="item">{{this.$t('login.bottom1')}}</span>
+      <span @click="show2 = true"class="item">{{this.$t('login.bottom2')}}</span>
+      <span @click="show3 = true"class="item">{{this.$t('login.bottom3')}}</span>
     </div>
+    <van-overlay :show="show1" @click="show1=false">
+      <div class="wrapper">
+        <div class="block">
+          <h3>隐私政策</h3>
+          <p>平台尊重并保护您的隐私，您通过计算机设备、移动端设备或其他设备使用数据查询服务时，我们可能会收集和使用您的相关信息</p>
+          <p>您主动提供的信息：账号、密码、邮箱、反馈</p>
+          <p>您使用产品的行为信息：登录、点击、下载</p>
+          <p>上述信息仅为保障您的正常使用及改善我们现有服务</p>
+          <p>我们将使用各种安全技术和程序，以防信息的丢失、不当使用、未经授权阅览或披露、分享。我们将使用加密技术、匿名化处理及相关合理可行的手段保护您的个人信息并使用安全保护机制防止您的个人信息遭到恶意攻击。</p>
+          <p>以上，如有任何问题请及时联系产品相关负责人。</p>
+          <p>联系人：孙玮颢</p>
+          <p>联系电话：15601988129</p>
+          <p>联系邮箱：sunwh@gacfcasales.com</p>
+        </div>
+      </div>
+    </van-overlay>
+    <van-overlay :show="show2" @click="show2=false">
+      <div class="wrapper">
+        <div class="block">
+          <h3>帮助与说明</h3>
+          <h4>数据源及分析维度</h4>
+          <p>业务洞察工具一期以四大垂直媒体文章、口碑、论坛版块数据为基础，基于媒体/用户线上发声，构建六大分析维度：品牌/车型/年款交叉购买考虑、产品垂媒声量、产品口碑、产品满意&不满意因子、产品购买&拒绝原因、高频疑问。所有车系及年款数据均从2018年1月开始爬取和展示，其中年款划分以垂媒外显为准。</p>
+          <h4>车型数据更新计划</h4>
+          <p>业务洞察工具一期提供CSUV及竞品数据，上线后会按照十天一车（包含对应的竞品）的节奏逐步把所有车型数据上线。</p>
+          <h4>迭代规划</h4>
+          <p>2020年Q1会上线移动版和双端英文版。</p>
+          <p>更新日期：2020.01.02</p>
+        </div>
+      </div>
+    </van-overlay>
+    <van-overlay :show="show3" >
+      <div class="wrapper">
+        <div class="block" style="height: 48%">
+          <h3>意见反馈</h3>
+          <div class="text">
+            <textarea class="textarea" v-model="textarea"></textarea>
+          </div>
+          <div class="btn">
+            <span @click="show3=false" class="cancel">取消</span>
+            <span class="send" @click="sendClick">发送</span>
+          </div>
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -38,7 +81,11 @@
         return {
           msg: '',
           username: "",
-          password: ""
+          password: "",
+          show1:false,
+          show2:false,
+          show3:false,
+          textarea:'',
         }
       },
       computed: {
@@ -87,6 +134,22 @@
           }).then(() => {
             // on close
           });
+        },
+        sendClick(){
+          var that=this;
+          that.$axios
+            .post("/mail?type='意见或建议'&text="+that.textarea)
+            .then(res => {
+              if (res.data.status === 1) {
+                that.$toast(that.$t("global.message2"));
+                that.textarea='';
+                that.show3=false;
+              } else {
+                that.$toast(that.$t("global.message3"));
+                that.textarea='';
+                that.show3=false;
+              }
+            });
         }
       }
     }
@@ -157,7 +220,7 @@
   .login-input{
     background-color: #fff;
     width: 710px;
-    height: 780px;
+    height: 680px;
     margin: auto;
     position: absolute;
     left: 0;
@@ -210,14 +273,15 @@
       text-align: center;
       font-size:36px;
       line-height: 103px;
-      margin-top: 3.5rem;
+      margin-top: 2.5rem;
 
     }
   }
   .end{
     position: absolute;
+    padding-bottom: 20px;
     z-index: 3;
-    bottom: 60px;
+    bottom: 0;
     width: 15rem;
     left:0;
     right:0;
@@ -234,6 +298,72 @@
       border-right:1px solid  #000;
       padding-left: 0.3rem;
       padding-right: 0.3rem;
+    }
+  }
+  .van-overlay{
+    z-index: 3;
+    .wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .block {
+      position: absolute;
+      border-radius: 5px;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 90%;
+      height: 80%;
+      margin: auto;
+      background-color: #fff;
+      padding: 10px;
+      h3{
+        margin: 10px 0;
+      }
+      h4{
+        margin-top: 20px;
+      }
+      p{
+        font-size: 14px;
+        margin: 10px 0;
+      }
+      .text{
+        position: relative;
+        padding: 10px;
+        .textarea{
+          display: block;
+          width: 100%;margin: auto;
+          height: 150px;
+        }
+      }
+      .btn{
+        height: 35px;
+        width: 60%;
+        margin: auto;
+        span{
+          width: 48%;
+          display: inline-block;
+          height: 35px;
+          line-height: 35px;
+          text-align: center;
+        }
+        span.cancel{
+          float: left;
+         border: 1px solid #dcdfe6;
+          color: #000000;
+        }
+        span.send{
+          float: right;
+          background-color: #fabe00;
+          color: white;
+          border: 1px solid #fabe00;
+        }
+      }
     }
   }
 

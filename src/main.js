@@ -10,6 +10,8 @@ import store from './store/index';
 import echarts from 'echarts'
 import Vant from 'vant';
 import 'vant/lib/index.css';
+import * as t  from './assets/js/common'
+
 
 Vue.use(Vant);
 Vue.prototype.$axios = axios

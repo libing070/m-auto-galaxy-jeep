@@ -1,12 +1,12 @@
 <template>
   <div class="analysissound">
     <div class="item">
-      <div class="draw" id="echartsound1" :style="{ height: '350px'}"></div>
-      <img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartsound1" :style="{ height: '350px'}"></div>
+      <img @click="zoomInClick(1,$event)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
-      <div class="draw" id="echartsound2" :style="{ height: '350px'}"></div>
-      <img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartsound2" :style="{ height: '350px'}"></div>
+      <img @click="zoomInClick(2,$event)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
       <zoom-in :downloadName="downloadName" v-on:isShowZoomOut="isShowZoomOutMethods"></zoom-in>
@@ -95,14 +95,15 @@
             legend: {
             //  data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
               data:legendData,
-              top:30,
+              bottom:0,
               textStyle:{
                 fontSize:'10'
               },
             },
             grid: {
-              left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
-              bottom:'10%',
+              left: '20%', //grid 组件离容器左侧的距离。默认值是10%。
+              bottom:'20%',
+              top:'20%'
             },
             // toolbox: {
             //   feature: {
@@ -110,6 +111,7 @@
             //   }
             // },
             xAxis: {
+
               type: 'category',
               boundaryGap: false,
               //data: ['周一', '周二', '周三', '周四', '周五', '周六']
@@ -120,10 +122,20 @@
               // }
             },
             yAxis: {
+              name: '声量',
               type: 'value',
               axisLabel: {
-                interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-                rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+                // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+                // rotate:38,  //调整数值改变倾斜的幅度（范围-90到90）
+                formatter: function(value,index){
+                  var value;
+                  if (value >=10000) {
+                    value = Number(value/10000)+'万';
+                  }else if(value <10000){
+                    value = value;
+                  }
+                  return value
+                }
               }
             },
             series: seriesData
@@ -154,8 +166,9 @@
           // 绘制图表
           echartsound2.setOption({
             grid: {
-              left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
+              left: '20%', //grid 组件离容器左侧的距离。默认值是10%。
               bottom:'10%',
+              top:'25%'
             },
             title: {
               text: '本竞品产品销量对比',
@@ -185,7 +198,7 @@
             },
             legend: {
               data: ['声量', '销量'],
-              top:30
+              top:40
             },
             xAxis: [
               {
@@ -201,8 +214,17 @@
                 type: 'value',
                 name: '声量',
                 axisLabel: {
-                  interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-                  rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+                  // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+                  // rotate:38,   //调整数值改变倾斜的幅度（范围-90到90）
+                  formatter: function(value,index){
+                    var value;
+                    if (value >=10000) {
+                      value = Number(value/10000)+'万';
+                    }else if(value <10000){
+                      value = value;
+                    }
+                    return value
+                  }
                 }
                 // min: 0,
                 // max: 250,
@@ -221,8 +243,17 @@
                 //   formatter: '{value} °C'
                 // }
                 axisLabel: {
-                  interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-                  rotate:-38   //调整数值改变倾斜的幅度（范围-90到90）
+                  // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+                  // rotate:-38,   //调整数值改变倾斜的幅度（范围-90到90）
+                  formatter: function(value,index){
+                    var value;
+                    if (value >=10000) {
+                      value = Number(value/10000)+'万';
+                    }else if(value <10000){
+                      value = value;
+                    }
+                    return value
+                  }
                 }
               }
             ],
@@ -251,10 +282,11 @@
             ]
           });
         },
-        zoomInClick(num){
+        zoomInClick(num,$event){
           var that=this;
           that.isShowZoomIn=true;
           that.$nextTick(() => {
+           $($event).siblings(".draw.small").fadeOut();
             if(num==1){
               that.drawLine1('zoomIds');
               that.downloadName='本竞品垂媒声量趋势';

@@ -1,16 +1,16 @@
 <template>
   <div class="analysiskoubei">
     <div class="item">
-      <div class="draw" id="echartkoubei1" :style="{ height: '300px'}"></div>
-      <img @click="zoomInClick(1)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartkoubei1" :style="{ height: '300px'}"></div>
+      <img @click="zoomInClick(1,$event)" class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
-      <div class="draw" id="echartkoubei2" :style="{ height: '300px'}"></div>
-      <img @click="zoomInClick(2)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartkoubei2" :style="{ height: '300px'}"></div>
+      <img @click="zoomInClick(2,$event)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="item">
-      <div class="draw" id="echartkoubei3" :style="{ height: '600px'}"></div>
-      <img @click="zoomInClick(3)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
+      <div class="draw small" id="echartkoubei3" :style="{ height: '600px'}"></div>
+      <img @click="zoomInClick(3,$event)"  class="zoom-btn" src="../../assets/img/icon-zoom-in.png"/>
     </div>
     <div class="rotate-div" v-if="isShowZoomIn">
       <zoom-in :downloadName="downloadName" v-on:isShowZoomOut="isShowZoomOutMethods"></zoom-in>
@@ -119,15 +119,15 @@
               //data: ['周一', '周二', '周三', '周四', '周五', '周六']
               data:xAxisData,
               axisLabel: {
-                interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-                rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+                // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+                // rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
               }
             },
             yAxis: {
               type: 'value',
               axisLabel: {
-                interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-                rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
+                // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+                // rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
               }
             },
             series: seriesData
@@ -290,10 +290,11 @@
             ]
           });
         },
-        zoomInClick(num){
+        zoomInClick(num,$event){
           var that=this;
           that.isShowZoomIn=true;
           that.$nextTick(() => {
+            $($event).siblings(".draw.small").fadeOut();
             if(num==1){
               that.drawLine1('zoomIds');
               that.downloadName='本竞品垂媒声量趋势';

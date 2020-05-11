@@ -4,7 +4,7 @@
     <div class="galaxy-warp" id="galaxyWarp">
       <div class="title">
         <span class="line"></span>
-        <div class="desc">{{titleName}}</div>
+        <div class="desc"> <img class="icon" :src="require('../../assets/img/'+iconName+'.png')">{{titleName}}</div>
       </div>
       <div class="item-type">
         <div class="box">
@@ -179,7 +179,6 @@
 
 <script>
   import pData from '../../assets/json/province'
-  import * as t  from '../../assets/js/common'
   import TopBar from "../common/TopBar";
   import MyCalendar from "./../common/MyCalendar";
   // 下面是导入两张图片的相对地址
@@ -242,6 +241,7 @@
           userattributeList:[],
           mediaList:[],
           titleName:'',
+          iconName:'',
           brandList:[],
           brandName:'',
           carTypeList:[],
@@ -298,8 +298,10 @@
           var that=this;
         this.target=  this.$route.query.target;
         var  name=  this.$route.query.name;
-        console.log(this.target+"  "+name);
+        var  iconName=  this.$route.query.icon;
+        console.log(this.target+"  "+name+"  "+iconName);
         this.titleName=name;
+        this.iconName=iconName;
         this.initParameters()//初始化默认参数
 
         var nowdate=new Date();
@@ -386,11 +388,17 @@
         this.mycalendarshow= this.$store.state.mycalendarshow;
       },
       'resultDataList':function () {
-        if(this.resultDataList.length>3){
-            $(".galaxy .galaxy-warp").css("padding-bottom","8rem");
-        }else{
-          $(".galaxy .galaxy-warp").css("padding-bottom","4rem");
-        }
+        // if(this.resultDataList.length>0){
+        //   $(".galaxy .galaxy-warp").css("padding-bottom","10rem");
+        // }
+        // if(this.resultDataList.length!=0){
+        //   if(this.resultDataList.length>3){
+        //     $(".galaxy .galaxy-warp").css("padding-bottom","10rem");
+        //   }else{
+        //     $(".galaxy .galaxy-warp").css("padding-bottom","2rem");
+        //   }
+        // }
+
       }
     },
       methods:{
@@ -511,8 +519,8 @@
             });
         },
         getCarTypeByBrand(){
-         this.isShowNiankuan=this.brandName=="Jeep"?true:false;
-         this.isShowTimeChoose=this.brandName=="Jeep"?true:false;
+         this.isShowNiankuan=(this.target=='pleased'||this.target=='reason')&&this.brandName=="Jeep"?true:false;
+         this.isShowTimeChoose=this.target!='buy'&&this.brandName=="Jeep"?true:false;
          this.carTypeList=[];
           this.$axios
             .get("car/series?brand="+this.brandName)
@@ -595,6 +603,7 @@
           if(item.name=='全国'){
             this.provinceDisabled=true;//省市选择关闭
             this.cityDisabled=true;//城市选择关闭
+            this.resultDataList.push("全国");
           }
          else{
             this.provinceDisabled=false;//省市选择开启
@@ -629,14 +638,14 @@
           var that=this;
           this.cityText='';
           if(this.areaText=="省市"){
-            item.color=item.color==''?'#fabe00':'';
-            item.className=((item.className.indexOf('active')!=-1)?'':'active');
-            if(item.className=='active'){
-              this.currPList.push(item.name);
-            }else{
-              this.currPList.remove(item.name);
-            }
-            this.currPList=this.currPList.unique(this.currPList);
+              item.color=item.color==''?'#fabe00':'';
+              item.className=((item.className.indexOf('active')!=-1)?'':'active');
+              if(item.className=='active'){
+                this.currPList.push(item.name);
+              }else{
+                this.currPList.remove(item.name);
+              }
+              this.currPList=this.currPList.unique(this.currPList);
           }
           else if(this.areaText=="城市"){
             this.provinceShow = false;//省市选择开启
@@ -829,6 +838,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     outline: none;
+    color: #B5B5B5;
   }
   select{
        background-color:transparent;
@@ -841,21 +851,21 @@
 
     .galaxy {
       background: #fabe00;
-      height: 100%;
+      /*height: 100%;*/
       width: 100%;
       top: 0;
       left: 0;
       overflow: auto;
       position: relative;
-      padding-bottom: 3rem;
+      padding-bottom: 1rem;
       .galaxy-warp {
         position: relative;
         margin: auto;
         width: 95%;
         border-radius: 5px;
         background: white;
-        margin-bottom: 1rem;
-        padding-bottom: 4rem;
+       // margin-bottom: 1rem;
+        /*padding-bottom: 8rem;*/
         margin-top: -6rem;
         height:100%;
         transition: all 0.6s ease-out;
@@ -873,14 +883,22 @@
             top: 0;
             bottom: 0;
           }
+
           .desc {
+            .icon{
+              display: inline-block;
+              height: 1.5rem;
+              padding-left: 5px;
+              padding-right: 25px;
+              vertical-align: bottom;
+            }
+            display: inline-block;
             height: 70px;
             font-weight: bold;
             border-bottom: 0.5px solid #fabe00;
-            padding-left: 0.5rem;
             width: 90%;
             margin: auto;
-
+            margin-left: 30px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -1022,6 +1040,7 @@
                 height: 100%;
                 line-height: 65px;
                 background-color: #f9f9f9;
+                color: #B5B5B5;
               }
               .time-line {
                 background-color: #fabe00;
@@ -1161,7 +1180,9 @@
           width: 40px;
           height: 25px;
           margin: auto;
-          margin-bottom: 30px;
+        //  margin-top: 40px;
+          padding-top: 1rem;
+          padding-bottom: 2rem;
           position: relative;
           z-index: 0;
           img{
@@ -1170,10 +1191,10 @@
         }
       }
       .galaxy-warp.close{
-        height: 200px;
+        height: 10rem;
       }
       .galaxy-warp.open{
-        height: 100%;
+        height: auto;
       }
       .hidediv{
         animation-name:fadeoutnum;
@@ -1228,6 +1249,9 @@
       @keyframes fadeinnum{
         0% {opacity:0}
         100% { opacity:1;}
+      }
+      .echarts-wrap{
+        margin-top: 1rem;
       }
   }
 

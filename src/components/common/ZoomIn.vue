@@ -1,7 +1,7 @@
 <template>
   <div class="zoomin">
     <div class="draw" id="zoomIds" :style="{ height: '97%'}"></div>
-    <img @click="cameraClick" class="camera-btn" src="../../assets/img/icon-camera.png"/>
+    <!--<img @click="cameraClick" class="camera-btn" src="../../assets/img/icon-camera.png"/>-->
     <img @click="zoomOutClick" class="zoom-btn" src="../../assets/img/icon-zoom-out.png"/>
   </div>
 </template>
@@ -40,7 +40,9 @@
         zoomOutClick(){
           // childByValue是在父组件on监听的方法
           // 第二个参数this.childValue是需要传的值
-          this.$emit('isShowZoomOut', false)
+          this.$emit('isShowZoomOut', false);
+          $(".draw.small").fadeIn();
+
         },
         cameraClick(){
           var that=this;
