@@ -24,11 +24,7 @@ const router= new Router({
     },
     {
       path: '/',
-      name: 'SignIn',
-      component: SignIn,
-      meta: {
-        permission: false
-      },
+      redirect:'/sign-in'
     },
     {
       path: '/helloworld',

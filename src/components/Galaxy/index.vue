@@ -67,7 +67,7 @@
           </div>
         </div>
       </div>
-      <div class="zhedie item-area">
+      <div class="zhedie item-area" v-bind:class="[isHideBorderbottom]">
         <div class="box">
           <span class="area-name">区域选择：</span>
         </div>
@@ -92,7 +92,7 @@
           </span>
         </div>
       </div>
-      <div class="zhedie item-user-form">
+      <div class="zhedie item-user-form" v-bind:class="[isHideUserFrom1]">
         <div class="box">
           <span class="user-attribute">用户属性：</span>
         </div>
@@ -103,7 +103,7 @@
           <span class="checked-option user" v-bind:class="[activechecked.isActivemeiti,disabledchecked.isDisabledmeiti]"><img v-bind:src="activechecked.isActivemeiti=='active'?checked_url:nochecked_url"><span class="text">媒体</span></span>
         </div>
       </div>
-      <div class="zhedie item-user-form" style="border: none">
+      <div class="zhedie item-user-form" style="border: none" v-bind:class="[isHideUserFrom2]">
         <div class="box">
           <span class="user-attribute">来源媒体：</span>
         </div>
@@ -238,6 +238,9 @@
             isDisabledaika:'',//爱卡汽车
             isDisabledtaipinyang:'',//太平洋汽车
           },
+          isHideUserFrom1:'',
+          isHideUserFrom2:'',
+          isHideBorderbottom:'',
           userattributeList:[],
           mediaList:[],
           titleName:'',
@@ -283,10 +286,10 @@
           cityShow:false,
           cityActions:[],
 
-          currPList:[],//当前选中的省份
+          currPList:['全国'],//当前选中的省份
           currCList:[],//当前选中的城市
           currProvinceCity:[],//当前选中省下面的市集合
-          resultDataList:[],//最终展示的结果
+          resultDataList:['全国'],//最终展示的结果
 
           retractable_url:retractable_open,
           chidlrenParams:[],//图表需要的参数集合
@@ -388,17 +391,6 @@
         this.mycalendarshow= this.$store.state.mycalendarshow;
       },
       'resultDataList':function () {
-        // if(this.resultDataList.length>0){
-        //   $(".galaxy .galaxy-warp").css("padding-bottom","10rem");
-        // }
-        // if(this.resultDataList.length!=0){
-        //   if(this.resultDataList.length>3){
-        //     $(".galaxy .galaxy-warp").css("padding-bottom","10rem");
-        //   }else{
-        //     $(".galaxy .galaxy-warp").css("padding-bottom","2rem");
-        //   }
-        // }
-
       }
     },
       methods:{
@@ -419,6 +411,9 @@
              that.disabledchecked.isDisabledtaipinyang='disabled';
              that.timeRadiooption=1;//上市期
              that.shangshiqiTimeBox='';//可选
+             that.isHideBorderbottom='border-bottom';
+             that.isHideUserFrom1='isHideUserFrom';
+             that.isHideUserFrom2='isHideUserFrom';
              break;
            case 'sound':
              that.isDisabledNiankuan=true;
@@ -463,6 +458,7 @@
 
              that.timeRadiooption=0;//自定义
              that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
+             that.isHideUserFrom1='isHideUserFrom';
              break;
            case 'reason':
              that.activechecked.isActivezhijia='active';
@@ -479,6 +475,7 @@
              that.timeRadiooption=0;//自定义
 
              that.mediaList=['汽车之家','易车','爱卡汽车','太平洋汽车'];
+             that.isHideUserFrom1='isHideUserFrom';
              break;
            case 'doubt':
              that.isDisabledNiankuan=true;
@@ -632,13 +629,31 @@
              that.provinceActions.push({name:pData[i].regionName,color:'',className:''});
             }
           }
-          this.areaText=='省市'?that.provinceActions=that.provinceActions.concat({name:'',color:'',className:''}):'';//最后追加一个空值 否则确定按钮挡住最后一个省份
+         var areaProv=[{name:'全选',color:'',className:''}];
+          this.areaText=='省市'?that.provinceActions=areaProv.concat(that.provinceActions.concat({name:'',color:'',className:''})):'';//最后追加一个空值 否则确定按钮挡住最后一个省份
           this.provinceShow = true;
         },
         onProvinceSelect(item){
           var that=this;
          // this.cityText='';
           if(this.areaText=="省市"){
+            if(item.name=='全选'){
+              that.resultDataList=[];
+              that.currPList=[];
+              $("#provinceActionsheet").find("button").each(function () {
+                if(($("#provinceActionsheet button").length!=($(this).index()+1))&&($(this).find('span').html()!='全选')){
+                  $(this).css("color",'#fabe00');
+                }
+              });
+              for(var i = 0; i < pData.length; i++){
+                that.currPList.push(pData[i].regionName);
+              };
+              setTimeout(function () {
+                that.resultDataList=[];
+                that.resultDataList=that.currPList;
+                that.provinceShow=false;
+              },100);
+            }else{
               item.color=item.color==''?'#fabe00':'';
               item.className=((item.className.indexOf('active')!=-1)?'':'active');
               if(item.className=='active'){
@@ -647,6 +662,8 @@
                 this.currPList.remove(item.name);
               }
               this.currPList=this.currPList.unique(this.currPList);
+            }
+
           }
           else if(this.areaText=="城市"){
             this.provinceShow = false;//省市选择开启
@@ -1132,6 +1149,9 @@
             }
           }
         }
+        .border-bottom{
+          border-bottom: none !important;
+        };
         .item-user-form{
           width: 90%;
           top: 1rem;
@@ -1168,6 +1188,9 @@
               opacity: 0.5;
             }
           }
+        }
+        .isHideUserFrom{
+          display: none;
         }
         .start-wrap{
           width: 550px;

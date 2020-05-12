@@ -25,8 +25,21 @@
       },
       mounted(){
         var that=this;
-        if(that.isSafari()){
+      // this.$toast(navigator.userAgent);
+        if(that.isSogou()){
+          $(".zoomin").css("width","91.5vh");
+        }
+        if(that.isUBrowser()){
           $(".zoomin").css("width","90vh");
+        }
+        if(that.isSafari()){
+          $(".zoomin").css("width","88vh");
+        }
+        if(that.isQQ()){
+          $(".zoomin").css("width","86.5vh");
+        }
+        if(that.isOPPO()){
+          $(".zoomin").css("width","85vh");
         }
       },
       methods:{
@@ -37,6 +50,34 @@
             ua.indexOf('ios') === -1 && ua.indexOf('browser') === -1) {
             return true;
           }else{
+            return false;
+          }
+        },
+        isUBrowser(){
+          if(navigator.userAgent.indexOf("UCBrowser")>-1){
+            return true;
+          }else {
+            return false;
+          }
+        },
+        isQQ(){
+          if(navigator.userAgent.indexOf("QQBrowser")>-1){
+            return true;
+          }else {
+            return false;
+          }
+        },
+        isOPPO(){
+          if(navigator.userAgent.indexOf("HeyTapBrowser")>-1){
+            return true;
+          }else {
+            return false;
+          }
+        },
+        isSogou(){
+          if(navigator.userAgent.indexOf("Sogou")>-1){
+            return true;
+          }else {
             return false;
           }
         },

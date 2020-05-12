@@ -18,6 +18,10 @@ module.exports = {
         target: host,
         changeOrigin: true
       },
+      "**/checkLogin": {
+        target: host,
+        changeOrigin: true
+      },
       "/mail": {
         target: host,
         changeOrigin: true
@@ -27,6 +31,10 @@ module.exports = {
         changeOrigin: true
       },
       "/car/series": {
+        target: host,
+        changeOrigin: true
+      },
+      "/car/year": {
         target: host,
         changeOrigin: true
       },
@@ -73,7 +81,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-   // host:'192.168.1.182',
+    //host:'192.168.1.182',
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8087, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,

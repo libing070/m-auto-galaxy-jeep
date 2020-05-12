@@ -66,7 +66,6 @@
               {
                 name: that.drawData1.series[index].name,
                 type: 'line',
-                stack: '总量',
                 data: that.drawData1.series[index].data,
                 itemStyle: {
                   normal: {
@@ -101,7 +100,7 @@
               },
             },
             grid: {
-              left: '20%', //grid 组件离容器左侧的距离。默认值是10%。
+              left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
               bottom:'20%',
               top:'20%'
             },
@@ -122,15 +121,17 @@
               // }
             },
             yAxis: {
-              name: '声量',
+              name: '声量(万)',
               type: 'value',
+              //  max:120000000,
+              // splitNumber : 5,
               axisLabel: {
                 // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
                 // rotate:38,  //调整数值改变倾斜的幅度（范围-90到90）
                 formatter: function(value,index){
                   var value;
                   if (value >=10000) {
-                    value = Number(value/10000)+'万';
+                    value = Number(value/10000);
                   }else if(value <10000){
                     value = value;
                   }
@@ -166,8 +167,9 @@
           // 绘制图表
           echartsound2.setOption({
             grid: {
-              left: '20%', //grid 组件离容器左侧的距离。默认值是10%。
+              left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
               bottom:'10%',
+              right: '15%',
               top:'25%'
             },
             title: {
@@ -212,14 +214,17 @@
             yAxis: [
               {
                 type: 'value',
-                name: '声量',
+                name: '声量(万)',
+                // max: function (value) {
+                //   return value.max ;
+                // },
                 axisLabel: {
                   // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
                   // rotate:38,   //调整数值改变倾斜的幅度（范围-90到90）
                   formatter: function(value,index){
                     var value;
                     if (value >=10000) {
-                      value = Number(value/10000)+'万';
+                      value = Number(value/10000);
                     }else if(value <10000){
                       value = value;
                     }
@@ -236,6 +241,9 @@
               {
                 type: 'value',
                 name: '销量',
+                // max: function (value) {
+                //   return value.max ;
+                // },
                 // min: 0,
                 // max: 25,
                 // interval: 5,
@@ -245,15 +253,15 @@
                 axisLabel: {
                   // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
                   // rotate:-38,   //调整数值改变倾斜的幅度（范围-90到90）
-                  formatter: function(value,index){
-                    var value;
-                    if (value >=10000) {
-                      value = Number(value/10000)+'万';
-                    }else if(value <10000){
-                      value = value;
-                    }
-                    return value
-                  }
+                  // formatter: function(value,index){
+                  //   var value;
+                  //   if (value >=10000) {
+                  //     value = Number(value/10000);
+                  //   }else if(value <10000){
+                  //     value = value;
+                  //   }
+                  //   return value
+                  // }
                 }
               }
             ],
@@ -261,7 +269,20 @@
               {
                 name: '声量',
                 type: 'bar',
+                yAxisIndex: 0,
                 data:seriesBarData,
+                markLine : {
+                  lineStyle:{
+                    color:'#3F3F3F',
+                  },
+                  label:{
+                    position:'middle',
+                    formatter: '{b}: {c}',
+                  },
+                  data : [
+                    {type : 'average', name: '声量平均值'}
+                  ]
+                },
                 itemStyle: {
                   normal: {
                     color: '#fabe00',
@@ -273,6 +294,15 @@
                 type: 'line',
                 yAxisIndex: 1,
                 data: seriesLineData,
+                markLine : {
+                  label:{
+                    position:'middle',
+                    formatter: '{b}: {c}',
+                  },
+                  data : [
+                    {type : 'average', name: '销量平均值'}
+                  ]
+                },
                 itemStyle: {
                   normal: {
                     color:'#3F3F3F',
@@ -286,7 +316,7 @@
           var that=this;
           that.isShowZoomIn=true;
           that.$nextTick(() => {
-           $($event).siblings(".draw.small").fadeOut();
+           $($event.target).siblings(".draw.small").fadeOut();
             if(num==1){
               that.drawLine1('zoomIds');
               that.downloadName='本竞品垂媒声量趋势';

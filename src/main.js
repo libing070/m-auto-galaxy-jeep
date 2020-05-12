@@ -15,7 +15,34 @@ import * as t  from './assets/js/common'
 
 Vue.use(Vant);
 Vue.prototype.$axios = axios
-Vue.prototype.$echarts = echarts
+Vue.prototype.$echarts = echarts;
+var that=this;
+  setInterval(function () {
+    $.ajax({
+      url:'v2/checkLogin',
+      type:'get',
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true,
+      async: false,
+      success: function(status) {
+        var status=JSON.parse(status)['status'];
+        if (status ==-1) {
+          console.log(status);
+          localStorage.hasLogin = false;
+          localStorage.isSuperAdmin = '';
+          localStorage.name = '';
+          localStorage.UserPhone = '';
+          if(!(window.location.href.indexOf("sign-in")>-1)){
+            window.location.href='/#/sign-in';
+          }
+        }
+      }
+    })
+  },2000);
+
+
 
 
 // 导入资源文件

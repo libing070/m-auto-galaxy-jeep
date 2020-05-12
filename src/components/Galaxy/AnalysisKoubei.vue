@@ -70,7 +70,6 @@
               {
                 name: that.drawData1.series[index].name,
                 type: 'line',
-                stack: '总量',
                 data: that.drawData1.series[index].data,
                 itemStyle: {
                   normal: {
@@ -90,7 +89,7 @@
               textStyle:{
                 fontSize:'14'
               },
-              // subtext:'声量',
+               subtext:'提及量',
             },
             tooltip: {
               trigger: 'axis'
@@ -115,7 +114,6 @@
             // },
             xAxis: {
               type: 'category',
-              boundaryGap: false,
               //data: ['周一', '周二', '周三', '周四', '周五', '周六']
               data:xAxisData,
               axisLabel: {
@@ -294,7 +292,7 @@
           var that=this;
           that.isShowZoomIn=true;
           that.$nextTick(() => {
-            $($event).siblings(".draw.small").fadeOut();
+            $($event.target).siblings(".draw.small").fadeOut();
             if(num==1){
               that.drawLine1('zoomIds');
               that.downloadName='本竞品垂媒声量趋势';

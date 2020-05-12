@@ -64,7 +64,7 @@
           var currArr=that.drawData1[index];
           var vals=[],name='';
           for(let val in currArr){
-            vals=currArr[2];
+            vals.push([currArr[0],currArr[1],currArr[2]]);
             name=currArr[3];
           }
           seriesData.push({
@@ -76,9 +76,9 @@
               }
             },
             symbolSize: function (val) {
-              return val *0.0005;
+              return val[2]>10000?val[2]/6000:val[2]/200;
             },
-            data: [vals]
+            data:vals
           });
         }
 
@@ -87,6 +87,7 @@
         echartbuy1.setOption({
           grid: {
             left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
+            bottom:'25%',
           },
           title: {
             text: '交叉购买考虑-垂媒留资数据',
@@ -98,39 +99,69 @@
             subtext:'反向线索重合度',
           },
           animation: true,
-
+          // toolbox: {
+          //   right:'15%',
+          //   top:'10',
+          //   feature: {
+          //     saveAsImage: {
+          //       type:'jpeg',
+          //       pixelRatio: 2,
+          //       title:'交叉购买考虑-垂媒留资数据',
+          //    //   icon:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAKJklEQVR4nO2dUZHruhJFDWEgBMKBsCEMhEAYCGEQCIEwEAIhEAzBEPI+pNznyWQcuyW7JXmtqv64dWpyJbu31S21pK4DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYBwVOkq6SbpJ6SYOkO/bL+vicvuMz++f9/mAFJH1IOkdBeDtd7TbEZ3nwfq+QyEgYjBDr2Nn7HYMRSf8UQgRvJ2rdBhF61YWkLzFqbG1f3u8dZhDF4e0sezVEUjKIowg7evsBvEDSpwirSrFPb3+AEQqzVUzhlmODt0/ACIVFLG+nwH7at7dfQNd1kg4itCrVDt7+sXvE6FGyXbz9Y9co5B594kscFPIX7LelCoRcxBOFmSvry7sqrLZ/ePejZBRIEcvRuw+7RfZ1jzPCWIaki/FZn7zbvlsUyrAtIwfiMBCf3dLnzWyWF7LlHyxiGYkhKXlILfCytsf4UWLE3hqF9Y/F4ZV3u2vHGGZRDr81xuGeeflEZEvW5d3u3aHA0hfFDrhEFGYAlz73o3e7d4eko+FFnbzbXTuyVS6wT2RrZFsDOXq3u3ZkW5w9ebd7dxhjYaZ4EzEKhLWQrZGt/IHZlERkmz1ken1LZJvBuovy62QUCkQtz56P0xbEF3Q1vKCbd9tbQbbFwt673c0TxWGpv7qLNZBsyDbVe49h8cG7/ZsSnfYQw561+FSYXkzZOXjyflatINsU+9jO8TfW5OD1cP4pOOtN9Wx1HUQ9UDZkz0O87Kq1D9+Oqqz15BDCq8zIHmZ5200518MURoxrAR2z2iBRC5Qb2aZ7S7KbUkcUtXEYG/VXK6F6R5Gx2RaP1cZpIb3IPVZFbZygf1ra6RbOuCW02gDZF21Ls3kFlQrTb7WHVYOou9oMBbzfeQ6b9hm1cUoh4nCgIZEcpjpZe9J1kwirvFAbt3q9rjxW/aPHVSTkRSD7GVql2O/p34o7dX3ZIXBFYTSp1acuz535UF2jx03c210F+lma5O03c+1naZLSzrgdFL7i55XtSwFEUSkKH+JPhZnS08r+clXaR/84brg1Ob+IuB8KRvYw7zL+EcseC/YZQxUY/fs6/gH2d29ADDH+xTDjK47c3zEceNzJ0cf//o52UQhHpL1tNsqEbOX5w/gHevMfw5/EF6Po4Kkx8Y/R+yEa7z7WguHZDyl/zP7uCaIozhkF8c7OYkSfRIYoafzHCCSROFocLS8io+XdDNQQCMSROGKUNM+PUJ5AIA4UKIxXQpH3cyoBBLIhqq+M4ls7nwFDIBuh9OOHPO3k/fy8QCAro5CEXwpw8lTb5S1bCGRFFLYCXAtw7ly2uxMOEchKKNAX4NS5bVd79hHICiiUg9Sab8y1Xdz+hEAyI5+TXQYnQR69n/faIJCMaN2TXR77Z/7b36KQ43w8teEQ//2xf+KyskiaPugCgWQiOmxucQwKaxF6FoKhfZ9RLGsIuNl6LgSSAYWp3Jwr4zeFr/8qm8qiWPrMQm5yAxwCSURpl/O8crSvrZwt/r9yCaW5d9t1CCQZ5TkTbFNhvOhDromF5naLIpAEMjnWoAISXeU7vO3o3ZecIBAjCqFVqkMVtTKtPLlUU7tGEYgRpV/zcFahia3Sw8Zm7lZBIAaUfmBe8Q6ktPWTQQWNjCkgEANKGz0uKnTkeEZps3NN3O+IQBaitMO6b7WIo+uy5CQH7z6kgkAWInvoMajCFefED0L1074IZAFKuzbMfSrXigK7HEUQyAJkzz1a+JJa85GqcxEEMhOlrXtUF1o9I/v95lWviyCQmch+1UPxU7pzkT3/Onq33QoCmYlsIUYz6wFdZz7M+a6KQ0wEMhPZwqtmRo8Hsq2yVxtmIZAZyD57Ve3M1V/InoscvNtuAYHMQLaq3Wq/mu+QbTSt8pAHBDID2ZLT5sKrB7KFWVXmIQhkBrId/tZcePVAthm9KkdUBDIDGW7SUkU1VxYM7x6BtCgQ2ZLS6vq5FIvjqMJEHYG8QYGljtD8Qc+yhZ3ybvdSEMgbjAKpuv5oDrIl6kfvdi8FgbxB4XyqpY7Q7AzWA9kKN6ub6kUgbzAK5Ojd7rUxPhcE0qBALIuEzU7xPpBtqvfk3e6lIJA37OVLuZS9PBcE8oa9fCmXItvIevRu91IQyBuMAqmyrGIJspXfVBd6IpA3KIBAnpBtfwwCaVAglk1CvXe718biOGIlvT2BdN1+6o6WIFvJe3X1aQhkBsavpbzbvRay5WW7effjP96LQC4Gh2i23ES2VfQq69MQyAyMDtFsmKUd7c9HIDOQ/TSPg3fbc6Od7c9HIDMx9LXar+YUMo6mqjBB7zoEMhvZ8pAWz8WyfCiqXRdCIDORrfboroaSdePocVfFpTcIZCay5yH3FkYR2a9BqHoURSALkP1s2upHkYS+VxtedR0CWYQC1lGk2hPeE/td5ezVAwSyEMsDi1blTI7Srn2ocnFwDAJZiNJumaqq/1EcKRd5yrsPqSAQA4lOU01MrrSroKvp5xQIxIDSZrTuqmDrqWw7BpsaPboOgZhJ/LreVejaQBS/5cyrsVU/a/cAgRhR+ihyV2FJrNJzjrsqve76LxBIArKvLP94JipgIU1h8qHP0J+Td19ygkASke2M2ldf3aNT+z8Uymgsq+SvxF7dVPYUCCSR6GDWtZFXDnbcsO3K2Pa+NXF0HQLJguz39k0JZbU4PrMw7tEPtFZ7PUEgmYhOl1Mkd4Xw7ZxDLLF9p8zCeFjV5SRTIJCMyF4SP/crfVY4MEH6I7FXCPkOCkn354qieFhzm8LGIJDMKH19xCKcW7QciTbiGIFAVkDpC2012FkNJuXPIJCVkO3sqBpsUAWlMrlAICuikAdsHfasLY5mE/JXIJCVUd51Ek8rYsV/axDIRii9xsnTrtpBvvEKBLIhCnlJX4DDz35f2lG+8QoE4oDCXouShTLENu5y1BiDQBxR+qYkhLEyCKQAtP3i4ithnLXDJPwdCKQg4tf7uqEwrowY0yCQAtH/92hcDM/43UjxHX+7mV1/a4JAKkCh+PBReHiJX/7+xfMfovXxxX7HvxGCsIFAGkGESauAQAAmQCAAEyAQgAkQCMAECARgAgQCMAECAZhga4EMjn0FWIyWV1334z+27JRjRReqQIGl/n0b/4Bll1w/0SaAIlCoh7sa/Ps6/hHr8TY3qc2jKqF+4shhPUfgPP6hlPv6/lMchhVkqdXTn89q6xN/EMNasd83GWsfpwhi2Bz7ffWc8lxFhmG126C/tiwrz1VkGFaznaay/lZOD8Qwi/V6t2FN+W9ZwrAabP6tvgp4NxjDtrRlh3kr4N1oDFvb7DcTK9+d2xhWovVShkoQlXe0Joal2KAwY5vvBBmFGa5LAZ3DMKsNCj58yCaMP8TyqbDyfhUhGFamPS5F/Va8glucOQYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0B7/Aw8bqCTC4/BcAAAAAElFTkSuQmCC'
+          //     }
+          //   }
+          // },
           tooltip: {
-           // formatter: '{b0}: {c0}<br />{b1}: {c1}'
+            trigger:'item',
+         //  formatter:'{a}<br />{c}'
+            formatter:function (params) {
+              console.log(params);
+
+              return "车型:"+params.seriesName+'<br/>正向线索:'+params.value[0]+'%<br/>反向线索:'+params.value[1]+'%<br/>线索量:'+params.value[2]
+            }
+
           },
           xAxis: {
+             name:'正向线索重合度',
+            nameLocation :'center',
+            nameTextStyle:{
+               padding:9,
+            },
             type: 'value',
-            min: 'dataMin',
-            max: 'dataMax',
             splitLine: {
               show: true
+            },
+            axisLabel: {
+              formatter: function(value,index){
+                return value+'%'
+              }
             }
           },
           yAxis: {
             type: 'value',
-            min: 'dataMin',
-            max: 'dataMax',
             splitLine: {
               show: true
+            },
+            axisLabel: {
+              formatter: function(value,index){
+                return value+'%'
+              }
             }
+
           },
           dataZoom: [
             {
               type: 'slider',
               show: true,
               xAxisIndex: [0],
-              start: 0,
-              end: 35
+              // start: 0,
+              // end: 35
             },
             {
               type: 'inside',
               xAxisIndex: [0],
-              start: 0,
-              end: 35
+              // start: 0,
+              // end: 35
             }
           ],
           series:seriesData
@@ -219,7 +250,7 @@
         var that=this;
         that.isShowZoomIn=true;
         that.$nextTick(() => {
-          $($event).siblings(".draw.small").fadeOut();
+          $($event.target).siblings(".draw.small").fadeOut();
           if(num==1){
             that.drawLine1('zoomIds');
             that.downloadName='交叉购买考虑-垂媒留资数据';

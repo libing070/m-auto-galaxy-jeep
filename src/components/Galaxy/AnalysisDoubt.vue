@@ -117,7 +117,7 @@
         var widthRate = 100/(groupLen+2.5);
          for(var i=1;i<=groupLen;i++){
            if(all=='all'){
-             w=i==1? (widthRate*2+"%"):((widthRate*1.2)+'%');
+             w=i==1? (widthRate*2.5+"%"):((widthRate*1.2)+'%');
            }
            html+='<div class="item" style="display: inline-block;width: '+w+';height: 350px" id="'+$el+i+'"></div>';
          }
@@ -126,7 +126,7 @@
            that.$echarts.init(document.getElementById($el+k)).setOption({
              title: {
                top:all=='all'?'10%':'0',
-               left:(k-1)==0?'15%':'',
+               left:all=='all'?(k-1==0?'55%':'0'):(k-1==0?'30%':'0'),
                textStyle:{
                  fontSize:'14',
                },
@@ -160,15 +160,15 @@
                axisLabel: {
                  show: k==1?true:false,
                  fontSize: '8',
-                 formatter:function(val){
-                   var strs = val.split(''); //字符串数组
-                   var str = ''
-                   for(var i = 0, s; s = strs[i++];) { //遍历字符串数组
-                     str += s;
-                     if(!(i % 4)) str += '\n'; //按需要求余
-                   }
-                   return str
-                 },
+                 // formatter:function(val){
+                 //   var strs = val.split(''); //字符串数组
+                 //   var str = ''
+                 //   for(var i = 0, s; s = strs[i++];) { //遍历字符串数组
+                 //     str += s;
+                 //     if(!(i % 4)) str += '\n'; //按需要求余
+                 //   }
+                 //   return str
+                 // },
                },
                show: k==1?true:false,
              },
@@ -189,7 +189,10 @@
                      label : {
                        show: true,
                        position: 'right',
-                       fontSize: '8'
+                       fontSize: '8',
+                       formatter: function(param){
+                         return param.data+"%";
+                       }
                      }
                    }
                  },
@@ -290,6 +293,9 @@
                   label : {
                     show: true,
                     position: 'right',
+                    formatter: function(param){
+                      return param.data+"%";
+                    }
                   }
                 }
               },
@@ -390,6 +396,9 @@
                   label : {
                     show: true,
                     position: 'right',
+                    formatter: function(param){
+                      return param.data+"%";
+                    }
                   }
                 }
               },
@@ -416,7 +425,7 @@
         var that=this;
         that.isShowZoomIn=true;
         that.$nextTick(() => {
-          $($event).siblings(".draw.small").fadeOut();
+          $($event.target).siblings(".draw.small").fadeOut();
           if(num=1){
             that.drawLine1('zoomIds','all','一级维度');
             that.downloadName='一级维度';

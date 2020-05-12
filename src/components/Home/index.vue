@@ -1,7 +1,7 @@
 <template>
   <div class="page-sign-in">
     <div class="top">
-      <div class="lang-box">
+      <div class="lang-box" style="display: none">
         <span :class="['item',{lang:true, active:curLang === 'en'}]" data-type="en" @click="toggleLang">EN</span>
         <span :class="['item',{lang:true, active:curLang === 'zh'}]" data-type="zh" @click="toggleLang">中文</span>
       </div>
@@ -317,7 +317,7 @@
     .block {
       position: absolute;
       border-radius: 5px;
-      top: 4rem;
+      top: 2rem;
       right: 0;
       left: 0;
       width: 90%;
