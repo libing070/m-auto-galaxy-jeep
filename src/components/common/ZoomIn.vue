@@ -1,5 +1,8 @@
 <template>
   <div class="zoomin">
+    <div class="column" v-if="downloadName=='一级维度'">
+      <span class="title">一级维度</span>
+    </div>
     <div class="draw" id="zoomIds" :style="{ height: '97%'}"></div>
     <!--<img @click="cameraClick" class="camera-btn" src="../../assets/img/icon-camera.png"/>-->
     <img @click="zoomOutClick" class="zoom-btn" src="../../assets/img/icon-zoom-out.png"/>
@@ -102,6 +105,49 @@
   height: 100vw;
   overflow-x: scroll;
   overflow-y: scroll;
+  .column{
+    z-index: 1;
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    height: 65px;
+    line-height: 65px;
+    .title{
+      position: absolute;
+      left: 30px;
+      font-weight: bold;
+      font-size:26px;
+      display: inline-block;
+    }
+    .btn-box{
+      width: 300px;
+      position: absolute;
+      right: 0;
+      left: 0;
+      margin: auto;
+      text-align: center;
+      display: inline-block;
+      border-radius: 5px;
+      .btn{
+        font-weight: bold;
+        width: 150px;
+        display: inline-block;
+        background-color: #f9f9f9;
+        color: #000000;
+        font-size: 26px;
+      }
+      .btn:nth-child(1){
+        float: left;
+      }
+      .btn:nth-child(2){
+        float: right;
+      }
+      .btn.active{
+        background-color: #fabe00;
+
+      }
+    }
+  }
   .draw{
     background-color: white;
     position: relative;
@@ -114,6 +160,7 @@
   }
   .zoom-btn{
     position: absolute;
+    z-index: 2;
     right: 30px;
     top: 30px;
     width: 60px;

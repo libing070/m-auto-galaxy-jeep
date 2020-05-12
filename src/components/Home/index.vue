@@ -1,7 +1,7 @@
 <template>
   <div class="page-sign-in">
     <div class="top">
-      <div class="lang-box" style="display: none">
+      <div class="lang-box">
         <span :class="['item',{lang:true, active:curLang === 'en'}]" data-type="en" @click="toggleLang">EN</span>
         <span :class="['item',{lang:true, active:curLang === 'zh'}]" data-type="zh" @click="toggleLang">中文</span>
       </div>
@@ -59,7 +59,7 @@
     </van-overlay>
     <van-overlay :show="show3" >
       <div class="wrapper">
-        <div class="block" style="height: 48%">
+        <div class="block" style="top: 9rem;">
           <h3>意见反馈</h3>
           <div class="text">
             <textarea class="textarea" v-model="textarea"></textarea>
@@ -124,6 +124,10 @@
           }
         },
         toggleLang(e) {
+          if(e.target.dataset.type=="en"){
+            this.$toast("开发中，尽请期待...");
+            return;
+          }
           this.$i18n.locale = e.target.dataset.type;
           localStorage.lang = e.target.dataset.type;
         },
@@ -313,12 +317,11 @@
     .block {
       position: absolute;
       border-radius: 5px;
-      top: 0;
+      top: 4rem;
       right: 0;
-      bottom: 0;
       left: 0;
       width: 90%;
-      height: 80%;
+      height: auto;
       margin: auto;
       background-color: #fff;
       padding: 10px;

@@ -264,8 +264,8 @@
           currEndDate: new Date(2020, 4, 3),//从月份0开始
 
           areaText:'全国',
-          provinceText:'',
-          cityText:'',
+          provinceText:'省',
+          cityText:'城市',
           provinceDisabled:true,
           cityDisabled:true,
 
@@ -501,6 +501,7 @@
 
        },
         changeBrandList(event){
+         console.log(11212121);
           this.getCarTypeByBrand();
         },
         getBrandList(){//获取品牌下拉列表数据
@@ -595,8 +596,8 @@
           // 可以通过 close-on-click-action 属性开启自动收起
           this.areaShow = false;
           this.areaText=item.name;
-          this.provinceText='';
-          this.cityText='';
+          //this.provinceText='';
+          //this.cityText='';
           this.currPList=[];
           this.currCList=[];
           this.resultDataList=[];
@@ -636,7 +637,7 @@
         },
         onProvinceSelect(item){
           var that=this;
-          this.cityText='';
+         // this.cityText='';
           if(this.areaText=="省市"){
               item.color=item.color==''?'#fabe00':'';
               item.className=((item.className.indexOf('active')!=-1)?'':'active');
@@ -650,7 +651,7 @@
           else if(this.areaText=="城市"){
             this.provinceShow = false;//省市选择开启
             this.cityDisabled=false;//城市选择开启
-            this.provinceText=item.name;
+           // this.provinceText=item.name;
             that.currProvinceCity=[];
             pData.forEach((val)=>{
               if(val.regionName==item.name){
@@ -712,6 +713,7 @@
           this.resultDataList.remove(item);
         },
         retractableClick(){
+         var that=this;
           var currClass=document.getElementById("galaxyWarp").className;
           var zhedie=  document.getElementsByClassName("zhedie");
           if(currClass.indexOf("close")>-1){
@@ -719,7 +721,7 @@
             document.getElementById("galaxyWarp").classList.add("open");
             document.getElementById("galaxyWarp").classList.remove("close");
             for(var i=0;i<zhedie.length;i++){
-              zhedie[i].classList.remove("hidediv");
+                zhedie[i].classList.remove("hidediv");
             }
             document.getElementsByClassName("item-type")[0].style.borderBottom="0.1px solid #d8d8d8";
             this.retractable_url=retractable_open;
@@ -732,8 +734,6 @@
                   zhedie[a].style.display="block";
                 },100*a);
               })(i);
-
-
             }
           }else{
             this.isShowEchartsWrap=true;
@@ -753,6 +753,12 @@
 
                 }
           }
+          setTimeout(function () {
+            if(!that.isShowNiankuan)
+            $("body").find(".big-box").css("display","none");
+          },100);
+
+
         },
         p(s) {
           return s < 10 ? '0' + s : s

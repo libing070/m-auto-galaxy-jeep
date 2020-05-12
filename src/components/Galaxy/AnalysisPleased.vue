@@ -120,33 +120,31 @@
              });
          });
       },
-      drawLine1($el,title){
+      drawLine1($el,all){
          var that=this;
-         var groupLen=that.drawData1.series.length;
-        var groupLen=1;
+         var groupLen=all=='all'?that.drawData1.series.length:1;
          var yAxisData=that.drawData1.x;
          var html='';
-         var widthRate = 100/(groupLen+3);
+         var w='100%';
+        var widthRate = 100/(groupLen+2.5);
          for(var i=1;i<=groupLen;i++){
-           var w=i==1? (widthRate*3.5+"%"):(widthRate+'%');
+           if(all=='all'){
+             w=i==1? (widthRate*2+"%"):((widthRate*1.2)+'%');
+           }
            html+='<div class="item" style="display: inline-block;width: '+w+';height: 350px" id="'+$el+i+'"></div>';
          }
          $("#"+$el).append(html);
          for(var k=1;k<=groupLen;k++){
            that.$echarts.init(document.getElementById($el+k)).setOption({
              title: {
-               top:0,
-             //  left:(k-1)==0?'70%':'',
-               left:'20%',
+               top:all=='all'?'10%':'0',
+               left:(k-1)==0?'15%':'',
                textStyle:{
                  fontSize:'14',
                },
-               text: title,
+               text: '',
                subtext:that.drawData1.series[k-1].name,
-               subtextStyle:{
-                 // fontSize:8,
-                 // align:'center'
-               }
+               subtextStyle:{}
              },
              tooltip: {
                show:false,
@@ -162,7 +160,7 @@
                left: '3%',
                right: (k-1)==0?'12%':'44%',
                bottom:'0',
-               top:title!=''?'15%':'0%',
+               top:all=='all'?'20%':'10%',
                containLabel: true
              },
              xAxis: {
@@ -173,9 +171,19 @@
                data: yAxisData,
                axisLabel: {
                  show: k==1?true:false,
-                 fontSize: '8'
+                 fontSize: '8',
+                 formatter:function(val){
+                   var strs = val.split(''); //字符串数组
+                   var str = ''
+                   for(var i = 0, s; s = strs[i++];) { //遍历字符串数组
+                     str += s;
+                     if(!(i % 4)) str += '\n'; //按需要求余
+                   }
+                   return str
+                 },
                },
                show: k==1?true:false,
+
              },
              series: [
                {
@@ -429,7 +437,7 @@
         that.$nextTick(() => {
           $($event).siblings(".draw.small").fadeOut();
           if(num==1){
-            that.drawLine1('zoomIds','一级维度');
+            that.drawLine1('zoomIds','all','一级维度');
             that.downloadName='一级维度';
           }else if(num==2){
             that.drawLine2('zoomIds','二级维度');
