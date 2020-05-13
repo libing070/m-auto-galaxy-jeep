@@ -426,7 +426,7 @@
         that.isShowZoomIn=true;
         that.$nextTick(() => {
           $($event.target).siblings(".draw.small").fadeOut();
-          if(num=1){
+          if(num==1){
             that.drawLine1('zoomIds','all','一级维度');
             that.downloadName='一级维度';
           }else if(num==2){
