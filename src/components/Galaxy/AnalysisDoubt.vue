@@ -110,6 +110,7 @@
       },
       drawLine1($el,all){
          var that=this;
+       // that.$loading.show();
         var groupLen=all=='all'?that.drawData1.series.length:1;
         var yAxisData=that.drawData1.x;
         var html='';
@@ -332,6 +333,7 @@
                   } else {
                     that.$toast(res.data.msg);
                   }
+                 // that.$loading.hide();
                 });
         })
       },
@@ -515,6 +517,18 @@
         right: 30px;
         top: 30px;
         width: 60px;
+        animation: iconBottom 1.5s linear infinite;
+      }
+      @keyframes iconBottom {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
     }
     .rotate-div{

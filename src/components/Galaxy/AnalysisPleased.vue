@@ -108,6 +108,7 @@
       },
       loadData1(){
         var that=this;
+       // that.$loading.show();
          return new Promise(resolve => {
            that.$axios
              .post("praise/first", that.chidlrenParams)
@@ -349,6 +350,7 @@
                   } else {
                     that.$toast(res.data.msg);
                   }
+                 // that.$loading.hide();
                 });
         })
       },
@@ -541,6 +543,18 @@
         right: 30px;
         top: 30px;
         width: 60px;
+        animation: iconBottom 1.5s linear infinite;
+      }
+      @keyframes iconBottom {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
     }
     .rotate-div{

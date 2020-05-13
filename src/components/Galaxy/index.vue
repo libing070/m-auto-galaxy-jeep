@@ -20,20 +20,18 @@
           <span class="name">车型</span>
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select v-model="carName">
+            <select v-model="carName" @change="changeCarTypeList($event)">
               <option v-for="(item,index) in carTypeList" v-bind:value="item.id">{{item.name}}</option>
 
             </select>
           </div>
         </div>
-        <div class="zhedie big-box"  v-show="isShowNiankuan">
+        <div class="zhedie big-box carYear" v-show="isShowNiankuan">
           <div class="cc">
             <img class="select-arrow" :src="require('../../assets/img/select.png')">
-            <select v-bind:disabled="isDisabledNiankuan" v-model="niankuanName">
+            <select v-bind:disabled="isDisabledNiankuan" v-model="niankuanName" @change="changeCarYearList($event)">
               <option value="">年款</option>
-              <option value="2019款">2019款</option>
-              <option value="2018款">2018款</option>
-              <option value="2017款">2017款</option>
+              <option v-for="(item,index) in carYearList" :disabled="item.is_true==1?false:true" v-bind:value="item.id">{{item.name}}</option>
             </select>
           </div>
         </div>
@@ -60,6 +58,13 @@
         </div>
         <div class="box" v-else-if="timeRadiooption==1" v-bind:class="[shangshiqiTimeBox]">
           <div class="desc" v-show="shangshiDesc">请注意：同一车系不同年款的上市期不同，请选择年款</div>
+          <div class="choose-time" style="width: 100%">
+            <span style="width: 46%" class="text start-time-text" @click="chooseCalendarClick($event)">{{ExposureStartDateText}}</span>
+            <span class="time-line"></span>
+            <span style="width: 46%" class="text end-time-text" @click="chooseCalendarClick($event)">{{ExposureEndDateText}}</span>
+          </div>
+        </div>
+        <div class="box" v-else-if="timeRadiooption==-1">
           <div class="choose-time" style="width: 100%">
             <span style="width: 46%" class="text start-time-text" @click="chooseCalendarClick($event)">{{currentStartDateText}}</span>
             <span class="time-line"></span>
@@ -205,7 +210,7 @@
       AnalysisReason,
       AnalysisSound
     },
-      data () {
+    data () {
         return {
           target:'',
           backurl:'/dimensions',
@@ -249,15 +254,19 @@
           brandName:'',
           carTypeList:[],
           carName:'',
+          carYearList:[],
           timer: '',
           dateType:'month',//按月，按天
           currentEndDateText:'结束日期',
           currentStartDateText:'开始日期',
+          ExposureStartDateText: '开始日期',
+          ExposureEndDateText: '结束日期',
           mycalendarshow:false,
           myminDate: new Date(2018, 7, 1),
           mymaxDate: new Date(2020, 4, 31),
           currentStartDate: new Date(2018, 11, 3),//从月份0开始 表示12月
           currentEndDate: new Date(2020, 1, 3),//从月份0开始
+
           mydateInterval:[],
 
           calendarshow: false,
@@ -295,10 +304,9 @@
           chidlrenParams:[],//图表需要的参数集合
           isShowEchartsWrap:false,
         }
-      },
-      created(){
-        console.log('created.......');
-          var that=this;
+    },
+    created(){
+        var that=this;
         this.target=  this.$route.query.target;
         var  name=  this.$route.query.name;
         var  iconName=  this.$route.query.icon;
@@ -317,27 +325,24 @@
         this.currentEndDate=new Date(resbefore1Month.split("/")[0],resbefore1Month.split("/")[1],1);
         this.currentEndDateText=this.currentEndDate.getFullYear()+"/"+(this.p(this.currentEndDate.getMonth()+1));
         //按月，设置最小日期和最大日期选择范围
-          var mmin=nowdate.getFullYear()-2//两年前
-          this.myminDate=new Date(mmin,1,1);//最小日期为两年之前的1月开始
-          this.mymaxDate=new Date(nowdate.getFullYear(),nowdate.getMonth(),1);//最大值为当前月
+        var mmin=nowdate.getFullYear()-2//两年前
+        this.myminDate=new Date(mmin,1,1);//最小日期为两年之前的1月开始
+        this.mymaxDate=new Date(nowdate.getFullYear(),nowdate.getMonth(),1);//最大值为当前月
         //按天
         this.currStartDate=new Date(nowdate - 1000 * 60 * 60 * 24 * 30);//最后一个数字30可改，30天的意思
         this.currEndDate=new Date(nowdate - 1000 * 60 * 60 * 24 * 1);//获取前一天
 
-
-
-      },
+    },
     mounted(){
           var that=this;
          that.$nextTick(() => {
            console.log('mounted....');
 
            //自定义 上市期单选按钮切换事件
-           $("body").on("click",'.item-time .radio-option',function () {
+           $("body").off('click','.item-time .radio-option').on("click",'.item-time .radio-option',function () {
              $(this).addClass("active").siblings().removeClass("active");
              $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
              $(this).siblings().find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
-
              that.timeRadiooption=$(this).attr('type');
              switch(that.target) {
                case 'buy':
@@ -355,6 +360,13 @@
                case 'doubt':
                  break;
              }
+             if(that.isShowNiankuan&&$(this).attr('type')==1){//选择的是满意不满意或者购买拒绝 且时间选择是上市期 则年款下拉框 2018年后不可选择
+                 that.getCarYearList(0);
+
+             }else{
+               that.getCarYearList();
+             }
+
            });
 
 
@@ -391,9 +403,31 @@
         this.mycalendarshow= this.$store.state.mycalendarshow;
       },
       'resultDataList':function () {
+      },
+      'brandName':function () {
+        var that=this;
+        if(that.target!='buy'&&that.brandName!='Jeep'){
+           that.timeRadiooption=0;
+          $("body").find('.item-time .radio-option').each(function () {
+            if($(this).index()==1){
+              $(this).addClass("active");
+              $(this).find('img').attr("src",require("../../assets/img/radio-checked.png"));
+            }else{
+              $(this).removeClass("active");
+              $(this).find('img').attr("src",require("../../assets/img/radio-nochecked.png"));
+            }
+          });
+        }
+      },
+      'niankuanName':function () {
+        var that=this;
+        if((that.target=='pleased'||that.target=='reason')&&that.niankuanName==''){
+          that.ExposureStartDateText='开始日期';
+            that.ExposureEndDateText= '结束日期';
+        }
       }
     },
-      methods:{
+    methods:{
        initParameters(){
          var that=this;
          this.getBrandList();
@@ -409,7 +443,7 @@
              that.disabledchecked.isDisabledyiche='disabled';
              that.disabledchecked.isDisabledaika='disabled';
              that.disabledchecked.isDisabledtaipinyang='disabled';
-             that.timeRadiooption=1;//上市期
+             that.timeRadiooption=-1;//上市期
              that.shangshiqiTimeBox='';//可选
              that.isHideBorderbottom='border-bottom';
              that.isHideUserFrom1='isHideUserFrom';
@@ -497,10 +531,43 @@
          }
 
        },
-        changeBrandList(event){
-         console.log(11212121);
+       changeBrandList(event){
           this.getCarTypeByBrand();
-        },
+       },
+       changeCarTypeList(event){
+
+         var that=this;
+          for(var key in this.carTypeList) {
+            var item = this.carTypeList[key];
+            if (item.name == this.carName) {
+              var date = item.date.split("~");
+              this.ExposureStartDateText = date[0];
+              this.ExposureEndDateText = date[1];
+            }
+          }
+         var ty=$("body").find('.item-time .radio-option.active').attr("type");
+         if(that.isShowNiankuan&&ty==1){//选择的是满意不满意或者购买拒绝 且时间选择是上市期 则年款下拉框 2018年后不可选择
+           that.getCarYearList(0);
+         }else{
+           that.getCarYearList();
+         }
+       },
+       changeCarYearList(event){
+          for(var key in this.carYearList) {
+            var item = this.carYearList[key];
+            if(this.niankuanName!=''){
+              if (item.name == this.niankuanName) {
+                var date = item.date.split("~");
+                this.ExposureStartDateText = date[0];
+                this.ExposureEndDateText = date[1];
+              }
+            }else{
+              this.ExposureStartDateText = '开始日期';
+              this.ExposureEndDateText =  '结束日期';
+            }
+
+          }
+       },
         getBrandList(){//获取品牌下拉列表数据
           this.$axios
             .get("car/brand", {})
@@ -517,9 +584,10 @@
             });
         },
         getCarTypeByBrand(){
-         this.isShowNiankuan=(this.target=='pleased'||this.target=='reason')&&this.brandName=="Jeep"?true:false;
-         this.isShowTimeChoose=this.target!='buy'&&this.brandName=="Jeep"?true:false;
-         this.carTypeList=[];
+         var that=this;
+          this.isShowNiankuan=(this.target=='pleased'||this.target=='reason')&&this.brandName=="Jeep"?true:false;
+          this.isShowTimeChoose=this.target!='buy'&&this.brandName=="Jeep"?true:false;
+          this.carTypeList=[];
           this.$axios
             .get("car/series?brand="+this.brandName)
             .then(res => {
@@ -528,10 +596,59 @@
                   this.carTypeList.push(val);
                 }
                 this.carName=this.carTypeList[0].name
+                var item = this.carTypeList[0];
+                var date = item.date.split("~");
+                this.ExposureStartDateText = date[0];
+                this.ExposureEndDateText = date[1];
+
+                var ty=$("body").find('.item-time .radio-option.active').attr("type");
+                if(that.isShowNiankuan&&ty==1){//选择的是满意不满意或者购买拒绝 且时间选择是上市期 则年款下拉框 2018年后不可选择
+                  that.getCarYearList(0);
+                }else{
+                  that.getCarYearList();
+                }
               } else {
                 this.$toast(res.data.msg);
               }
-            });
+          });
+
+        },
+        getCarYearList(flag) {
+          //刷新年款
+          var that=this;
+          this.carYearList=[];
+          this.$axios
+            .get("car/year?brand="+this.brandName+"&series="+this.carName)
+            .then(res => {
+              if (res.data.status === 1) {
+                for(var val of res.data.data){
+                  if(flag==0&&Number(val.id.replace("款",""))<2018){
+                    var key = "is_true";
+                    var value = 0; //0不可选
+                    val[key] = value;//添加是否可选
+                  }else{
+                    var key = "is_true";
+                    var value = 1;//1可选
+                    val[key] = value;//添加是否可选
+                  }
+                  that.carYearList.push(val);
+                }
+                var item = that.carYearList[0];
+              //  this.niankuanName = item.name;
+
+                if((that.target=='pleased'||that.target=='reason')&&that.niankuanName==''){
+                  that.ExposureStartDateText='开始日期';
+                  that.ExposureEndDateText= '结束日期';
+                }else{
+                  var date = item.date.split("~");
+                  this.ExposureStartDateText = date[0];
+                  this.ExposureEndDateText = date[1];
+                }
+
+              } else {
+                this.$toast(res.data.msg);
+              }
+          });
         },
         handleLoad () {
           this.timer = new Date().getTime()
@@ -593,7 +710,7 @@
           // 可以通过 close-on-click-action 属性开启自动收起
           this.areaShow = false;
           this.areaText=item.name;
-          //this.provinceText='';
+          this.provinceText='省';
           //this.cityText='';
           this.currPList=[];
           this.currCList=[];
@@ -668,7 +785,7 @@
           else if(this.areaText=="城市"){
             this.provinceShow = false;//省市选择开启
             this.cityDisabled=false;//城市选择开启
-           // this.provinceText=item.name;
+            this.provinceText=item.name;
             that.currProvinceCity=[];
             pData.forEach((val)=>{
               if(val.regionName==item.name){
@@ -732,7 +849,8 @@
         retractableClick(){
          var that=this;
           var currClass=document.getElementById("galaxyWarp").className;
-          var zhedie=  document.getElementsByClassName("zhedie");
+         // var zhedie=  document.getElementsByClassName("zhedie");
+          var zhedie=$(".zhedie").not(".isHideUserFrom");
           if(currClass.indexOf("close")>-1){
             this.isShowEchartsWrap=false;
             document.getElementById("galaxyWarp").classList.add("open");
@@ -748,7 +866,11 @@
                 setTimeout(function() {
                 //  console.log(a);
                   zhedie[a].classList.add("showdiv");
-                  zhedie[a].style.display="block";
+                  if ($.inArray('carYear', zhedie[a].classList)!=-1) {
+                    zhedie[a].style.display="inline";
+                  }else{
+                    zhedie[a].style.display="block";
+                  }
                 },100*a);
               })(i);
             }
@@ -760,10 +882,12 @@
             this.retractable_url=retractable_close;
                 for(var i=zhedie.length-1;i>=0;i--){
                   zhedie[i].classList.remove("showdiv");
+                  zhedie[i].classList.add("hidediv");
+
                   (function(a) {
                     setTimeout(function() {
                       //console.log(a);
-                      zhedie[a].classList.add("hidediv");
+                      //zhedie[a].classList.add("hidediv");
                       zhedie[a].style.display="none";
                     }, 400/a);
                   })(i);
@@ -832,14 +956,19 @@
         },
         startAnalysisClick(){
           var that=this;
+          var ty=$("body").find('.item-time .radio-option.active').attr("type");
+          if((that.target=='pleased'||that.target=='reason')&&that.niankuanName==''&&ty==1){
+            this.$toast("请选择年款");
+            return;
+          }
           that.retractableClick();
           that.isShowEchartsWrap=true;
           var data={
             yType:that.target,
             brand:that.brandName,
             series:that.carName,
-            year:that.niankuanName,
-            date:[that.currentStartDateText.replace(/\//g,"-"),that.currentEndDateText.replace(/\//g,"-")],
+            year:that.target=='pleased'||that.target=='reason'?that.niankuanName:'',
+            date:that.timeRadiooption==1?[that.ExposureStartDateText,that.ExposureEndDateText]:[that.currentStartDateText.replace(/\//g,"-"),that.currentEndDateText.replace(/\//g,"-")],
             area:that.areaText=='全国'?'all':that.areaText=='省市'?"province":"city",//all,province,city
             province:that.areaText=='省市'?that.resultDataList:[],
             city:that.areaText=='城市'?that.resultDataList:[],
@@ -915,16 +1044,18 @@
               padding-right: 25px;
               vertical-align: bottom;
             }
-            display: inline-block;
+            display: flex;
+            align-items: center;
             height: 70px;
             font-weight: bold;
-            border-bottom: 0.5px solid #fabe00;
+            border-bottom: 0.7px solid #fabe00;
             width: 90%;
             margin: auto;
             margin-left: 30px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            padding-bottom: 0.8rem;
           }
         }
         .item-type {
@@ -957,6 +1088,7 @@
                 bottom: 0;
                 margin: auto;
                 height: 30%;
+                background: #fff;
                 pointer-events: none;
               }
               select {
@@ -1013,6 +1145,7 @@
             display: inline-block;
             font-size: 28px;
             width: 100%;
+            margin-bottom: 20px;
             radio-name {
               width: 140px;
               height: 35px;

@@ -134,6 +134,7 @@
         forgetPwd(){
           this.$dialog.alert({
             title: '提示',
+            confirmButtonColor:'#fabe00',
             message: '请联系市场部数字智能营销团队孙玮颢'
           }).then(() => {
             // on close

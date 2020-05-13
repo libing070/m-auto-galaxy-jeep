@@ -101,9 +101,21 @@
           localStorage.lang = e.target.dataset.type;
         },
         logout() {
-          localStorage.setItem("hasLogin", false);
-          //this.$store.commit(types.CHANGE_GLOBAL_STATE, false);
-          this.$router.push("/sign-in");
+          var that=this;
+          this.$dialog.alert({
+            title: '提示',
+            showCancelButton:true,
+            confirmButtonColor:'#fabe00',
+            message: '确认退出？'
+          }).then(() => {
+            localStorage.setItem("hasLogin", false);
+            //this.$store.commit(types.CHANGE_GLOBAL_STATE, false);
+            that.$router.push("/sign-in");
+          }).catch(() => {
+            // on cancel
+          });
+
+
         }
       }
     }

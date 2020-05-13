@@ -133,6 +133,7 @@
         },
         loadData3(){
           var that=this;
+          //that.$loading.show();
           this.$axios
             .post("praise/emotion", that.chidlrenParams)
             .then(res => {
@@ -142,6 +143,7 @@
               } else {
                 this.$toast(res.data.msg);
               }
+            //  that.$loading.hide();
             });
         },
         drawLine2($el){
@@ -244,7 +246,7 @@
             grid: {
               left: '3%',
               right: '4%',
-              bottom: '3%',
+              bottom: '6%',
               containLabel: true
             },
             xAxis: {
@@ -252,7 +254,10 @@
             },
             yAxis: {
               type: 'category',
-              data: yAxisData
+              data: yAxisData,
+              axisLabel: {
+                fontSize: '10',
+              }
             },
             series: [
               {
@@ -333,6 +338,18 @@
         right: 30px;
         top: 30px;
         width: 60px;
+        animation: iconBottom 1.5s linear infinite;
+      }
+      @keyframes iconBottom {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
     }
     .rotate-div{

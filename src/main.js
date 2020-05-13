@@ -54,6 +54,9 @@ vantLocales(i18n.locale)
 console.log('main.js文件温馨提示：', i18n.messages[i18n.locale].app.hello)
 Vue.config.productionTip = false
 
+import myLoading from './assets/js/myLoading'
+Vue.use(myLoading);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
