@@ -14,8 +14,8 @@
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAmCAYAAAC76qlaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4BpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5NWNkZWZkYi1iOGY4LTZlNDEtYmZjYS00OGViOTNjNGRlNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RkM4QjAyODk3RDVDMTFFQTg1NDlFQkZFRUM5NkQyQTAiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RkM4QjAyODg3RDVDMTFFQTg1NDlFQkZFRUM5NkQyQTAiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTE0ZmRkNS1jNTZiLWNiNGItOWM0Yi01ODdmZTBmYWJiOWIiIHN0UmVmOmRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpkNGViZjI2YS05YzY3LTMxNGUtOTE5Yy1lMGM5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" @click.prevent="logout">
     </div>
   </div>
-   <div class="block-bg"></div>
-    <div class="demand" @click="showPopup">
+   <div class="block-bg" :class="[blockHeight]"></div>
+    <div class="demand" v-show="isShowdemand" @click="showPopup">
       {{this.$t('global.new_demand')}}
     </div>
 
@@ -50,6 +50,8 @@
         return {
           newdemandShow: false,
           textareaContent:'',
+          isShowdemand:false,
+          blockHeight:'',
         }
       },
       props: ['isshowBackbtn',"backurl"],
@@ -58,12 +60,24 @@
           return this.$i18n.locale;
         },
       },
+      created(){
+          var that=this;
+        if(localStorage.isSuperAdmin=='true'){
+          that.isShowdemand=true;
+          that.blockHeight='blockHeight';
+        }
+      },
       methods:{
         goBack(){
             this.$router.push({path:this.backurl});
 
         },
         showPopup() {
+          // if(localStorage.isSuperAdmin=='true'){
+          //   this.newdemandShow = true;
+          // }else{
+          //   this.$toast("暂无权限");
+          // }
           this.newdemandShow = true;
         },
         hidePopup(){
@@ -178,6 +192,9 @@
     .block-bg{
       background: #000;
       width: 100%;
+      height: 8rem;
+    }
+    .block-bg.blockHeight{
       height: 10rem;
     }
     .demand{

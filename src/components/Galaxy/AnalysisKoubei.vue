@@ -265,7 +265,7 @@
                 type: 'bar',
                 stack: '总量',
                 label: {
-                  show: true,
+                  show: false,
                   position: 'insideRight'
                 },
                 data:pulsSeriesData,
@@ -280,7 +280,7 @@
                 type: 'bar',
                 stack: '总量',
                 label: {
-                  show: true,
+                  show: false,
                   position: 'insideRight'
                 },
                 data: minusSeriesData,

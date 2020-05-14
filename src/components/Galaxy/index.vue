@@ -282,13 +282,7 @@
           cityDisabled:true,
 
           areaShow: false,
-          areaActions: [
-            { name: '全国' },
-            { name: '省市' },
-            { name: '城市' },
-            // { name: '城市',disabled: true },
-          ],
-
+          areaActions:[],
           provinceShow:false,
           provinceActions:[],
 
@@ -311,6 +305,19 @@
         var  name=  this.$route.query.name;
         var  iconName=  this.$route.query.icon;
         console.log(this.target+"  "+name+"  "+iconName);
+        if(this.target=='buy'){
+          this.areaActions=[
+            { name: '全国' },
+            { name: '省市' },
+            { name: '城市' ,disabled:true},
+          ]
+        }else{
+          this.areaActions=[
+            { name: '全国' },
+            { name: '省市' },
+            { name: '城市'},
+          ]
+        }
         this.titleName=name;
         this.iconName=iconName;
         this.initParameters()//初始化默认参数
@@ -361,9 +368,22 @@
                  break;
              }
              if(that.isShowNiankuan&&$(this).attr('type')==1){//选择的是满意不满意或者购买拒绝 且时间选择是上市期 则年款下拉框 2018年后不可选择
+               if(that.carName=='大指挥官'){
+                 that.isShowNiankuan=false;
+               }else{
+                 that.isShowNiankuan=true;
+               }
                  that.getCarYearList(0);
-
              }else{
+               if(!(that.target=='pleased'||that.target=='reason')){
+                 that.isShowNiankuan=false;
+               }else{
+                 if(that.carName=='大指挥官'){
+                   that.isShowNiankuan=false;
+                 }else{
+                   that.isShowNiankuan=true;
+                 }
+               }
                that.getCarYearList();
              }
 
@@ -547,9 +567,24 @@
           }
          var ty=$("body").find('.item-time .radio-option.active').attr("type");
          if(that.isShowNiankuan&&ty==1){//选择的是满意不满意或者购买拒绝 且时间选择是上市期 则年款下拉框 2018年后不可选择
+           if(that.carName=='大指挥官'){
+             that.isShowNiankuan=false;
+           }else{
+             that.isShowNiankuan=true;
+           }
            that.getCarYearList(0);
          }else{
+           if(!(that.target=='pleased'||that.target=='reason')){
+             that.isShowNiankuan=false;
+           }else{
+             if(that.carName=='大指挥官'){
+               that.isShowNiankuan=false;
+             }else{
+               that.isShowNiankuan=true;
+             }
+           }
            that.getCarYearList();
+
          }
        },
        changeCarYearList(event){
@@ -603,8 +638,22 @@
 
                 var ty=$("body").find('.item-time .radio-option.active').attr("type");
                 if(that.isShowNiankuan&&ty==1){//选择的是满意不满意或者购买拒绝 且时间选择是上市期 则年款下拉框 2018年后不可选择
+                  if(that.carName=='大指挥官'){
+                    that.isShowNiankuan=false;
+                  }else{
+                    that.isShowNiankuan=true;
+                  }
                   that.getCarYearList(0);
                 }else{
+                  if(!(that.target=='pleased'||that.target=='reason')){
+                    that.isShowNiankuan=false;
+                  }else{
+                    if(that.carName=='大指挥官'){
+                      that.isShowNiankuan=false;
+                    }else{
+                      that.isShowNiankuan=true;
+                    }
+                  }
                   that.getCarYearList();
                 }
               } else {

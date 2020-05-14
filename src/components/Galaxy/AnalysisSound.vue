@@ -217,12 +217,7 @@
               {
                 type: 'value',
                 name: '声量(万)',
-                // max: function (value) {
-                //   return value.max ;
-                // },
                 axisLabel: {
-                  // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
-                  // rotate:38,   //调整数值改变倾斜的幅度（范围-90到90）
                   formatter: function(value,index){
                     var value;
                     if (value >=10000) {
@@ -232,10 +227,12 @@
                     }
                     return value
                   }
-                }
-                // min: 0,
-                // max: 250,
-                // interval: 50,
+                },
+                //  min: 0,
+                // max: function (value) {
+                //   return value.max ;
+                // },
+               //interval:'auto',
                 // axisLabel: {
                 //   formatter: '{value} ml'
                 // }
