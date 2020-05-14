@@ -41,8 +41,28 @@
         if(that.isOPPO()){
           $(".zoomin").css("width","85vh");
         }
+        if(that.isAndroid()&&that.isWeiXin()){
+          $(".zoomin").css("width","100vh");
+        }
       },
       methods:{
+          isAndroid(){
+            var u = navigator.userAgent;
+            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            if(isAndroid){
+              return true;
+            }else{
+              return false;
+            }
+          },
+          isWeiXin(){
+          var ua = window.navigator.userAgent.toLowerCase();
+          if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+            return true;
+          }else{
+            return false;
+          }
+        },
         isSafari(){
           var ua = navigator.userAgent.toLowerCase();
           if (ua.indexOf('applewebkit') > -1 && ua.indexOf('mobile') > -1 && ua.indexOf('safari') > -1 &&

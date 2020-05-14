@@ -170,7 +170,7 @@
           echartsound2.setOption({
             grid: {
               left: '15%', //grid 组件离容器左侧的距离。默认值是10%。
-              bottom:'10%',
+              bottom:'18%',
               right: '15%',
               top:'25%'
             },
@@ -210,6 +210,10 @@
                 data: xAxisData,
                 axisPointer: {
                   type: 'shadow'
+                },
+                axisLabel: {
+                  interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
+                  rotate:-38,   //调整数值改变倾斜的幅度（范围-90到90）
                 }
               }
             ],
@@ -270,6 +274,7 @@
                 type: 'bar',
                 yAxisIndex: 0,
                 data:seriesBarData,
+                barMaxWidth: 30, // 最大宽度
                 markLine : {
                   lineStyle:{
                     color:'#3F3F3F',
