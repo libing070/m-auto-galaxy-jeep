@@ -689,9 +689,9 @@
                   that.ExposureStartDateText='开始日期';
                   that.ExposureEndDateText= '结束日期';
                 }else{
-                  var date = item.date.split("~");
-                  this.ExposureStartDateText = date[0];
-                  this.ExposureEndDateText = date[1];
+                  // var date = item.date.split("~");
+                  // this.ExposureStartDateText = date[0];
+                  // this.ExposureEndDateText = date[1];
                 }
 
               } else {

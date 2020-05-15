@@ -35,7 +35,7 @@ var that=this;
           localStorage.name = '';
           localStorage.UserPhone = '';
           if(!(window.location.href.indexOf("sign-in")>-1)){
-            window.location.href='/#/sign-in';
+            window.location.href='sign-in';
           }
         }
       }

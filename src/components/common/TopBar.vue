@@ -126,7 +126,7 @@
           }).then(() => {
             localStorage.setItem("hasLogin", false);
             //this.$store.commit(types.CHANGE_GLOBAL_STATE, false);
-            that.$router.push("/sign-in");
+            that.$router.push("sign-in");
           }).catch(() => {
             // on cancel
           });
