@@ -49,7 +49,7 @@
         loadData1(){
           var that=this;
           this.$axios
-            .post("praise/day", that.chidlrenParams)
+            .post("/praise/day", that.chidlrenParams)
             .then(res => {
               if (res.data.status ==1) {
                 that.drawData1=res.data.data;
@@ -135,7 +135,7 @@
           var that=this;
           //that.$loading.show();
           this.$axios
-            .post("praise/emotion", that.chidlrenParams)
+            .post("/praise/emotion", that.chidlrenParams)
             .then(res => {
               if (res.data.status ==1) {
                 that.drawData3=res.data.data;

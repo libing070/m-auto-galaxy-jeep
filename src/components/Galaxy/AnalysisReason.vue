@@ -108,7 +108,7 @@
        // that.$loading.show();
          return new Promise(resolve => {
            that.$axios
-             .post("praise/first", that.chidlrenParams)
+             .post("/praise/first", that.chidlrenParams)
              .then(res => {
                if (res.data.status ==1) {
                  resolve(res.data.data);
@@ -232,7 +232,7 @@
         that.chidlrenParams['first']=that.currFirstBarActiveyAxisName;
         return new Promise(resolve => {
           that.$axios
-            .post("praise/second", that.chidlrenParams)
+            .post("/praise/second", that.chidlrenParams)
             .then(res => {
               if (res.data.status ==1) {
                 resolve(res.data.data);
@@ -338,7 +338,7 @@
         that.chidlrenParams['second']=that.currSecondBarActiveyAxisName;
         return new Promise(resolve => {
               that.$axios
-                .post("praise/third", that.chidlrenParams)
+                .post("/praise/third", that.chidlrenParams)
                 .then(res => {
                   if (res.data.status ==1) {
                     resolve(res.data.data);

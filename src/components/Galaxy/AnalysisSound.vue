@@ -45,7 +45,7 @@
         loadData1(){
           var that=this;
           this.$axios
-            .post("sound/day", that.chidlrenParams)
+            .post("/sound/day", that.chidlrenParams)
             .then(res => {
               if (res.data.status ==1) {
                 that.drawData1=res.data.data;
@@ -146,7 +146,7 @@
           var that=this;
          // that.$loading.show();
           this.$axios
-            .post("sound/all", that.chidlrenParams)
+            .post("/sound/all", that.chidlrenParams)
             .then(res => {
               if (res.data.status ==1) {
                 that.drawData2=res.data.data;

@@ -47,7 +47,7 @@
       loadData1(){
         var that=this;
         this.$axios
-          .post("cross/media", that.chidlrenParams)
+          .post("/cross/media", that.chidlrenParams)
           .then(res => {
             if (res.data.status ==1) {
               console.log(res.data.data.series);
@@ -180,7 +180,7 @@
         var that=this;
        // that.$loading.show();
         this.$axios
-          .post("praise/compet", that.chidlrenParams)
+          .post("/praise/compet", that.chidlrenParams)
           .then(res => {
             if (res.data.status ==1) {
               that.drawData2=res.data.data;

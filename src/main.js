@@ -19,7 +19,7 @@ Vue.prototype.$echarts = echarts;
 var that=this;
   setInterval(function () {
     $.ajax({
-      url:'v2/checkLogin',
+      url:'/v2/checkLogin',
       type:'get',
       xhrFields: {
         withCredentials: true

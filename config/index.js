@@ -12,7 +12,8 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    //assetsPublicPath: './',//测试
+    assetsPublicPath: '/',//本地
     proxyTable: {
       "**/login": {
         target: host,
@@ -112,7 +113,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

@@ -605,7 +605,7 @@
        },
         getBrandList(){//获取品牌下拉列表数据
           this.$axios
-            .get("car/brand", {})
+            .get("/car/brand", {})
             .then(res => {
               if (res.data.status === 1) {
                 for(var val of res.data.data){
@@ -624,7 +624,7 @@
           this.isShowTimeChoose=this.target!='buy'&&this.brandName=="Jeep"?true:false;
           this.carTypeList=[];
           this.$axios
-            .get("car/series?brand="+this.brandName)
+            .get("/car/series?brand="+this.brandName)
             .then(res => {
               if (res.data.status === 1) {
                 for(var val of res.data.data){
@@ -667,7 +667,7 @@
           var that=this;
           this.carYearList=[];
           this.$axios
-            .get("car/year?brand="+this.brandName+"&series="+this.carName)
+            .get("/car/year?brand="+this.brandName+"&series="+this.carName)
             .then(res => {
               if (res.data.status === 1) {
                 for(var val of res.data.data){

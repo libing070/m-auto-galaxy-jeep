@@ -105,7 +105,7 @@
             this.$toast(that.$t("login.password_tip"));
           }else{
             this.$axios
-              .post("v2/login", {
+              .post("/v2/login", {
                 username: this.username,
                 password: this.password
               })
