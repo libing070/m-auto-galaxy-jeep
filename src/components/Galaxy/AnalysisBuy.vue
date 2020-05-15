@@ -73,7 +73,15 @@
             type: 'scatter',
             itemStyle: {
               normal: {
-                opacity: 0.8
+                opacity: 0.8,
+                label : {
+                  show: true,
+                  position: 'top',
+                  fontSize:'10',
+                  formatter:function (params) {
+                    return params.seriesName
+                  }
+                }
               }
             },
             symbolSize: function (val) {
