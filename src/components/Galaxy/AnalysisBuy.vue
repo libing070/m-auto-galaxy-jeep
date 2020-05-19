@@ -237,7 +237,7 @@
             type: 'category',
             data: yAxisData,
             axisLabel: {
-              fontSize: '10',
+              fontSize: '8',
               // interval:0, //坐标刻度之间的显示间隔，默认就可以了（默认是不重叠）
               // rotate:38   //调整数值改变倾斜的幅度（范围-90到90）
             }

@@ -13,7 +13,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: './',//测试
-   // assetsPublicPath: '/',//本地
+    //assetsPublicPath: '/',//本地
     proxyTable: {
       "**/login": {
         target: host,
