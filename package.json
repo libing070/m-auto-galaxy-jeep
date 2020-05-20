@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "crypto-js": "^4.0.0",
     "echarts": "^4.7.0",
     "html2canvas": "^1.0.0-rc.5",
     "vant": "^2.5.9",
