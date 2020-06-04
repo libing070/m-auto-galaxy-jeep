@@ -29,7 +29,7 @@ var that=this;
       success: function(status) {
         var status=JSON.parse(status)['status'];
         if (status ==-1) {
-          console.log(status);
+          //console.log(status);
           localStorage.hasLogin = false;
           localStorage.isSuperAdmin = '';
           localStorage.name = '';
@@ -47,11 +47,11 @@ var that=this;
 
 // 导入资源文件
 import {i18n, vantLocales} from './lang'
-console.log('当前的语言是：', i18n.locale)
+//console.log('当前的语言是：', i18n.locale)
 // vant-ui组件国际化
 vantLocales(i18n.locale)
 
-console.log('main.js文件温馨提示：', i18n.messages[i18n.locale].app.hello)
+//console.log('main.js文件温馨提示：', i18n.messages[i18n.locale].app.hello)
 Vue.config.productionTip = false
 
 import myLoading from './assets/js/myLoading'

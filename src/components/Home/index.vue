@@ -20,7 +20,7 @@
       <div class="username"><input v-model="username" class="username-input" type="text" :placeholder="this.$t('login.name_label')"></div>
       <div class="password"><input v-model="password" class="password-input" type="password" :placeholder="this.$t('login.password_label')"></div>
       <div class="passs">
-        <van-checkbox class="rem-pwd" v-model="checkedbox" checked-color="#fabe00">记住密码</van-checkbox>
+        <!--<van-checkbox class="rem-pwd" v-model="checkedbox" checked-color="#fabe00">记住密码</van-checkbox>-->
         <div class="forget-pwd" @click="forgetPwd">{{this.$t('login.forget_password')}}</div>
       </div>
 
@@ -28,7 +28,7 @@
     </div>
     <div class="end">
       <span @click="show1 = true" class="item">{{this.$t('login.bottom1')}}</span>
-      <span @click="show2 = true"class="item">{{this.$t('login.bottom2')}}</span>
+      <span @click="openPDF"class="item">产品使用说明书</span>
       <span @click="show3 = true"class="item">{{this.$t('login.bottom3')}}</span>
     </div>
     <van-overlay :show="show1" @click="show1=false">
@@ -100,7 +100,7 @@
         }
       },
       created () {
-          console.log(document.cookie.split(';'));
+        //  console.log(document.cookie.split(';'));
          var usernamecookie= document.cookie.indexOf("username=");
          if(usernamecookie==-1){
            localStorage.setItem("remenberPwd",'false');
@@ -113,9 +113,12 @@
             this.checkedbox=false;
             this.clearCookie();
           }
-          console.log("login"+this.$i18n.locale);
+       //   console.log("login"+this.$i18n.locale);
       },
       methods:{
+        openPDF(){
+          window.open("./static/Jeep业务洞察工具移动端产品使用说明书.pdf",'_blank')
+        },
         loginSystem(){
           var that=this;
           if(this.username===""){
