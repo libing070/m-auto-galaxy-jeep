@@ -117,7 +117,8 @@
       },
       methods:{
         openPDF(){
-          window.open("./static/Jeep业务洞察工具移动端产品使用说明书.pdf",'_blank')
+          window.open("http://jeep.bitsmart.com.cn/static/Jeep%E4%B8%9A%E5%8A%A1%E6%B4%9E%E5%AF%9F%E5%B7%A5%E5%85%B7%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BA%A7%E5%93%81%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%E4%B9%A6.pdf",'_blank')
+         // window.open("../../assets/Jeep业务洞察工具移动端产品使用说明书.pdf",'_blank')
         },
         loginSystem(){
           var that=this;
